@@ -9,8 +9,8 @@ import argparse as ap
 
 ###########
 parser = ap.ArgumentParser(description='Provide SURVIVOR runtime parameters.')
-parser.add_argument('-rm','--RUNMODE',dest='run_mode',default='inv')
-parser.add_argument('-svpa','--SURVPARAM', dest='sv_param', default='5000/500/5000')
+parser.add_argument('--RUNMODE', type=str, nargs='?', dest='run_mode')
+parser.add_argument('--SURVPARAM', type=str, nargs='?', dest='sv_param')
 ###########
 args = parser.parse_args()
 run_mode = args.run_mode

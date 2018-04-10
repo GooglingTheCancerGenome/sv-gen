@@ -14,15 +14,13 @@ doc: |
 inputs:
   RUNMODE:
     type: string
-    default: inv
     inputBinding:
       prefix: --RUNMODE
 
   SURVPARAM:
     type: string
-    default: 5000/500/5000
     inputBinding:
-      prefix: --SURVPARAM
+       prefix: --SURVPARAM
 outputs:
   - id: example_out
     type: File

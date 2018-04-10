@@ -49,8 +49,4 @@ outputs:
 
 
 
-
-
-
-
 baseCommand: [SURVIVOR, simSV]
