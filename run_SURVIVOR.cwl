@@ -1,17 +1,15 @@
 cwlVersion: "cwl:v1.0"
 class: Workflow
 inputs:
+  file_a:
+     type: File
+  file_b:
+     type: File
   RUNMODE:
     type: string
 
   SURVPARAM:
     type: string
-
-  Reference_file:
-    type: File
-
-  Parameter_file:
-    type: File
 
   snp_mutation_freq:
     type: int
@@ -26,8 +24,24 @@ outputs:
   fasta:
     type: File
     outputSource: runsv/fasta_out
+  index:
+    type: File
+    outputSource: faidx/index
 
 steps:
+  catfasta:
+    run: cat.cwl
+    in:
+       file_a: file_a
+       file_b: file_b
+    out:
+       [con_fasta]
+  faidx:
+    run: samtools-faidx.cwl
+    in:
+       input: catfasta/con_fasta
+    out:
+       [index]
   configsv:
     run: configSURVIVOR.cwl
     in:
@@ -38,7 +52,7 @@ steps:
   runsv:
     run: SURVIVOR_simSV.cwl
     in:
-       Reference_file: Reference_file
+       Reference_file: catfasta/con_fasta
        Parameter_file: configsv/example_out
        snp_mutation_freq: snp_mutation_freq
        read_type: read_type

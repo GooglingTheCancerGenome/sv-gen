@@ -16,7 +16,7 @@ inputs:
 
 
 outputs:
-  - id: example_out
+  - id: con_fasta
     type: File
     outputBinding:
       glob: merge.fasta
