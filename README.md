@@ -17,7 +17,7 @@ Ensure that the following tools are in your $PATH:
 - SURVIVOR
 - Samtools
 
-Create python virtualenv.
+Create a python virtual environment.
 
 ````
 virtualenv -p python2 venv_cwl
@@ -28,7 +28,6 @@ pip install cwltool argparse argparse2tool
 Run Survivor pipeline
 
 ````
-PATH=$PATH:/path/to/sv-gen-workflow/tools cwltool --preserve-environment PATH run_SURVIVOR.cwl json/run_SURVIVOR.json
-
+PATH=$PATH:/path/to/sv-gen-workflow/tools cwltool --preserve-environment PATH run_SURVIVOR.cwl json/sv_input.json
 ````
 
