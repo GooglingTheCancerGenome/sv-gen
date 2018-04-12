@@ -1,22 +1,24 @@
 cwlVersion: "cwl:v1.0"
 
+requirements:
+- class: InlineJavascriptRequirement
+
+
 class: CommandLineTool
 baseCommand: cat
-stdout: merge.fasta
 inputs:
   file_a:
     type: File
     inputBinding:
-      position: 1
+      position: 2
   file_b:
     type: File
     inputBinding:
-      position: 2
-
-
-
+      position: 3
 outputs:
   - id: con_fasta
     type: File
     outputBinding:
-      glob: merge.fasta
+      glob:  $('merged_'+inputs.file_b.basename)
+
+stdout: $('merged_'+inputs.file_b.basename)

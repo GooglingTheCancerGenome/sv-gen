@@ -21,12 +21,19 @@ inputs:
     type: string
 
 outputs:
-  fasta:
+  fasta1:
     type: File
-    outputSource: runsv/fasta_out
-  index:
+    outputSource: catfasta/con_fasta
+  fasta2:
+    type: File
+    outputSource: catfasta2/con_fasta
+  faidx_out:
     type: File
     outputSource: faidx/index
+  faidx2_out:
+    type: File
+    outputSource: faidx2/index
+
 
 steps:
   catfasta:
@@ -58,4 +65,20 @@ steps:
        read_type: read_type
        output_prefix: output_prefix
     out: [fasta_out]
+
+  catfasta2:
+    run: cat.cwl
+    in:
+       file_a: file_a
+       file_b: runsv/fasta_out
+    out:
+       [con_fasta]
+  faidx2:
+    run: samtools-faidx.cwl
+    in:
+       input: catfasta2/con_fasta
+    out:
+       [index]
+
+
 
