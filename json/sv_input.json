@@ -1,0 +1,11 @@
+file_a:
+   class: File
+   path: /Users/tschafers/GCGC/reference/chr17_human.fasta
+file_b:
+   class: File
+   path: /Users/tschafers/GCGC/reference/chr17_human.fasta
+RUNMODE: inv
+SURVPARAM: 50/5/50
+snp_mutation_freq: 0
+read_type: 0
+output_prefix: sv_mut
