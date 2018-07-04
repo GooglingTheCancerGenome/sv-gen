@@ -34,22 +34,25 @@ def get_genome(sample):
     elif sample[0] == 'N':
         return NORMALFASTA
 
-def get_coverage(sample):
-    cov = 15
+def get_coverage(sample, cov):
     if sample == 'T0' or sample == 'N0':
         # Test coverage
         return cov
     else:
         # Test coverage
-        return cov*2
+        return str(int(cov)*2)
 
 #Rules
 
 rule all:
   input:
-      expand('{sample}/BAM/{sample}.bam',
-             sample=config['SAMPLES']),
-      'T1/MERGED/T1.bam.bai'
+      expand('{sample}/BAM/{sample}_{coverage}_{insert_size}.bam',
+             sample=config['SAMPLES'],
+             coverage=config['coverage'],
+             insert_size=config['insert_size']),
+      expand('T1/MERGED/T1_{coverage}_{insert_size}.bam.bai',
+             coverage=config['coverage'],
+             insert_size=config['insert_size'])
 
 #rule create_SURVIVOR_template:
 #    output: SV_template.txt
@@ -62,12 +65,12 @@ rule sim_reads:
     input:
         genome = lambda wildcards: get_genome(wildcards.sample)
     params:
-        isize = 350,
-        fold_cov = lambda wildcards: get_coverage(wildcards.sample),
-        dir = '{sample}/FASTQ/{sample}_'
+        isize = lambda wildcards: wildcards.insert_size,
+        fold_cov = lambda wildcards: get_coverage(wildcards.sample, wildcards.coverage),
+        dir = '{sample}/FASTQ/{sample}_{coverage}_{insert_size}_'
     output:
-        first = '{sample}/FASTQ/{sample}_1.fq',
-        second = '{sample}/FASTQ/{sample}_2.fq'
+        first = '{sample}/FASTQ/{sample}_{coverage}_{insert_size}_1.fq',
+        second = '{sample}/FASTQ/{sample}_{coverage}_{insert_size}_2.fq'
     shell:
         '{ART} \
         -ss HSXt \
@@ -84,11 +87,11 @@ rule sim_reads:
 
 rule rename:
     input:
-        first = '{sample}/FASTQ/{sample}_1.fq', \
-        second = '{sample}/FASTQ/{sample}_2.fq'
+        first = '{sample}/FASTQ/{sample}_{coverage}_{insert_size}_1.fq', \
+        second = '{sample}/FASTQ/{sample}_{coverage}_{insert_size}_2.fq'
     output:
-        first = '{sample}/FASTQ/{sample}_F1_S1_L001_R1_001.fq', \
-        second = '{sample}/FASTQ/{sample}_F1_S1_L001_R2_001.fq'
+        first = '{sample}/FASTQ/{sample}_{coverage}_{insert_size}_F1_S1_L001_R1_001.fq', \
+        second = '{sample}/FASTQ/{sample}_{coverage}_{insert_size}_F1_S1_L001_R2_001.fq'
     shell:
             'mv {input.first} {output.first}; mv {input.second} {output.second}'
 
@@ -107,7 +110,7 @@ rule mapping:
     params:
         rg = "@RG\tID:{wildcards.sample}\tSM:{wildcards.sample}\tLB:{wildcards.sample}"
     output:
-        '{sample}/BAM/{sample}.bam'
+        '{sample}/BAM/{sample}_{coverage}_{insert_size}.bam'
     shell:
         '{SPEEDSEQ} align \
             -o {wildcards.sample}/BAM/{wildcards.sample} \
@@ -118,17 +121,17 @@ rule mapping:
 
 rule merge_bams:
     input:
-        'T0/BAM/T0.bam',
-        'N0/BAM/N0.bam'
+        'T0/BAM/T0_{coverage}_{insert_size}.bam',
+        'N0/BAM/N0_{coverage}_{insert_size}.bam'
     output:
-        'T1/MERGED/T1.bam'
+        'T1/MERGED/T1_{coverage}_{insert_size}.bam'
     shell:
         'sambamba merge {output} {input}'
 
 rule index_bams:
     input:
-        'T1/MERGED/T1.bam'
+        'T1/MERGED/T1_{coverage}_{insert_size}.bam'
     output:
-        'T1/MERGED/T1.bam.bai'
+        'T1/MERGED/T1_{coverage}_{insert_size}.bam.bai'
     shell:
         'sambamba index {input}'
