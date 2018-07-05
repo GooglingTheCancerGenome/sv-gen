@@ -62,6 +62,7 @@ rule all:
     input:
         '/Users/tschafers/GCGC/output/chr17_human_merged.fasta.fai',
         '/Users/tschafers/GCGC/output/chr17_human_merged.fasta',
+        'sv_template',
         'chr17_SV_N.vcf',
         'chr17_SV_N.bed',
         'chr17_SV_N.insertions.fa',
@@ -84,21 +85,20 @@ rule fasta_index:
     shell:
         'samtools faidx {input}'
 
-'''
 rule configsv:
     input:
         rules.fasta_index.output
     params:
         run_mode = 'ind',
-        sv_param = '50/50/50'
+        sv_param = '2/8/10'
     output:
         'sv_template'
     shell:
         '../tools/configSURVIVOR.py --RUNMODE {params.run_mode} --SURVPARAM {params.sv_param}'
-'''
+
 rule SURVIVOR_simSV:
     input:
-        template = {SV_TEMPLATE},
+        template = rules.configsv.output,
         ref = '/Users/tschafers/GCGC/reference/chr17_human.fasta'
     params:
         snp_freq = 0,
