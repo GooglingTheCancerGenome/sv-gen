@@ -7,21 +7,26 @@ __version__ = '1.0.0'
 __license__ = 'Apache License, Version 2.0'
 
 #FASTA with SVs
-SVFASTA = '/Users/lsantuari/Documents/Local_GitHub/sv-gen-workflow/merged_sv_mut.fasta'
-#FASTA without SVs
-NORMALFASTA = '/Users/lsantuari/Documents/Local_GitHub/sv-gen-workflow/merged_chr17_human.fasta'
-#Coverage
-FOLD_COV = 1 #1 for testing
-REFERENCE = '/Users/lsantuari/Documents/Data/HPC/DeepSV/Artificial_data/SURVIVOR-master/Debug/chr17_human.fasta'
+#SVFASTA = '/Users/lsantuari/Documents/Local_GitHub/sv-gen-workflow/merged_sv_mut.fasta'
 
+#FASTA without SVs
+#NORMALFASTA = '/Users/lsantuari/Documents/Local_GitHub/sv-gen-workflow/merged_chr17_human.fasta'
+NORMALFASTA = '/Users/tschafers/GCGC/output/chr17_human_merged.fasta'
+SV_OUT_PREFIX_N = 'chr17_SV_N'
+
+
+#Coverage
+#FOLD_COV = 1 #1 for testing
+#REFERENCE = '/Users/lsantuari/Documents/Data/HPC/DeepSV/Artificial_data/SURVIVOR-master/Debug/chr17_human.fasta'
+REFERENCE = '/Users/tschafers/GCGC/reference/chr17_human.fasta'
 #Tools
 #Requirements:
 # - SURVIVOR v2
 # - ART: ART-bin-MountRainier-2016.06.05-MacOS64.tgz
 # - SPEEDSEQ
-SURVIVOR= '/Users/lsantuari/Applications/ReadSimulation/SURVIVOR/Debug/SURVIVOR'
-ART = '/Users/lsantuari/Applications/ReadSimulation/art_bin_MountRainier/art_illumina'
-SPEEDSEQ = '/Users/lsantuari/Applications/ReadSimulation/speedseq/bin/speedseq'
+#SURVIVOR= '/Users/lsantuari/Applications/ReadSimulation/SURVIVOR/Debug/SURVIVOR'
+#ART = '/Users/lsantuari/Applications/ReadSimulation/art_bin_MountRainier/art_illumina'
+#SPEEDSEQ = '/Users/lsantuari/Applications/ReadSimulation/speedseq/bin/speedseq'
 
 #Random seed
 SEED = random.randint(1, 10**3)
@@ -44,12 +49,24 @@ def get_coverage(sample):
         return cov*2
 
 #Rules
-
+'''
 rule all:
   input:
       expand('{sample}/BAM/{sample}.bam',
              sample=config['SAMPLES']),
       'T1/MERGED/T1.bam.bai'
+'''
+rule all:
+    input:
+        '/Users/tschafers/GCGC/output/chr17_human_merged.fasta.fai',
+        '/Users/tschafers/GCGC/output/chr17_human_merged.fasta',
+        'sv_template.txt',
+        'chr17_SV_N.vcf',
+        'chr17_SV_N.bed',
+        'chr17_SV_N.insertions.fa',
+        'chr17_SV_N.fasta'
+
+
 
 #rule create_SURVIVOR_template:
 #    output: SV_template.txt
@@ -57,7 +74,62 @@ rule all:
 #        'tools/configSURVIVOR.py \
 #            --RUNMODE IND \
 #            --SURVPARAM 500/5000/10000'
+rule cat_hap:
+    input:
+        genome = {REFERENCE}
+    output:
+        merge = {NORMALFASTA}
+    shell:
+        'cat {input.genome} {input.genome} > {output}'
 
+rule fasta_index:
+    input:
+        rules.cat_hap.output.merge
+    output:
+        index = '/Users/tschafers/GCGC/output/chr17_human_merged.fasta.fai'
+    shell:
+        'samtools faidx {input}'
+
+
+rule configsv:
+    input:
+        rules.fasta_index.output
+    params:
+        run_mode = 'ind',
+        sv_param = '50/50/50'
+    output:
+        'sv_template.txt'
+    shell:
+        '../tools/configSURVIVOR.py --RUNMODE {params.run_mode} --SURVPARAM {params.sv_param}'
+
+rule SURVIVOR_simSV:
+    input:
+        template = rules.configsv.output,
+        ref = {NORMALFASTA}
+    params:
+        snp_freq = 0,
+        read_mode = 0,
+        out_prefix = 'chr17_SV_N'
+    output:
+        'chr17_SV_N.vcf',
+        'chr17_SV_N.bed',
+        'chr17_SV_N.insertions.fa',
+        'chr17_SV_N.fasta'
+
+    shell:
+        '''
+        SURVIVOR simSV {input.template} \
+        {input.ref} \
+        {params.snp_freq} \
+        {params.read_mode} \
+        {params.out_prefix}
+        '''
+
+
+
+
+
+'''
 rule sim_reads:
     input:
         genome = lambda wildcards: get_genome(wildcards.sample)
@@ -132,3 +204,4 @@ rule index_bams:
         'T1/MERGED/T1.bam.bai'
     shell:
         'sambamba index {input}'
+'''
