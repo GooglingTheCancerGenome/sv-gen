@@ -107,8 +107,8 @@ rule SURVIVOR_simSV:
     output:
         vcf = 'chr17_SV_N.vcf',
         bed = 'chr17_SV_N.bed',
-        fasta = 'chr17_SV_N.insertions.fa',
-        index = 'chr17_SV_N.fasta'
+        ins = 'chr17_SV_N.insertions.fa',
+        fasta = 'chr17_SV_N.fasta'
 
     shell:
         'SURVIVOR simSV {input.ref} {input.template} {params.snp_freq} {params.read_mode} {params.out_prefix}'
