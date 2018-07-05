@@ -33,7 +33,7 @@ elif (str.lower(run_mode) == 'tra'):
 elif (str.lower(run_mode) == 'inv'):
     inv_min, inv_max, inv_num = [max, min, num]
 ############ Write template #####################
-filename = 'sv_template.txt'
+filename = 'sv_template'
 with open(filename, 'a') as sv_temp:
     sv_temp.write(
         'PARAMETER FILE: DO JUST MODIFY THE VALUES AND KEEP THE SPACES!\n')
