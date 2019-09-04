@@ -12,4 +12,6 @@ The workflow installs the following tools:
 
 -   [SURVIVOR](https://github.com/fritzsedlazeck/SURVIVOR) (1.0.5)
 -   [ART](https://www.niehs.nih.gov/research/resources/software/biostatistics/art/) (2016-06-05)
--   [SpeedSeq](https://github.com/hall-lab/speedseq) (0.1.2)
+-   [BWA](https://github.com/lh3/bwa) (0.7.17)
+-   [Sambamba](https://github.com/biod/sambamba) (0.7.0) or
+-   [Samtools](https://github.com/samtools/samtools) (1.9)
