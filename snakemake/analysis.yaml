@@ -1,3 +1,23 @@
+# I/O files in FASTA format
+input: data/chr17_human.fasta  # (haploid) reference genome
+output:
+  diploid: data/merged_chr17_human.fasta  # diploid (homozygous) reference
+  diploid_sv: data/merged_sv_mut.fasta    # diploid (hetero-/hemi-zygous) genome
+                                          # based on the reference & simulated SVs
+
+# I/O files (extensions) used by the workflow
+file_exts:
+  fasta: .fasta
+  fasta_idx:
+    - .fasta.fai  # faidx index file
+    - .fasta.bwt  # BWA v0.6.x index files
+    - .fasta.amb  # |
+    - .fasta.ann  # |
+    - .fasta.pac  # |
+    - .fasta.sa   # |
+  bam: .bam
+  bam_idx: .bam.bai
+
 SAMPLES : ['G1', 'G2', 'N1', 'N2', 'N3']
 coverage : [5,10,15,20,25,30]
 insert_size : [300,350,400,450,500]
