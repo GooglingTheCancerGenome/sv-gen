@@ -1,34 +1,28 @@
 import random
 
 shell.executable("/bin/bash")
+configfile: "analysis.yaml"
 
-__author__ = 'Luca Santuari'
-__version__ = '1.0.0'
+__author__ = ['Luca Santuari', 'Arnold Kuzniar']
+__version__ = '0.1.0'
 __license__ = 'Apache License, Version 2.0'
 
 #FASTA with SVs
-#SVFASTA = '/Users/lsantuari/Documents/Local_GitHub/sv-gen-workflow/merged_sv_mut.fasta'
-
+SVFASTA = '/Users/lsantuari/Documents/Local_GitHub/sv-gen-workflow/merged_sv_mut.fasta'
 #FASTA without SVs
-#NORMALFASTA = '/Users/lsantuari/Documents/Local_GitHub/sv-gen-workflow/merged_chr17_human.fasta'
-REFERENCE = '/Users/tschafers/GCGC/reference/chr17_human.fasta'
-NORMALFASTA = '/Users/tschafers/GCGC/output/chr17_human_merged.fasta'
-SVFASTA = '/Users/tschafers/GCGC/output/chr17_human_SV_merged.fasta'
-SV_TEMPLATE = '/Users/tschafers/Temp/sv-gen-workflow/test/sv_test_template'
-
-
-
+NORMALFASTA = '/Users/lsantuari/Documents/Local_GitHub/sv-gen-workflow/merged_chr17_human.fasta'
 #Coverage
-#FOLD_COV = 1 #1 for testing
-#REFERENCE = '/Users/lsantuari/Documents/Data/HPC/DeepSV/Artificial_data/SURVIVOR-master/Debug/chr17_human.fasta'
+FOLD_COV = 1 #1 for testing
+REFERENCE = '/Users/lsantuari/Documents/Data/HPC/DeepSV/Artificial_data/SURVIVOR-master/Debug/chr17_human.fasta'
+
 #Tools
 #Requirements:
 # - SURVIVOR v2
 # - ART: ART-bin-MountRainier-2016.06.05-MacOS64.tgz
 # - SPEEDSEQ
-#SURVIVOR= '/Users/lsantuari/Applications/ReadSimulation/SURVIVOR/Debug/SURVIVOR'
-#ART = '/Users/lsantuari/Applications/ReadSimulation/art_bin_MountRainier/art_illumina'
-#SPEEDSEQ = '/Users/lsantuari/Applications/ReadSimulation/speedseq/bin/speedseq'
+SURVIVOR= '/Users/lsantuari/Applications/ReadSimulation/SURVIVOR/Debug/SURVIVOR'
+ART = '/Users/lsantuari/Applications/ReadSimulation/art_bin_MountRainier/art_illumina'
+SPEEDSEQ = '/Users/lsantuari/Applications/ReadSimulation/speedseq/bin/speedseq'
 
 #Random seed
 SEED = random.randint(1, 10**3)
@@ -41,111 +35,43 @@ def get_genome(sample):
     elif sample[0] == 'N':
         return NORMALFASTA
 
-def get_coverage(sample):
-    cov = 15
+def get_coverage(sample, cov):
     if sample == 'T0' or sample == 'N0':
         # Test coverage
         return cov
     else:
         # Test coverage
-        return cov*2
+        return str(int(cov)*2)
 
 #Rules
-'''
+
 rule all:
   input:
-      expand('{sample}/BAM/{sample}.bam',
-             sample=config['SAMPLES']),
-      'T1/MERGED/T1.bam.bai'
-'''
-rule all:
-    input:
-        '/Users/tschafers/GCGC/output/chr17_human_merged.fasta.fai',
-        '/Users/tschafers/GCGC/output/chr17_human_merged.fasta',
-        'sv_template',
-        'chr17_SV_N.vcf',
-        'chr17_SV_N.bed',
-        'chr17_SV_N.insertions.fa',
-        'chr17_SV_N.fasta',
-        '/Users/tschafers/GCGC/output/chr17_human_SV_merged.fasta'
+      expand('{sample}/BAM/{sample}_{coverage}_{insert_size}.bam',
+             sample=config['SAMPLES'],
+             coverage=config['coverage'],
+             insert_size=config['insert_size']),
+      expand('T1/MERGED/T1_{coverage}_{insert_size}.bam.bai',
+             coverage=config['coverage'],
+             insert_size=config['insert_size'])
 
-rule cat_hap:
-    input:
-        genome = {REFERENCE}
-    output:
-        merge = {NORMALFASTA}
-    shell:
-        'cat {input.genome} {input.genome} > {output}'
+#rule create_SURVIVOR_template:
+#    output: SV_template.txt
+#    shell:
+#        'tools/configSURVIVOR.py \
+#            --RUNMODE IND \
+#            --SURVPARAM 500/5000/10000'
 
-rule fasta_index:
-    input:
-        rules.cat_hap.output.merge
-    output:
-        index = '/Users/tschafers/GCGC/output/chr17_human_merged.fasta.fai'
-    shell:
-        'samtools faidx {input}'
-
-rule configsv:
-    input:
-        rules.fasta_index.output
-    params:
-        run_mode = 'ind',
-        sv_param = '2/8/10'
-    output:
-        'sv_template'
-    shell:
-        '../tools/configSURVIVOR.py --RUNMODE {params.run_mode} --SURVPARAM {params.sv_param}'
-
-rule SURVIVOR_simSV:
-    input:
-        template = rules.configsv.output,
-        ref = '/Users/tschafers/GCGC/reference/chr17_human.fasta'
-    params:
-        snp_freq = 0,
-        read_mode = 0,
-        out_prefix = 'chr17_SV_N'
-    output:
-        vcf = 'chr17_SV_N.vcf',
-        bed = 'chr17_SV_N.bed',
-        ins = 'chr17_SV_N.insertions.fa',
-        fasta = 'chr17_SV_N.fasta'
-
-    shell:
-        'SURVIVOR simSV {input.ref} {input.template} {params.snp_freq} {params.read_mode} {params.out_prefix}'
-
-
-rule cat_hap_sv:
-    input:
-        genome = {REFERENCE},
-        sv_out = rules.SURVIVOR_simSV.output.fasta
-    output:
-        merge = {SVFASTA}
-    shell:
-        'cat {input.genome} {input.sv_out} > {output}'
-
-
-rule fastaSV_index:
-    input:
-        rules.cat_hap_sv.output.merge
-    output:
-        index = '/Users/tschafers/GCGC/output/chr17_human_SV_merged.fasta.fai'
-    shell:
-        'samtools faidx {input}'
-
-
-
-
-'''
 rule sim_reads:
     input:
         genome = lambda wildcards: get_genome(wildcards.sample)
     params:
-        isize = 350,
-        fold_cov = lambda wildcards: get_coverage(wildcards.sample),
-        dir = '{sample}/FASTQ/{sample}_'
+        isize = lambda wildcards: wildcards.insert_size,
+        fold_cov = lambda wildcards: get_coverage(wildcards.sample, wildcards.coverage),
+        dir = '{sample}/FASTQ/{sample}_{coverage}_{insert_size}_'
     output:
-        first = '{sample}/FASTQ/{sample}_1.fq',
-        second = '{sample}/FASTQ/{sample}_2.fq'
+        first = '{sample}/FASTQ/{sample}_{coverage}_{insert_size}_1.fq',
+        second = '{sample}/FASTQ/{sample}_{coverage}_{insert_size}_2.fq'
     shell:
         '{ART} \
         -ss HSXt \
@@ -162,11 +88,11 @@ rule sim_reads:
 
 rule rename:
     input:
-        first = '{sample}/FASTQ/{sample}_1.fq', \
-        second = '{sample}/FASTQ/{sample}_2.fq'
+        first = '{sample}/FASTQ/{sample}_{coverage}_{insert_size}_1.fq', \
+        second = '{sample}/FASTQ/{sample}_{coverage}_{insert_size}_2.fq'
     output:
-        first = '{sample}/FASTQ/{sample}_F1_S1_L001_R1_001.fq', \
-        second = '{sample}/FASTQ/{sample}_F1_S1_L001_R2_001.fq'
+        first = '{sample}/FASTQ/{sample}_{coverage}_{insert_size}_F1_S1_L001_R1_001.fq', \
+        second = '{sample}/FASTQ/{sample}_{coverage}_{insert_size}_F1_S1_L001_R2_001.fq'
     shell:
             'mv {input.first} {output.first}; mv {input.second} {output.second}'
 
@@ -185,7 +111,7 @@ rule mapping:
     params:
         rg = "@RG\tID:{wildcards.sample}\tSM:{wildcards.sample}\tLB:{wildcards.sample}"
     output:
-        '{sample}/BAM/{sample}.bam'
+        '{sample}/BAM/{sample}_{coverage}_{insert_size}.bam'
     shell:
         '{SPEEDSEQ} align \
             -o {wildcards.sample}/BAM/{wildcards.sample} \
@@ -196,18 +122,17 @@ rule mapping:
 
 rule merge_bams:
     input:
-        'T0/BAM/T0.bam',
-        'N0/BAM/N0.bam'
+        'T0/BAM/T0_{coverage}_{insert_size}.bam',
+        'N0/BAM/N0_{coverage}_{insert_size}.bam'
     output:
-        'T1/MERGED/T1.bam'
+        'T1/MERGED/T1_{coverage}_{insert_size}.bam'
     shell:
         'sambamba merge {output} {input}'
 
 rule index_bams:
     input:
-        'T1/MERGED/T1.bam'
+        'T1/MERGED/T1_{coverage}_{insert_size}.bam'
     output:
-        'T1/MERGED/T1.bam.bai'
+        'T1/MERGED/T1_{coverage}_{insert_size}.bam.bai'
     shell:
         'sambamba index {input}'
-'''
