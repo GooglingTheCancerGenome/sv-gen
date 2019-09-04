@@ -1,33 +1,15 @@
 # sv-gen-workflow
-CWL workflows and helper script to generate artificial structural variant (SV) data used to train the CNN model.
 
-* chr17 of the hg19 Human genome assembly is used as the test chromosome
-* SURVIVOR is used to introduce SVs only on one of the two homologous chromosomes
-* The ART read simulator is used to generate paired-end reads
-* bwa-mem is used to map the reads on the hg19 assembly
+Snakemake-based workflow to generate artificial structural variant (SV) data.
 
-Output of the workflow are two categories of Tumor/Normal pairs of BAM alignment files: Somatic and Germline.
+### Dependencies
 
-* The Somatic category contains a Tumor BAM file with 50% tumor purity and a Normal BAM file which does not contain SVs. The model is trained to recognize SVs that are present in the Tumor but not in the Normal BAM files as 'somatic'.
-* The Germline category contains two BAM files with the same set of SVs, so the model is trained to recognize SVs that are present in both the Tumor and Normal BAM files as 'germline'.
+-   python (>=3.6)
+-   [conda](https://conda.io/) (>=4.5)
+-   [snakemake](https://snakemake.readthedocs.io/) (>=4.8)
 
+The workflow installs the following tools:
 
-# Setup
-Ensure that the following tools are in your $PATH:
-- SURVIVOR
-- Samtools
-
-Create a python virtual environment.
-
-````
-virtualenv -p python2 venv_cwl
-source /venv_cwl/bin/activate
-pip install cwltool argparse argparse2tool
-
-````
-Run Survivor pipeline
-
-````
-PATH=$PATH:/path/to/sv-gen-workflow/tools cwltool --preserve-environment PATH run_SURVIVOR.cwl json/sv_input.json
-````
-
+-   [SURVIVOR](https://github.com/fritzsedlazeck/SURVIVOR) (1.0.5)
+-   [ART](https://www.niehs.nih.gov/research/resources/software/biostatistics/art/) (2016-06-05)
+-   [SpeedSeq](https://github.com/hall-lab/speedseq) (0.1.2)
