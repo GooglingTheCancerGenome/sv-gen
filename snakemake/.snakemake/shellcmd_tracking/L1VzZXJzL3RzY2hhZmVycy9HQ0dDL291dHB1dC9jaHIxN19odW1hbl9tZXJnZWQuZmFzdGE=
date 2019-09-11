@@ -1,1 +1,0 @@
-cat /Users/tschafers/GCGC/reference/chr17_human.fasta /Users/tschafers/GCGC/reference/chr17_human.fasta > /Users/tschafers/GCGC/output/chr17_human_merged.fasta
