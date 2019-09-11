@@ -7,26 +7,11 @@ __author__ = ['Luca Santuari', 'Arnold Kuzniar']
 __version__ = '0.1.0'
 __license__ = 'Apache License, Version 2.0'
 
-#FASTA with SVs
-SVFASTA = '/Users/lsantuari/Documents/Local_GitHub/sv-gen-workflow/merged_sv_mut.fasta'
-#FASTA without SVs
-NORMALFASTA = '/Users/lsantuari/Documents/Local_GitHub/sv-gen-workflow/merged_chr17_human.fasta'
-#Coverage
-FOLD_COV = 1 #1 for testing
-REFERENCE = '/Users/lsantuari/Documents/Data/HPC/DeepSV/Artificial_data/SURVIVOR-master/Debug/chr17_human.fasta'
 
-#Tools
-#Requirements:
-# - SURVIVOR v2
-# - ART: ART-bin-MountRainier-2016.06.05-MacOS64.tgz
-# - SPEEDSEQ
-SURVIVOR= '/Users/lsantuari/Applications/ReadSimulation/SURVIVOR/Debug/SURVIVOR'
-ART = '/Users/lsantuari/Applications/ReadSimulation/art_bin_MountRainier/art_illumina'
-SPEEDSEQ = '/Users/lsantuari/Applications/ReadSimulation/speedseq/bin/speedseq'
-
-#Random seed
+REFERENCE = config['input']
+NORMALFASTA = config['output']['diploid']
+SVFASTA = config['output']['diploid_sv']
 SEED = random.randint(1, 10**3)
-#print('Using random seed = %d'% SEED)
 
 #helper functions
 def get_genome(sample):
@@ -72,37 +57,51 @@ rule sim_reads:
     output:
         first = '{sample}/FASTQ/{sample}_{coverage}_{insert_size}_1.fq',
         second = '{sample}/FASTQ/{sample}_{coverage}_{insert_size}_2.fq'
+    conda:
+        "environment.yaml"
     shell:
-        '{ART} \
-        -ss HSXt \
-        -M \
-        -i {input.genome} \
-        -p \
-        -l 150 \
-        -f {params.fold_cov} \
-        -m {params.isize} \
-        -s 100 \
-        -na \
-        -rs {SEED} \
-        -o {params.dir}'
+        """
+        set -xe
+        art_illumina \
+            -ss HSXt \
+            -M \
+            -i {input.genome} \
+            -p \
+            -l 150 \
+            -f {params.fold_cov} \
+            -m {params.isize} \
+            -s 100 \
+            -na \
+            -rs {SEED} \
+            -o {params.dir}
+        """
 
 rule rename:
     input:
-        first = '{sample}/FASTQ/{sample}_{coverage}_{insert_size}_1.fq', \
+        first = '{sample}/FASTQ/{sample}_{coverage}_{insert_size}_1.fq',
         second = '{sample}/FASTQ/{sample}_{coverage}_{insert_size}_2.fq'
     output:
-        first = '{sample}/FASTQ/{sample}_{coverage}_{insert_size}_F1_S1_L001_R1_001.fq', \
+        first = '{sample}/FASTQ/{sample}_{coverage}_{insert_size}_F1_S1_L001_R1_001.fq',
         second = '{sample}/FASTQ/{sample}_{coverage}_{insert_size}_F1_S1_L001_R2_001.fq'
     shell:
-            'mv {input.first} {output.first}; mv {input.second} {output.second}'
+        """
+        set -xe
+        mv {input.first} {output.first}
+        mv {input.second} {output.second}
+        """
 
 rule gzip:
     input:
-        first = rules.rename.output.first, second = rules.rename.output.second
+        first = rules.rename.output.first,
+        second = rules.rename.output.second
     output:
-        first = rules.rename.output.first+'.gz', second = rules.rename.output.second+'.gz'
+        first = rules.rename.output.first+'.gz',
+        second = rules.rename.output.second+'.gz'
     shell:
-            'gzip {input.first}; gzip {input.second}'
+        """
+        set -xe
+        gzip {input.first} {input.second}
+        """
 
 rule mapping:
     input:
@@ -126,6 +125,8 @@ rule merge_bams:
         'N0/BAM/N0_{coverage}_{insert_size}.bam'
     output:
         'T1/MERGED/T1_{coverage}_{insert_size}.bam'
+    conda:
+        "environment.yaml"
     shell:
         'sambamba merge {output} {input}'
 
@@ -134,5 +135,7 @@ rule index_bams:
         'T1/MERGED/T1_{coverage}_{insert_size}.bam'
     output:
         'T1/MERGED/T1_{coverage}_{insert_size}.bam.bai'
+    conda:
+        "environment.yaml"
     shell:
         'sambamba index {input}'
