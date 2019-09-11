@@ -40,12 +40,30 @@ rule all:
              coverage=config['coverage'],
              insert_size=config['insert_size'])
 
-#rule create_SURVIVOR_template:
-#    output: SV_template.txt
-#    shell:
-#        'tools/configSURVIVOR.py \
-#            --RUNMODE IND \
-#            --SURVPARAM 500/5000/10000'
+rule survivor_config:
+    output:
+        "parameter_file"
+    conda:
+        "environment.yaml"
+    shell:
+        """
+        set -xe
+        SURVIVOR simSV "{output}""
+        """
+
+rule survivor_simsv:
+    input:
+        param = survivor_config.output,
+        fasta = config['input']
+    output: config['output']['diploid_sv']
+    conda:
+        "environment.yaml"
+    shell:
+        """
+        set -xe
+        OUTFILE="$(basename "{output}" .fasta)"
+        SURVIVOR simSV "{input.fasta}" "{input.param}" 0 0 "${{OUTFILE}}"
+        """
 
 rule sim_reads:
     input:
