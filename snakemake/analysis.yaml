@@ -1,0 +1,26 @@
+# I/O files
+input:
+  fasta: data/chr17.fasta  # reference genome (haploid)
+  config: params.txt       # SURVIVOR config file
+output:
+  fasta:
+    hm: data/chr17.hm.fasta      # diploid reference (homozygous)
+    hmsv: data/chr17.hmsv.fasta  # diploid genome with SVs (homozygous)
+    htsv: data/chr17.htsv.fasta  # diploid genome with SVs (heterozygous)
+
+# I/O files (extensions) used by the workflow
+# file_exts:
+#   fasta: .fasta
+#   fasta_idx:
+#     - .fasta.fai  # faidx index file
+#     - .fasta.bwt  # BWA v0.6.x index files
+#     - .fasta.amb  # |
+#     - .fasta.ann  # |
+#     - .fasta.pac  # |
+#     - .fasta.sa   # |
+#   bam: .bam
+#   bam_idx: .bam.bai
+# 
+# SAMPLES : ['G1', 'G2', 'N1', 'N2', 'N3']
+# coverage : [5,10,15,20,25,30]
+# insert_size : [300,350,400,450,500]

@@ -1,12 +1,50 @@
 # sv-gen-workflow
-CWL workflows and helper script to generate artificial structural variant (SV) data used to train the CNN model.
 
-* chr17 of the hg19 Human genome assembly is used as the test chromosome
-* SURVIVOR is used to introduce SVs only on one of the two homologous chromosomes
-* The ART read simulator is used to generate paired-end reads
-* bwa-mem is used to map the reads on the hg19 assembly
+Snakemake-based workflow to generate artificial structural variant (SV) data.
 
-Output of the workflow are two categories of Tumor/Normal pairs of BAM alignment files: Somatic and Germline.
+## Dependencies
 
-* The Somatic category contains a Tumor BAM file with 50% tumor purity and a Normal BAM file which does not contain SVs. The model is trained to recognize SVs that are present in the Tumor but not in the Normal BAM files as 'somatic'.
-* The Germline category contains two BAM files with the same set of SVs, so the model is trained to recognize SVs that are present in both the Tumor and Normal BAM files as 'germline'.
+-   python (>=3.6)
+-   [conda](https://conda.io/) (>=4.5)
+-   [snakemake](https://snakemake.readthedocs.io/) (>=4.8)
+
+The workflow installs the following tools:
+
+-   [SURVIVOR](https://github.com/fritzsedlazeck/SURVIVOR) (1.0.6)
+-   [ART](https://www.niehs.nih.gov/research/resources/software/biostatistics/art/) (2016-06-05)
+-   [BWA](https://github.com/lh3/bwa) (0.7.17)
+-   [Sambamba](https://github.com/biod/sambamba) (0.7.0) or
+-   [Samtools](https://github.com/samtools/samtools) (1.9)
+
+**1. Clone this repo.**
+
+```bash
+git clone https://github.com/GooglingTheCancerGenome/sv-gen-workflow.git
+cd sv-gen-workflow/snakemake
+```
+
+**2. Install dependencies.**
+
+```bash
+wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh  # download Miniconda installer (with Python 3)
+bash miniconda.sh  # install Conda (accept defaults)
+# add the following line to ~/.bashrc & source env
+# export PATH="$HOME/miniconda3/bin:$PATH"
+source ~/.bashrc
+conda update -y conda  # update Conda
+conda create -y -n wf2 && source activate wf2  # create & activate new env
+conda install -y -c bioconda snakemake
+```
+
+**3. Configure the workflow.**
+
+-   **config files**:
+    -   `analysis.yaml` - analysis-specific settings
+    -   `environment.yaml` - software dependencies and versions
+
+**4. Execute the workflow.**
+
+```bash
+snakemake -np  # 'dry' run only checks I/O files
+snakemake --use-conda
+```
