@@ -1,4 +1,4 @@
-# sv-gen-workflow
+# sv-gen
 
 Snakemake-based workflow to generate artificial structural variant (SV) data.
 
@@ -20,7 +20,7 @@ The workflow installs the following tools:
 
 ```bash
 git clone https://github.com/GooglingTheCancerGenome/sv-gen-workflow.git
-cd sv-gen-workflow/snakemake
+cd sv-gen/snakemake
 ```
 
 **2. Install dependencies.**
@@ -32,7 +32,7 @@ bash miniconda.sh  # install Conda (accept defaults)
 # export PATH="$HOME/miniconda3/bin:$PATH"
 source ~/.bashrc
 conda update -y conda  # update Conda
-conda create -y -n wf2 && source activate wf2  # create & activate new env
+conda create -y -n wf && source activate wf  # create & activate new env
 conda install -y -c bioconda snakemake
 ```
 
