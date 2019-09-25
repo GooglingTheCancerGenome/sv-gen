@@ -22,5 +22,16 @@ output:
 #   bam_idx: .bam.bai
 # 
 # SAMPLES : ['G1', 'G2', 'N1', 'N2', 'N3']
-# coverage : [5,10,15,20,25,30]
-# insert_size : [300,350,400,450,500]
+
+#sim_genomes:
+#
+sim_reads:
+  seed: 1000
+  stdev: 10
+  read_len: 150
+  profile: HSXt
+  coverage: 30
+  insert_size: 500
+    # min: 300
+    # max: 500
+    # step: 50
