@@ -17,11 +17,15 @@ localrules: all
 
 rule all:
     input:
-        expand("{prefix}_{paired}.fq", prefix=[os.path.splitext(f)[0] for f in config['output']['fasta'].values()], paired=[1,2])
+        [expand("{prefix}.{ext}", prefix=config['input']['fasta'], ext=['bwt', 'amb', 'ann', 'pac', 'sa']),
+        config['output']['fasta'].values(),
+        #expand("{prefix}_{paired}.fq", prefix=[os.path.splitext(f)[0] for f in config['output']['fasta'].values()], paired=[1,2])]
+        expand("{prefix}.sam", prefix=[os.path.splitext(f)[0] for f in config['output']['fasta'].values()])]
 
 # include rules
 include: "rules/sim_genomes.smk"
 include: "rules/sim_reads.smk"
+include: "rules/map_reads.smk"
 
 # rule all:
 #   input:

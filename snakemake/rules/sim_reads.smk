@@ -9,8 +9,8 @@ rule art_illumina:
         coverage = config['sim_reads']['coverage'],
         insert_size = config['sim_reads']['insert_size']
     output:
-        fastq1 = '{prefix}_1.fq',
-        fastq2 = '{prefix}_2.fq'
+        fastq1 = "{prefix}_1.fq",
+        fastq2 = "{prefix}_2.fq"
     conda:
         "../environment.yaml"
     shell:

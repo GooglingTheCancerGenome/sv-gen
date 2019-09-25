@@ -1,6 +1,7 @@
 # I/O files
 input:
   fasta: data/chr17.fasta  # reference genome (haploid)
+  # chr: 17
   config: params.txt       # SURVIVOR config file
 output:
   fasta:
@@ -20,18 +21,28 @@ output:
 #     - .fasta.sa   # |
 #   bam: .bam
 #   bam_idx: .bam.bai
-# 
-# SAMPLES : ['G1', 'G2', 'N1', 'N2', 'N3']
+#   vcf: .vcf
+#   bed: .bed
+#   fastq: .fq  # temp files 
 
 #sim_genomes:
 #
 sim_reads:
   seed: 1000
   stdev: 10
+  # min: 300
+  # max: 500
+  # step: 50  
   read_len: 150
+  # min: 300
+  # max: 500
+  # step: 50
   profile: HSXt
-  coverage: 30
+  coverage: 30 # max. coverage; use samtools/sambamba to downsample
+  # min: 10
+  # max: 30
+  # step: 5
   insert_size: 500
-    # min: 300
-    # max: 500
-    # step: 50
+  # min: 300
+  # max: 500
+  # step: 50
