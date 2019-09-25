@@ -1,6 +1,6 @@
 rule art_illumina:
     input:
-        fasta = "{prefix}.fasta"
+        fasta = "{basedir}/{genotype}/{prefix}.fasta"
     params:
         seed = config['sim_reads']['seed'],
         profile = config['sim_reads']['profile'],
@@ -9,8 +9,8 @@ rule art_illumina:
         coverage = config['sim_reads']['coverage'],
         insert_size = config['sim_reads']['insert_size']
     output:
-        fastq1 = "{prefix}_1.fq",
-        fastq2 = "{prefix}_2.fq"
+        fastq1 = "{basedir}/{genotype}/{prefix}_1.fq",
+        fastq2 = "{basedir}/{genotype}/{prefix}_2.fq"
     conda:
         "../environment.yaml"
     shell:

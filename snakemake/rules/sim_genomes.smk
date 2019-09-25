@@ -18,7 +18,7 @@ rule survivor_simsv:
         config = config['input']['config'],
         fasta = config['input']['fasta']
     output:
-        "{prefix}.{genotype, h[tm][sv]*}.fasta"
+        "{basedir}/{genotype}/{prefix}.fasta"
     params:
         sfx = '.org'
     conda:
@@ -31,17 +31,17 @@ rule survivor_simsv:
 
         # write diploid genomes into FASTA
         # sequence IDs must be unique -> [SEQID].[N]
-        if [ "{wildcards.genotype}" == "hmsv" ]; then
+        if [ "{wildcards.genotype}" == "hmzsv" ]; then
             SURVIVOR simSV "{input.fasta}" "{input.config}" 0 0 "${{PREFIX}}"
             sed -E -i{params.sfx} "s:^(>.*):\\1\.1:" "{output}"
             sed -E "s:^(>.*):\\1\.2:" "{output}{params.sfx}" >> "{output}"
             rm -f "{output}{params.sfx}"
-        elif [ "{wildcards.genotype}" == "htsv" ]; then
+        elif [ "{wildcards.genotype}" == "htzsv" ]; then
             SURVIVOR simSV "{input.fasta}" "{input.config}" 0 0 "${{PREFIX}}"
             sed -E -i{params.sfx} "s:^(>.*):\\1\.1:" "{output}"
             sed -E "s:^(>.*):\\1\.2:" "{input.fasta}" >> "{output}"
             rm -f "{output}{params.sfx}"
-        elif [ "{wildcards.genotype}" == "hm" ]; then
+        elif [ "{wildcards.genotype}" == "hmz" ]; then
             sed -E "s:^(>.*):\\1\.1:" "{input.fasta}" > "{output}"
             sed -E "s:^(>.*):\\1\.2:" "{input.fasta}" >> "{output}"
         fi

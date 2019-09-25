@@ -5,9 +5,9 @@ input:
   config: params.txt       # SURVIVOR config file
 output:
   fasta:
-    hm: data/chr17.hm.fasta      # diploid reference (homozygous)
-    hmsv: data/chr17.hmsv.fasta  # diploid genome with SVs (homozygous)
-    htsv: data/chr17.htsv.fasta  # diploid genome with SVs (heterozygous)
+    hmz: data/hmz/chr17.fasta      # diploid reference (homozygous)
+    hmzsv: data/hmzsv/chr17.fasta  # diploid genome with SVs (homozygous)
+    htzsv: data/htzsv/chr17.fasta  # diploid genome with SVs (heterozygous)
 
 # I/O files (extensions) used by the workflow
 # file_exts:
