@@ -27,6 +27,12 @@ output:
 
 #sim_genomes:
 #
+# sv_types:
+#   - INDEL
+#   - DUP
+#   - INV
+#   - TRA
+
 sim_reads:
   seed: 1000
   stdev: 10
