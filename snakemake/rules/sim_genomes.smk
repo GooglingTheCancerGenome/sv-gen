@@ -20,14 +20,14 @@ rule samtools_faidx:
         region = config['input']['region'],
         fasta = os.path.splitext(config['input']['region'])[0] + ".fasta"
     params:
-        chr = "\n".join([str(c) for c in config['input']['chr']])
+        seqids = "\n".join([str(c) for c in config['input']['seqids']])
     conda:
         "../environment.yaml"
     shell:
         """
         set -xe
-        echo "{params.chr}" > "{output.region}"
-        if [ "{params.chr}" == "" ]; then
+        echo "{params.seqids}" > "{output.region}"
+        if [ "{params.seqids}" == "" ]; then
             ln -sr "{input.fasta}" "{output.fasta}"
         else
             samtools faidx "{input.fasta}" -r "{output.region}" -o "{output.fasta}"

@@ -1,7 +1,7 @@
 # I/O files
 input:
   fasta: data/chr17_2n.fasta  # reference genome (haploid)
-  chr: [17]                   # list of zero or more SeqIDs (e.g. chromosomes)
+  seqids: []                  # list of zero or more SeqIDs (e.g. chromosomes)
   config: data/params.txt     # SURVIVOR config file
   region: data/chr.txt        # SAMTOOLS file of regions in chr[:from-to] format
 output:
