@@ -28,17 +28,14 @@ output:
 #sim_genomes:
 #
 # sv_types:
-#   - INDEL
-#   - DUP
-#   - INV
-#   - TRA
+#   - INDEL # count, min/max length
+#   - DUP   # "" 
+#   - INV   # ""
+#   - TRA   # ""
 
 sim_reads:
   seed: 1000
-  stdev: 10
-  # min: 300
-  # max: 500
-  # step: 50  
+  stdev: 10  # on the insert size? no need to vary 
   read_len: 150
   # min: 300
   # max: 500
@@ -46,7 +43,6 @@ sim_reads:
   profile: HSXt
   coverage: 30 # max. coverage; use samtools/sambamba to downsample
   # min: 10
-  # max: 30
   # step: 5
   insert_size: 500
   # min: 300
