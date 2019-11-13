@@ -13,10 +13,31 @@ rule survivor_config:
         cat "{output}"
         """
 
+rule samtools_faidx:
+    input:
+        fasta = config['input']['fasta']
+    output:
+        region = config['input']['region'],
+        fasta = os.path.splitext(config['input']['region'])[0] + ".fasta"
+    params:
+        chr = "\n".join([str(c) for c in config['input']['chr']])
+    conda:
+        "../environment.yaml"
+    shell:
+        """
+        set -xe
+        echo "{params.chr}" > "{output.region}"
+        if [ "{params.chr}" == "" ]; then
+            ln -sr "{input.fasta}" "{output.fasta}"
+        else
+            samtools faidx "{input.fasta}" -r "{output.region}" -o "{output.fasta}"
+        fi
+        """
+
 rule survivor_simsv:
     input:
         config = config['input']['config'],
-        fasta = config['input']['fasta']
+        fasta = os.path.splitext(config['input']['region'])[0] + ".fasta"
     output:
         "{basedir}/{genotype}/{prefix}.fasta"
     params:

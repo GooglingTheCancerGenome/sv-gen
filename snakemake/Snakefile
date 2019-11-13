@@ -17,116 +17,16 @@ localrules: all
 
 rule all:
     input:
-        [expand("{prefix}.{ext}", prefix=config['input']['fasta'], ext=['bwt', 'amb', 'ann', 'pac', 'sa']),
-        config['output']['fasta'].values(),
-        #expand("{prefix}_{paired}.fq", prefix=[os.path.splitext(f)[0] for f in config['output']['fasta'].values()], paired=[1,2])]
-        expand("{prefix}.sam", prefix=[os.path.splitext(f)[0] for f in config['output']['fasta'].values()])]
+        #os.path.splitext(config['input']['region'])[0] + ".fasta"
+        #[expand("{prefix}.{ext}", prefix=config['input']['fasta'], ext=['bwt', 'amb', 'ann', 'pac', 'sa']),
+        #config['output'].values(),
+        [expand("{prefix}_{paired}.fq",
+        prefix=[os.path.join(f, os.path.splitext(config['input']['region'])[0]) for f in config['output'].values()],
+        paired=[1,2]),
+        expand("{prefix}.sam",
+        prefix=[os.path.join(f, os.path.splitext(config['input']['region'])[0]) for f in config['output'].values()])]
 
 # include rules
 include: "rules/sim_genomes.smk"
 include: "rules/sim_reads.smk"
 include: "rules/map_reads.smk"
-
-# rule all:
-#   input:
-#       expand('{sample}/BAM/{sample}_{coverage}_{insert_size}.bam',
-#              sample=config['SAMPLES'],
-#              coverage=config['coverage'],
-#              insert_size=config['insert_size']),
-#       expand('T1/MERGED/T1_{coverage}_{insert_size}.bam.bai',
-#              coverage=config['coverage'],
-#              insert_size=config['insert_size'])
-# 
-# 
-# rule sim_reads:
-#     input:
-#         genome = lambda wildcards: get_genome(wildcards.sample)
-#     params:
-#         isize = lambda wildcards: wildcards.insert_size,
-#         fold_cov = lambda wildcards: get_coverage(wildcards.sample, wildcards.coverage),
-#         dir = '{sample}/FASTQ/{sample}_{coverage}_{insert_size}_'
-#     output:
-#         first = '{sample}/FASTQ/{sample}_{coverage}_{insert_size}_1.fq',
-#         second = '{sample}/FASTQ/{sample}_{coverage}_{insert_size}_2.fq'
-#     conda:
-#         "environment.yaml"
-#     shell:
-#         """
-#         set -xe
-#         art_illumina \
-#             -ss HSXt \
-#             -M \
-#             -i {input.genome} \
-#             -p \
-#             -l 150 \
-#             -f {params.fold_cov} \
-#             -m {params.isize} \
-#             -s 100 \
-#             -na \
-#             -rs {SEED} \
-#             -o {params.dir}
-#         """
-# 
-# rule rename:
-#     input:
-#         first = '{sample}/FASTQ/{sample}_{coverage}_{insert_size}_1.fq',
-#         second = '{sample}/FASTQ/{sample}_{coverage}_{insert_size}_2.fq'
-#     output:
-#         first = '{sample}/FASTQ/{sample}_{coverage}_{insert_size}_F1_S1_L001_R1_001.fq',
-#         second = '{sample}/FASTQ/{sample}_{coverage}_{insert_size}_F1_S1_L001_R2_001.fq'
-#     shell:
-#         """
-#         set -xe
-#         mv {input.first} {output.first}
-#         mv {input.second} {output.second}
-#         """
-# 
-# rule gzip:
-#     input:
-#         first = rules.rename.output.first,
-#         second = rules.rename.output.second
-#     output:
-#         first = rules.rename.output.first+'.gz',
-#         second = rules.rename.output.second+'.gz'
-#     shell:
-#         """
-#         set -xe
-#         gzip {input.first} {input.second}
-#         """
-# 
-# rule mapping:
-#     input:
-#         fq1 = rules.gzip.output.first,
-#         fq2 = rules.gzip.output.second
-#     params:
-#         rg = "@RG\tID:{wildcards.sample}\tSM:{wildcards.sample}\tLB:{wildcards.sample}"
-#     output:
-#         '{sample}/BAM/{sample}_{coverage}_{insert_size}.bam'
-#     shell:
-#         '{SPEEDSEQ} align \
-#             -o {wildcards.sample}/BAM/{wildcards.sample} \
-#             -R {params.rg} \
-#             {REFERENCE} \
-#             {input.fq1} \
-#             {input.fq2}'
-# 
-# rule merge_bams:
-#     input:
-#         'T0/BAM/T0_{coverage}_{insert_size}.bam',
-#         'N0/BAM/N0_{coverage}_{insert_size}.bam'
-#     output:
-#         'T1/MERGED/T1_{coverage}_{insert_size}.bam'
-#     conda:
-#         "environment.yaml"
-#     shell:
-#         'sambamba merge {output} {input}'
-# 
-# rule index_bams:
-#     input:
-#         'T1/MERGED/T1_{coverage}_{insert_size}.bam'
-#     output:
-#         'T1/MERGED/T1_{coverage}_{insert_size}.bam.bai'
-#     conda:
-#         "environment.yaml"
-#     shell:
-#         'sambamba index {input}'

@@ -1,13 +1,13 @@
 # I/O files
 input:
-  fasta: data/chr17.fasta  # reference genome (haploid)
-  # chr: 17
-  config: params.txt       # SURVIVOR config file
+  fasta: data/chr17_2n.fasta  # reference genome (haploid)
+  chr: [17]                   # list of zero or more SeqIDs (e.g. chromosomes)
+  config: data/params.txt     # SURVIVOR config file
+  region: data/chr.txt        # SAMTOOLS file of regions in chr[:from-to] format
 output:
-  fasta:
-    hmz: data/hmz/chr17.fasta      # diploid reference (homozygous)
-    hmzsv: data/hmzsv/chr17.fasta  # diploid genome with SVs (homozygous)
-    htzsv: data/htzsv/chr17.fasta  # diploid genome with SVs (heterozygous)
+  hmz: data/hmz      # dir with diploid homozygous genome
+  hmzsv: data/hmzsv  # dir with diploid homozygous genome incl. SVs
+  htzsv: data/htzsv  # dir with diploid heterozygous genome incl. SVs
 
 # I/O files (extensions) used by the workflow
 # file_exts:
