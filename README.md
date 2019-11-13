@@ -1,4 +1,4 @@
-# sv-gen-workflow
+# sv-gen
 
 Snakemake-based workflow to generate artificial structural variant (SV) data.
 
@@ -19,8 +19,8 @@ The workflow installs the following tools:
 **1. Clone this repo.**
 
 ```bash
-git clone https://github.com/GooglingTheCancerGenome/sv-gen-workflow.git
-cd sv-gen-workflow/snakemake
+git clone https://github.com/GooglingTheCancerGenome/sv-gen.git
+cd sv-gen/snakemake
 ```
 
 **2. Install dependencies.**
