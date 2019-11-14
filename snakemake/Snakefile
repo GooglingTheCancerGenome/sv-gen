@@ -18,13 +18,19 @@ localrules: all
 rule all:
     input:
         #os.path.splitext(config['input']['region'])[0] + ".fasta"
+        # expand("{basedir}/{genotype}/{prefix}.fasta",
+        # basedir=os.path.dirname(config['input']['region']),
+        # genotype=config['output']['genotype'],
+        # prefix=os.path.splitext(os.path.basename(config['input']['region']))[0])
         #[expand("{prefix}.{ext}", prefix=config['input']['fasta'], ext=['bwt', 'amb', 'ann', 'pac', 'sa']),
         #config['output'].values(),
-        [expand("{prefix}_{paired}.fq",
-        prefix=[os.path.join(f, os.path.splitext(config['input']['region'])[0]) for f in config['output'].values()],
+        [expand(os.path.join("{basedir}", "{genotype}_{paired}.fq"),
+        basedir=os.path.dirname(config['input']['region']),
+        genotype=config['output']['genotype'],
         paired=[1,2]),
-        expand("{prefix}.sam",
-        prefix=[os.path.join(f, os.path.splitext(config['input']['region'])[0]) for f in config['output'].values()])]
+        expand(os.path.join("{basedir}", "{genotype}.sam"),
+        basedir=os.path.dirname(config['input']['region']),
+        genotype=config['output']['genotype'])]
 
 # include rules
 include: "rules/sim_genomes.smk"

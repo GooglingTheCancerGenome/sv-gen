@@ -39,7 +39,7 @@ rule survivor_simsv:
         config = config['input']['config'],
         fasta = os.path.splitext(config['input']['region'])[0] + ".fasta"
     output:
-        "{basedir}/{genotype}/{prefix}.fasta"
+        os.path.join("{basedir}", "{genotype}.fasta")
     params:
         sfx = '.org'
     conda:

@@ -5,9 +5,10 @@ input:
   config: data/params.txt     # SURVIVOR config file
   region: data/chr.txt        # SAMTOOLS file of regions in chr[:from-to] format
 output:
-  hmz: data/hmz      # dir with diploid homozygous genome
-  hmzsv: data/hmzsv  # dir with diploid homozygous genome incl. SVs
-  htzsv: data/htzsv  # dir with diploid heterozygous genome incl. SVs
+  genotype:
+    - hmz   # homozygous genome (diploid)
+    - hmzsv # homozygous genome with SVs
+    - htzsv # heterozygous genome with SVs
 
 # I/O files (extensions) used by the workflow
 # file_exts:

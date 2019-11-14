@@ -1,6 +1,6 @@
 rule art_illumina:
     input:
-        fasta = "{basedir}/{genotype}/{prefix}.fasta"
+        fasta = os.path.join("{basedir}", "{genotype}.fasta")
     params:
         seed = config['sim_reads']['seed'],
         profile = config['sim_reads']['profile'],
@@ -9,8 +9,8 @@ rule art_illumina:
         coverage = config['sim_reads']['coverage'],
         insert_size = config['sim_reads']['insert_size']
     output:
-        fastq1 = "{basedir}/{genotype}/{prefix}_1.fq",
-        fastq2 = "{basedir}/{genotype}/{prefix}_2.fq"
+        fastq1 = os.path.join("{basedir}", "{genotype}_1.fq"),
+        fastq2 = os.path.join("{basedir}", "{genotype}_2.fq")
     conda:
         "../environment.yaml"
     shell:
