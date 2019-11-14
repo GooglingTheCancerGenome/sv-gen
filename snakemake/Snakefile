@@ -17,20 +17,24 @@ localrules: all
 
 rule all:
     input:
-        #os.path.splitext(config['input']['region'])[0] + ".fasta"
-        # expand("{basedir}/{genotype}/{prefix}.fasta",
-        # basedir=os.path.dirname(config['input']['region']),
-        # genotype=config['output']['genotype'],
-        # prefix=os.path.splitext(os.path.basename(config['input']['region']))[0])
+        ### DEBUG:
+        #os.path.join(os.path.dirname(config['input']['fasta']), "seqids.fasta")
+        #expand(os.path.join("{basedir}", "{genotype}.fasta"),
+        #basedir=os.path.dirname(config['input']['fasta']),
+        #genotype=config['output']['genotype'])
         #[expand("{prefix}.{ext}", prefix=config['input']['fasta'], ext=['bwt', 'amb', 'ann', 'pac', 'sa']),
         #config['output'].values(),
-        [expand(os.path.join("{basedir}", "{genotype}_{paired}.fq"),
-        basedir=os.path.dirname(config['input']['region']),
-        genotype=config['output']['genotype'],
-        paired=[1,2]),
+        # [expand(os.path.join("{basedir}", "{genotype}_{paired}.fq"),
+        # basedir=os.path.dirname(config['input']['fasta']),
+        # genotype=config['output']['genotype'],
+        # paired=[1,2]),
+        # expand(os.path.join("{basedir}", "{genotype}{ext}"),
+        # basedir=os.path.dirname(config['input']['fasta']),
+        # genotype=config['output']['genotype'],
+        # ext=config['file_exts']['fasta'][0])]
         expand(os.path.join("{basedir}", "{genotype}.sam"),
-        basedir=os.path.dirname(config['input']['region']),
-        genotype=config['output']['genotype'])]
+        basedir=os.path.dirname(config['input']['fasta']),
+        genotype=config['output']['genotype'])
 
 # include rules
 include: "rules/sim_genomes.smk"
