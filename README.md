@@ -1,5 +1,7 @@
 # sv-gen
 
+[![Build Status](https://travis-ci.org/GooglingTheCancerGenome/sv-gen.svg?branch=dev)](https://travis-ci.org/GooglingTheCancerGenome/sv-gen)
+
 Snakemake-based workflow to generate artificial structural variant (SV) data.
 
 ## Dependencies
