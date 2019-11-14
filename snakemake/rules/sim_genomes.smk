@@ -54,12 +54,12 @@ rule survivor_simsv:
         if [ "{wildcards.genotype}" == "hmz" ]; then
             sed -E "s:^(>.*):\\1\.1:" "{input.fasta}" > "{output.fasta}"
             sed -E "s:^(>.*):\\1\.2:" "{input.fasta}" >> "{output.fasta}"
-        elif [ "{wildcards.genotype}" == "hmzsv" ]; then
+        elif [ "{wildcards.genotype}" == "hmz-sv" ]; then
             SURVIVOR simSV "{input.fasta}" "{input.config}" 0 0 "{params.prefix}"
             sed -E -i{params.sfx} "s:^(>.*):\\1\.1:" "{output.fasta}"
             sed -E "s:^(>.*):\\1\.2:" "{output.fasta}{params.sfx}" >> "{output.fasta}"
             rm -f "{output.fasta}{params.sfx}"
-        elif [ "{wildcards.genotype}" == "htzsv" ]; then
+        elif [ "{wildcards.genotype}" == "htz-sv" ]; then
             SURVIVOR simSV "{input.fasta}" "{input.config}" 0 0 "{params.prefix}"
             sed -E -i{params.sfx} "s:^(>.*):\\1\.1:" "{output.fasta}"
             sed -E "s:^(>.*):\\1\.2:" "{input.fasta}" >> "{output.fasta}"

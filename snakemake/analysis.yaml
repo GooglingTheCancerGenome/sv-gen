@@ -5,9 +5,9 @@ input:
   config: data/survivor.cfg  # SURVIVOR config file
 output:
   genotype:
-    - hmz   # homozygous genome (diploid)
-    - hmzsv # homozygous genome with SVs
-    - htzsv # heterozygous genome with SVs
+    - hmz    # homozygous genome (diploid)
+    - hmz-sv # homozygous genome with SVs
+    - htz-sv # heterozygous genome with SVs
 
 # I/O files (extensions) used by the workflow
 file_exts:
