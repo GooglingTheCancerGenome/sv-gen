@@ -1,12 +1,13 @@
 # I/O files
 input:
-  fasta: data/chr17.fasta  # reference genome (haploid)
-  config: params.txt       # SURVIVOR config file
+  fasta: data/chr17.fasta     # reference genome (haploid)
+  seqids: [17]                # list of zero or more SeqIDs (e.g. chromosomes)
+  config: data/params.txt     # SURVIVOR config file
+  region: data/chr.txt        # SAMTOOLS file of regions in chr[:from-to] format
 output:
-  fasta:
-    hm: data/chr17.hm.fasta      # diploid reference (homozygous)
-    hmsv: data/chr17.hmsv.fasta  # diploid genome with SVs (homozygous)
-    htsv: data/chr17.htsv.fasta  # diploid genome with SVs (heterozygous)
+  hmz: data/hmz      # dir with diploid homozygous genome
+  hmzsv: data/hmzsv  # dir with diploid homozygous genome incl. SVs
+  htzsv: data/htzsv  # dir with diploid heterozygous genome incl. SVs
 
 # I/O files (extensions) used by the workflow
 # file_exts:
@@ -20,18 +21,30 @@ output:
 #     - .fasta.sa   # |
 #   bam: .bam
 #   bam_idx: .bam.bai
-# 
-# SAMPLES : ['G1', 'G2', 'N1', 'N2', 'N3']
+#   vcf: .vcf
+#   bed: .bed
+#   fastq: .fq  # temp files 
 
 #sim_genomes:
 #
+# sv_types:
+#   - INDEL # count, min/max length
+#   - DUP   # "" 
+#   - INV   # ""
+#   - TRA   # ""
+
 sim_reads:
   seed: 1000
-  stdev: 10
+  stdev: 10  # on the insert size? no need to vary 
   read_len: 150
+  # min: 300
+  # max: 500
+  # step: 50
   profile: HSXt
-  coverage: 30
+  coverage: 30 # max. coverage; use samtools/sambamba to downsample
+  # min: 10
+  # step: 5
   insert_size: 500
-    # min: 300
-    # max: 500
-    # step: 50
+  # min: 300
+  # max: 500
+  # step: 50

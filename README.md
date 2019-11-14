@@ -19,7 +19,7 @@ The workflow installs the following tools:
 **1. Clone this repo.**
 
 ```bash
-git clone https://github.com/GooglingTheCancerGenome/sv-gen-workflow.git
+git clone https://github.com/GooglingTheCancerGenome/sv-gen.git
 cd sv-gen/snakemake
 ```
 
