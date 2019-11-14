@@ -32,7 +32,7 @@ bash miniconda.sh  # install Conda (accept defaults)
 # export PATH="$HOME/miniconda3/bin:$PATH"
 source ~/.bashrc
 conda update -y conda  # update Conda
-conda create -y -n wf2 && source activate wf2  # create & activate new env
+conda create -y -n wf && source activate wf  # create & activate new env
 conda install -y -c bioconda snakemake
 ```
 
