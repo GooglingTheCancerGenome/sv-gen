@@ -13,9 +13,9 @@ output:
 file_exts:
   fastai:
     - .fasta
-    - .fasta.bwt  # BWA v0.6.x index files
+    - .fasta.ann  # BWA v0.6.x index files
     - .fasta.amb  # |
-    - .fasta.ann  # |
+    - .fasta.bwt  # |
     - .fasta.pac  # |
     - .fasta.sa   # |
 
