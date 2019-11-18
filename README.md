@@ -9,8 +9,9 @@ Snakemake-based workflow to generate artificial structural variant (SV) data.
 -   python (>=3.6)
 -   [conda](https://conda.io/) (>=4.5)
 -   [snakemake](https://snakemake.readthedocs.io/) (>=4.8)
+-   [xenon-cli](https://github.com/NLeSC/xenon-cli) (3.0.4)
 
-The workflow installs the following tools:
+The workflow includes the following tools:
 
 -   [SURVIVOR](https://github.com/fritzsedlazeck/SURVIVOR) (1.0.6)
 -   [ART](https://www.niehs.nih.gov/research/resources/software/biostatistics/art/) (2016-06-05)
@@ -21,7 +22,7 @@ The workflow installs the following tools:
 
 ```bash
 git clone https://github.com/GooglingTheCancerGenome/sv-gen.git
-cd sv-gen/snakemake
+cd sv-gen
 ```
 
 **2. Install dependencies.**
@@ -45,6 +46,7 @@ conda env create -n wf -f environment.yaml
 **4. Execute the workflow.**
 
 ```bash
+cd snakemake
 snakemake -np  # 'dry' run only checks I/O files
 snakemake --use-conda
 ```
