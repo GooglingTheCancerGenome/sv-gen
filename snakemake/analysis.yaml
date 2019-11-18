@@ -21,12 +21,10 @@ file_exts:
 
 sim_genomes:
   sv_type:
-    DUP: [3, 101, 10001]  # [count, min_len, max_len]
-    INDEL: [1, 21, 501]   #
-    INV: [4, 601, 801]    #
-    TRA: [0, 1001, 3001]  #
-    # INV_del: [2, 600, 800]
-    # INV_dup: [2, 600, 800]
+    DUP: [3, 100, 10000]  # [count, min_len, max_len]
+    INDEL: [1, 20, 500]   #
+    INV: [4, 600, 800]    #
+    TRA: [0, 1000, 3000]  #
 
 sim_reads:
   seed: 1000
