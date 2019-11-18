@@ -14,18 +14,19 @@ file_exts:
   fastai:
     - .fasta
     - .fasta.ann  # BWA v0.6.x index files
-    - .fasta.amb  # |
-    - .fasta.bwt  # |
-    - .fasta.pac  # |
-    - .fasta.sa   # |
+    - .fasta.amb  #
+    - .fasta.bwt  #
+    - .fasta.pac  #
+    - .fasta.sa   #
 
-#sim_genomes:
-#
-# sv_types:
-#   - INDEL # count, min/max length
-#   - DUP   # "" 
-#   - INV   # ""
-#   - TRA   # ""
+sim_genomes:
+  sv_type:
+    DUP: [3, 101, 10001]  # [count, min_len, max_len]
+    INDEL: [1, 21, 501]   #
+    INV: [4, 601, 801]    #
+    TRA: [0, 1001, 3001]  #
+    # INV_del: [2, 600, 800]
+    # INV_dup: [2, 600, 800]
 
 sim_reads:
   seed: 1000

@@ -3,15 +3,10 @@ import random
 shell.executable("/bin/bash")
 configfile: "analysis.yaml"
 
-__author__ = ['Luca Santuari', 'Arnold Kuzniar']
+__author__ = ['Arnold Kuzniar', 'Luca Santuari']
 __version__ = '0.1.0'
 __license__ = 'Apache License, Version 2.0'
 
-
-# REFERENCE = config['input']
-# NORMALFASTA = config['output']['diploid']
-# SVFASTA = config['output']['diploid_sv']
-# SEED = random.randint(1, 10**3)
 
 localrules: all
 

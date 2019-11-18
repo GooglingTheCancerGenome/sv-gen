@@ -2,7 +2,7 @@ rule survivor_config:
     output:
         config['input']['config']
     params:
-        n_trans = 0
+        matrix = config['sim_genomes']['sv_type']
     conda:
         "../environment.yaml"
     shell:
@@ -10,7 +10,20 @@ rule survivor_config:
         set -xe
 
         SURVIVOR simSV "{output}" &&
-        sed -E -i.org "s/^(TRANSLOCATION_number:)\s+[0-9]+/\\1 {params.n_trans}/" "{output}" &&
+        sed -i.org \
+            -E "s/^(DUPLICATION_number:)\s+[0-9]+/\\1 {params.matrix[DUP][0]}/;\
+                s/^(DUPLICATION_minimum_length:)\s+[0-9]+/\\1 {params.matrix[DUP][1]}/;\
+                s/^(DUPLICATION_maximum_length:)\s+[0-9]+/\\1 {params.matrix[DUP][2]}/;\
+                s/^(INDEL_number:)\s+[0-9]+/\\1 {params.matrix[INDEL][0]}/;\
+                s/^(INDEL_minimum_length:)\s+[0-9]+/\\1 {params.matrix[INDEL][1]}/;\
+                s/^(INDEL_maximum_length:)\s+[0-9]+/\\1 {params.matrix[INDEL][2]}/;\
+                s/^(INVERSION_number:)\s+[0-9]+/\\1 {params.matrix[INV][0]}/;\
+                s/^(INVERSION_minimum_length:)\s+[0-9]+/\\1 {params.matrix[INV][1]}/;\
+                s/^(INVERSION_maximum_length:)\s+[0-9]+/\\1 {params.matrix[INV][2]}/;\
+                s/^(TRANSLOCATION_number:)\s+[0-9]+/\\1 {params.matrix[TRA][0]}/;\
+                s/^(TRANSLOCATION_minimum_length:)\s+[0-9]+/\\1 {params.matrix[TRA][1]}/;\
+                s/^(TRANSLOCATION_maximum_length:)\s+[0-9]+/\\1 {params.matrix[TRA][2]}/"\
+            "{output}"
         cat "{output}"
         """
 
