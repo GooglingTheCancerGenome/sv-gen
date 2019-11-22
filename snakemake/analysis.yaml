@@ -21,23 +21,14 @@ file_exts:
 
 sim_genomes:
   sv_type:
-    DUP: [3, 100, 10000]  # [count, min_len, max_len]
-    INDEL: [1, 20, 500]   #
-    INV: [4, 600, 800]    #
-    TRA: [0, 1000, 3000]  #
+    DUP: [3, 100, 10000]  # duplication: [count, min_len, max_len]
+    INDEL: [1, 20, 500]   # insertion/deletion: ""
+    INV: [4, 600, 800]    # inversion: ""
+    TRA: [0, 1000, 3000]  # translocation: ""
 
 sim_reads:
   seed: 1000
-  stdev: 10  # on the insert size? no need to vary 
-  read_len: 150
-  # min: 300
-  # max: 500
-  # step: 50
   profile: HSXt
-  coverage: 30 # max. coverage; use samtools/sambamba to downsample
-  # min: 10
-  # step: 5
-  insert_size: 500
-  # min: 300
-  # max: 500
-  # step: 50
+  read_len: [150, 300]    # [len1, len2 ...]
+  insert_len: [10, 500]   # [stdev, len1, len2 ...]
+  coverage: [10, 20, 30]  # [cov1, cov2 ...]

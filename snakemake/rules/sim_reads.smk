@@ -8,9 +8,8 @@ rule art_illumina:
         seed = config['sim_reads']['seed'],
         profile = config['sim_reads']['profile'],
         read_len = config['sim_reads']['read_len'],
-        stdev = config['sim_reads']['stdev'],
+        insert_len = config['sim_reads']['insert_len'],
         coverage = config['sim_reads']['coverage'],
-        insert_size = config['sim_reads']['insert_size'],
         prefix = os.path.join("{basedir}", "{genotype}_")
     conda:
         "../environment.yaml"
@@ -21,13 +20,13 @@ rule art_illumina:
         art_illumina \
             -ss {params.profile} \
             -M \
-            -i {input} \
+            -i "{input}" \
             -p \
-            -l {params.read_len} \
-            -f {params.coverage} \
-            -m {params.insert_size} \
-            -s {params.stdev} \
+            -l {params.read_len[0]} \
+            -f {params.coverage[0]} \
+            -s {params.insert_len[0]} \
+            -m {params.insert_len[1]} \
             -na \
             -rs {params.seed} \
-            -o {params.prefix}
+            -o "{params.prefix}"
         """
