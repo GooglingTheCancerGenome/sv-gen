@@ -34,3 +34,18 @@ rule bwa_mem:
             "{input.fastai[0]}" "{input.fastq1}" "{input.fastq2}" | \
         samtools sort -o "{output}"
         """
+
+rule samtools_view:
+    input:
+        os.path.join("{basedir}", "{genotype}.bam")
+    output:
+        os.path.join("{basedir}", "{genotype}.cov{cov}.bam")
+    conda:
+        "../environment.yaml"
+    shell:
+        """
+        set -xe
+
+        FRAC=$(LC_ALL=C printf "%.2f" $(bc <<< "scale=2; {wildcards.cov} / 100"))
+        samtools view -s ${{FRAC}} "{input}" -o "{output}"
+        """
