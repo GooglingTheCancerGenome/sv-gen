@@ -27,7 +27,7 @@ rule all:
         # basedir=os.path.dirname(config['input']['fasta']),
         # genotype=config['output']['genotype'],
         # ext=config['file_exts']['fasta'][0])]
-        expand(os.path.join("{basedir}", "{genotype}.sam"),
+        expand(os.path.join("{basedir}", "{genotype}.bam"),
         basedir=os.path.dirname(config['input']['fasta']),
         genotype=config['output']['genotype'])
 

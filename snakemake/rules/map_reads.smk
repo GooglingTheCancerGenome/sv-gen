@@ -20,7 +20,7 @@ rule bwa_mem:
         fastq1 = os.path.join("{basedir}", "{genotype}_1.fq"),
         fastq2 = os.path.join("{basedir}", "{genotype}_2.fq")
     output:
-        os.path.join("{basedir}", "{genotype}.sam")
+        os.path.join("{basedir}", "{genotype}.bam")
     params:
         read_group = "@RG\\tID:{0}\\tLB:{0}\\tSM:{0}".format("{genotype}")
     conda:
@@ -31,5 +31,6 @@ rule bwa_mem:
 
         bwa mem \
             -R "{params.read_group}" \
-            "{input.fastai[0]}" "{input.fastq1}" "{input.fastq2}" > "{output}"
+            "{input.fastai[0]}" "{input.fastq1}" "{input.fastq2}" | \
+        samtools sort -o "{output}"
         """
