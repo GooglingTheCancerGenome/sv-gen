@@ -20,16 +20,20 @@ rule all:
         #genotype=config['output']['genotype'])
         #[expand("{prefix}.{ext}", prefix=config['input']['fasta'], ext=['bwt', 'amb', 'ann', 'pac', 'sa']),
         #config['output'].values(),
-        # [expand(os.path.join("{basedir}", "{genotype}_{paired}.fq"),
+        # expand(os.path.join("{basedir}", "r{read_len}_i{insert_len}", "{genotype}_{paired}.fq"),
         # basedir=os.path.dirname(config['input']['fasta']),
+        # read_len=config['sim_reads']['read'],
+        # insert_len=config['sim_reads']['insert'][1:],
         # genotype=config['output']['genotype'],
-        # paired=[1,2]),
+        # paired=[1,2])
         # expand(os.path.join("{basedir}", "{genotype}{ext}"),
         # basedir=os.path.dirname(config['input']['fasta']),
         # genotype=config['output']['genotype'],
         # ext=config['file_exts']['fasta'][0])]
-        expand(os.path.join("{basedir}", "cov{cov}", "{genotype}.bam"),
+        expand(os.path.join("{basedir}", "r{read_len}_i{insert_len}", "cov{cov}", "{genotype}.bam"),
         basedir=os.path.dirname(config['input']['fasta']),
+        read_len=config['sim_reads']['read']['len'],
+        insert_len=config['sim_reads']['insert']['len'],
         cov=config['sim_reads']['coverage'],
         genotype=config['output']['genotype'])
 

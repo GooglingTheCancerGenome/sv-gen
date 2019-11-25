@@ -29,6 +29,9 @@ sim_genomes:
 sim_reads:
   seed: 1000
   profile: HSXt
-  read_len: [150, 300]    # [len1, len2 ...]
-  insert_len: [10, 500]   # [stdev, len1, len2 ...]
-  coverage: [10, 20, 40]  # [cov1, cov2 ...]
+  coverage: [10, 30]  # [cov1, cov2, ...]
+  read:
+    len: [150]  # [len1, len2, ...]
+  insert:
+    stdev: 10
+    len: [500]  # [len1, len2, ...]
