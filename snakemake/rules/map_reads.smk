@@ -10,7 +10,8 @@ rule bwa_index:
         """
         set -xe
 
-        bwa index "{input.fasta}"
+        bwa index "{input.fasta}" &&
+        ls {output.fastai}
         """
     
 rule bwa_mem:
