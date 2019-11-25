@@ -1,6 +1,6 @@
 rule art_illumina:
     input:
-        os.path.join("{basedir}", "{genotype}.fasta")
+        fasta = os.path.join("{basedir}", "{genotype}.fasta")
     output:
         fastq1 = os.path.join("{basedir}", "{genotype}_1.fq"),
         fastq2 = os.path.join("{basedir}", "{genotype}_2.fq")
@@ -20,7 +20,7 @@ rule art_illumina:
         art_illumina \
             -ss {params.profile} \
             -M \
-            -i "{input}" \
+            -i "{input.fasta}" \
             -p \
             -l {params.read_len[0]} \
             -f {params.coverage} \

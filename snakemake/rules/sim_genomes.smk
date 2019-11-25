@@ -1,6 +1,6 @@
 rule survivor_config:
     output:
-        config['input']['config']
+        cfg = config['input']['config']
     params:
         matrix = config['sim_genomes']['sv_type']
     conda:
@@ -9,7 +9,7 @@ rule survivor_config:
         """
         set -xe
 
-        SURVIVOR simSV "{output}" &&
+        SURVIVOR simSV "{output.cfg}" &&
         sed -i.org \
             -E "s/^(DUPLICATION_number:)\s+[0-9]+/\\1 {params.matrix[DUP][0]}/;\
                 s/^(DUPLICATION_minimum_length:)\s+[0-9]+/\\1 {params.matrix[DUP][1]}/;\
@@ -29,9 +29,10 @@ rule survivor_config:
 
 rule samtools_faidx:
     input:
-        config['input']['fasta']
+        fasta = config['input']['fasta']
     output:
-        [os.path.join("{basedir}", "seqids.") + sfx for sfx in ("txt", "fasta")]
+        seqids = os.path.join("{basedir}", "seqids.txt"),
+        fasta = os.path.join("{basedir}", "seqids.fasta")
     params:
         seqids = "\n".join([str(c) for c in config['input']['seqids']])
     conda:
@@ -39,11 +40,11 @@ rule samtools_faidx:
     shell:
         """
         set -xe
-        echo "{params.seqids}" > "{output[0]}"
+        echo "{params.seqids}" > "{output.seqids}"
         if [ "{params.seqids}" == "" ]; then
-            ln -sr "{input}" "{output[1]}"
+            ln -sr "{input.fasta}" "{output.fasta}"
         else
-            samtools faidx "{input}" -r "{output[0]}" -o "{output[1]}"
+            samtools faidx "{input}" -r "{output.seqids}" -o "{output.fasta}"
         fi
         """
 
