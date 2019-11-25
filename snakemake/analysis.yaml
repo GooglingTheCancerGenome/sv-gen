@@ -9,7 +9,7 @@ output:
     - hmz-sv # homozygous genome with SVs
     - htz-sv # heterozygous genome with SVs
 
-# I/O files (extensions) used by the workflow
+# I/O file extensions
 file_exts:
   fastai:
     - .fasta
@@ -31,4 +31,4 @@ sim_reads:
   profile: HSXt
   read_len: [150, 300]    # [len1, len2 ...]
   insert_len: [10, 500]   # [stdev, len1, len2 ...]
-  coverage: [10, 20, 30]  # [cov1, cov2 ...]
+  coverage: [10, 20, 40]  # [cov1, cov2 ...]
