@@ -1,7 +1,7 @@
 #!/bin/bash -xe
 
 source ~/.profile
-export BRANCH=dev
+export BRANCH=master
 git clone -b $BRANCH https://github.com/GooglingTheCancerGenome/sv-gen.git
 cd sv-gen/snakemake
 snakemake --version
