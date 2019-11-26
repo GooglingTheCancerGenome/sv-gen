@@ -5,19 +5,22 @@ input:
   config: data/survivor.cfg  # SURVIVOR config file
 output:
   genotype:
-    - hmz    # homozygous genome (diploid)
-    - hmz-sv # homozygous genome with SVs
-    - htz-sv # heterozygous genome with SVs
+    - hmz     # homozygous genome (diploid)
+    - hmz-sv  # homozygous genome with SVs
+    - htz-sv  # heterozygous genome with SVs
 
 # I/O file extensions
 file_exts:
-  fastai:
-    - .fasta
+  fasta: .fasta
+  fasta_idx:
     - .fasta.ann  # BWA v0.6.x index files
     - .fasta.amb  #
     - .fasta.bwt  #
     - .fasta.pac  #
     - .fasta.sa   #
+  fastq: .fq
+  bam: .bam
+  bam_idx: .bam.bai
 
 sim_genomes:
   sv_type:

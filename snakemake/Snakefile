@@ -8,7 +8,6 @@ __version__ = '0.1.0'
 __license__ = 'Apache License, Version 2.0'
 
 
-#ruleorder: samtools_view > bwa_mem
 localrules: all
 
 rule all:
@@ -30,7 +29,7 @@ rule all:
         # basedir=os.path.dirname(config['input']['fasta']),
         # genotype=config['output']['genotype'],
         # ext=config['file_exts']['fasta'][0])]
-        expand(os.path.join("{basedir}", "r{read_len}_i{insert_len}", "cov{cov}", "{genotype}.bam"),
+        expand(os.path.join("{basedir}", "r{read_len}_i{insert_len}", "cov{cov}", "{genotype}.bam.bai"),
         basedir=os.path.dirname(config['input']['fasta']),
         read_len=config['sim_reads']['read']['len'],
         insert_len=config['sim_reads']['insert']['len'],
