@@ -1,34 +1,31 @@
 rule art_illumina:
     input:
-        fasta = "{basedir}/{genotype}/{prefix}.fasta"
+        fasta = os.path.join("{basedir}", "{genotype}.fasta")
+    output:
+        fastq1 = os.path.join("{basedir}", "r{read_len}_i{insert_len}", "{genotype}_1.fq"),
+        fastq2 = os.path.join("{basedir}", "r{read_len}_i{insert_len}", "{genotype}_2.fq")
     params:
         seed = config['sim_reads']['seed'],
         profile = config['sim_reads']['profile'],
-        read_len = config['sim_reads']['read_len'],
-        stdev = config['sim_reads']['stdev'],
-        coverage = config['sim_reads']['coverage'],
-        insert_size = config['sim_reads']['insert_size']
-    output:
-        fastq1 = "{basedir}/{genotype}/{prefix}_1.fq",
-        fastq2 = "{basedir}/{genotype}/{prefix}_2.fq"
+        insert_stdev = config['sim_reads']['insert']['stdev'],
+        coverage = max(config['sim_reads']['coverage']),
+        prefix = os.path.join("{basedir}", "r{read_len}_i{insert_len}", "{genotype}_")
     conda:
         "../environment.yaml"
     shell:
         """
         set -xe
-        PREFIX="$(basename "{input.fasta}" .fasta)"
-        OUTDIR="$(dirname "{input.fasta}")"
 
         art_illumina \
-            -ss {params.profile} \
             -M \
-            -i {input.fasta} \
-            -p \
-            -l {params.read_len} \
-            -f {params.coverage} \
-            -m {params.insert_size} \
-            -s {params.stdev} \
             -na \
+            -p \
+            -f {params.coverage} \
+            -l {wildcards.read_len} \
+            -m {wildcards.insert_len} \
+            -s {params.insert_stdev} \
+            -ss {params.profile} \
             -rs {params.seed} \
-            -o ${{OUTDIR}}/${{PREFIX}}_
+            -i "{input.fasta}" \
+            -o "{params.prefix}"
         """

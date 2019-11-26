@@ -1,50 +1,40 @@
 # I/O files
 input:
-  fasta: data/chr17.fasta     # reference genome (haploid)
-  seqids: [17]                # list of zero or more SeqIDs (e.g. chromosomes)
-  config: data/params.txt     # SURVIVOR config file
-  region: data/chr.txt        # SAMTOOLS file of regions in chr[:from-to] format
+  fasta: data/test.fasta     # reference genome (haploid)
+  seqids: [17]               # list of zero or more SeqIDs (e.g. chromosomes)
+  config: data/survivor.cfg  # SURVIVOR config file
 output:
-  hmz: data/hmz      # dir with diploid homozygous genome
-  hmzsv: data/hmzsv  # dir with diploid homozygous genome incl. SVs
-  htzsv: data/htzsv  # dir with diploid heterozygous genome incl. SVs
+  genotype:
+    - hmz     # homozygous genome (diploid)
+    - hmz-sv  # homozygous genome with SVs
+    - htz-sv  # heterozygous genome with SVs
 
-# I/O files (extensions) used by the workflow
-# file_exts:
-#   fasta: .fasta
-#   fasta_idx:
-#     - .fasta.fai  # faidx index file
-#     - .fasta.bwt  # BWA v0.6.x index files
-#     - .fasta.amb  # |
-#     - .fasta.ann  # |
-#     - .fasta.pac  # |
-#     - .fasta.sa   # |
-#   bam: .bam
-#   bam_idx: .bam.bai
-#   vcf: .vcf
-#   bed: .bed
-#   fastq: .fq  # temp files 
+# I/O file extensions
+file_exts:
+  fasta: .fasta
+  fasta_idx:
+    - .fasta.ann  # BWA v0.6.x index files
+    - .fasta.amb  #
+    - .fasta.bwt  #
+    - .fasta.pac  #
+    - .fasta.sa   #
+  fastq: .fq
+  bam: .bam
+  bam_idx: .bam.bai
 
-#sim_genomes:
-#
-# sv_types:
-#   - INDEL # count, min/max length
-#   - DUP   # "" 
-#   - INV   # ""
-#   - TRA   # ""
+sim_genomes:
+  sv_type:
+    DUP: [3, 100, 10000]  # duplication: [count, min_len, max_len]
+    INDEL: [1, 20, 500]   # insertion/deletion: ""
+    INV: [4, 600, 800]    # inversion: ""
+    TRA: [0, 1000, 3000]  # translocation: ""
 
 sim_reads:
   seed: 1000
-  stdev: 10  # on the insert size? no need to vary 
-  read_len: 150
-  # min: 300
-  # max: 500
-  # step: 50
   profile: HSXt
-  coverage: 30 # max. coverage; use samtools/sambamba to downsample
-  # min: 10
-  # step: 5
-  insert_size: 500
-  # min: 300
-  # max: 500
-  # step: 50
+  coverage: [10, 30]  # [cov1, cov2, ...]
+  read:
+    len: [150]  # [len1, len2, ...]
+  insert:
+    stdev: 10
+    len: [500]  # [len1, len2, ...]

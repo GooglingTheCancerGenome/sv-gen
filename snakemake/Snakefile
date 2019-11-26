@@ -3,28 +3,38 @@ import random
 shell.executable("/bin/bash")
 configfile: "analysis.yaml"
 
-__author__ = ['Luca Santuari', 'Arnold Kuzniar']
+__author__ = ['Arnold Kuzniar', 'Luca Santuari']
 __version__ = '0.1.0'
 __license__ = 'Apache License, Version 2.0'
 
-
-# REFERENCE = config['input']
-# NORMALFASTA = config['output']['diploid']
-# SVFASTA = config['output']['diploid_sv']
-# SEED = random.randint(1, 10**3)
 
 localrules: all
 
 rule all:
     input:
-        #os.path.splitext(config['input']['region'])[0] + ".fasta"
+        ### DEBUG:
+        #os.path.join(os.path.dirname(config['input']['fasta']), "seqids.fasta")
+        #expand(os.path.join("{basedir}", "{genotype}.fasta"),
+        #basedir=os.path.dirname(config['input']['fasta']),
+        #genotype=config['output']['genotype'])
         #[expand("{prefix}.{ext}", prefix=config['input']['fasta'], ext=['bwt', 'amb', 'ann', 'pac', 'sa']),
         #config['output'].values(),
-        [expand("{prefix}_{paired}.fq",
-        prefix=[os.path.join(f, os.path.splitext(config['input']['region'])[0]) for f in config['output'].values()],
-        paired=[1,2]),
-        expand("{prefix}.sam",
-        prefix=[os.path.join(f, os.path.splitext(config['input']['region'])[0]) for f in config['output'].values()])]
+        # expand(os.path.join("{basedir}", "r{read_len}_i{insert_len}", "{genotype}_{paired}.fq"),
+        # basedir=os.path.dirname(config['input']['fasta']),
+        # read_len=config['sim_reads']['read'],
+        # insert_len=config['sim_reads']['insert'][1:],
+        # genotype=config['output']['genotype'],
+        # paired=[1,2])
+        # expand(os.path.join("{basedir}", "{genotype}{ext}"),
+        # basedir=os.path.dirname(config['input']['fasta']),
+        # genotype=config['output']['genotype'],
+        # ext=config['file_exts']['fasta'][0])]
+        expand(os.path.join("{basedir}", "r{read_len}_i{insert_len}", "cov{cov}", "{genotype}.bam.bai"),
+        basedir=os.path.dirname(config['input']['fasta']),
+        read_len=config['sim_reads']['read']['len'],
+        insert_len=config['sim_reads']['insert']['len'],
+        cov=config['sim_reads']['coverage'],
+        genotype=config['output']['genotype'])
 
 # include rules
 include: "rules/sim_genomes.smk"
