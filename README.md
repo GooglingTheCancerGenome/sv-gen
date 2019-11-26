@@ -35,6 +35,8 @@ bash miniconda.sh  # install Conda (accept defaults)
 source ~/.bashrc
 conda update -y conda  # update Conda
 conda env create -n wf -f environment.yaml
+conda activate wf
+cd snakemake
 ```
 
 **3. Configure the workflow.**
@@ -46,7 +48,6 @@ conda env create -n wf -f environment.yaml
 **4. Execute the workflow.**
 
 ```bash
-cd snakemake
 snakemake -np  # 'dry' run only checks I/O files
 snakemake --use-conda  # run simulations locally
 ```
