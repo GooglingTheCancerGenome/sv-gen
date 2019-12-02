@@ -17,8 +17,7 @@ snakemake --use-conda --configfile analysis.yaml \
 
 echo -e "\nLog files:"
 ls *.log
-for f in $(ls stderr-*.log);
-do
+for f in $(ls stderr-*.log); do
   echo -e "\n### $f ###\n"
   cat $f
 done
