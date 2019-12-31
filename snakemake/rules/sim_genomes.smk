@@ -44,7 +44,7 @@ rule samtools_faidx:
         if [ "{params.seqids}" == "" ]; then
             ln -sr "{input.fasta}" "{output.fasta}"
         else
-            samtools faidx "{input}" -r "{output.seqids}" -o "{output.fasta}"
+            samtools faidx "{input.fasta}" -r "{output.seqids}" -o "{output.fasta}"
         fi
         """
 
