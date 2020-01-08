@@ -1,7 +1,7 @@
 # I/O files
 input:
-  fasta: data/test.fasta     # reference genome (haploid)
-  seqids: [17]               # list of zero or more SeqIDs (e.g. chromosomes)
+  fasta: data/chr22_44-45Mb.GRCh37.fasta  # reference genome (haploid)
+  seqids: [22]               # list of zero or more SeqIDs (e.g. chromosomes)
   config: data/survivor.cfg  # SURVIVOR config file
 output:
   genotype:
