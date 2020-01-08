@@ -1,8 +1,8 @@
 rule bwa_index:
     input:
-        fasta = os.path.join("{basedir}", "{genotype}.fasta")
+        fasta = os.path.join("{basedir}", "seqids.fasta")
     output:
-        fastai = [os.path.join("{basedir}", "{genotype}") +
+        fastai = [os.path.join("{basedir}", "seqids") +
                   e for e in config['file_exts']['fasta_idx']]
     conda:
         "../environment.yaml"
@@ -16,8 +16,8 @@ rule bwa_index:
 
 rule bwa_mem:
     input:
-        fasta = os.path.join("{basedir}", "{genotype}.fasta"),
-        fastai = [os.path.join("{basedir}", "{genotype}") +
+        fasta = os.path.join("{basedir}", "seqids.fasta"),
+        fastai = [os.path.join("{basedir}", "seqids") +
                   e for e in config['file_exts']['fasta_idx']],
         fastq1 = os.path.join("{basedir}", "r{read_len}_i{insert_len}", "{genotype}_1.fq"),
         fastq2 = os.path.join("{basedir}", "r{read_len}_i{insert_len}", "{genotype}_2.fq")
