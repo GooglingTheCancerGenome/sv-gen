@@ -24,10 +24,12 @@ file_exts:
 
 sim_genomes:
   sv_type:
-    DUP: [0, 100, 10000]  # duplication: [count, min_len, max_len]
-    INDEL: [10, 20, 500]  # insertion/deletion: ""
-    INV: [0, 600, 800]    # inversion: ""
-    TRA: [0, 1000, 3000]  # translocation: ""
+    DUP: [0, 100, 10000]    # duplication: [count, min_len, max_len]
+    INDEL: [10, 20, 500]    # insertion/deletion: ""
+    INV: [0, 600, 800]      # inversion: ""
+    INV_DEL: [0, 600, 800]  # inversions/deletions: ""
+    INV_DUP: [0, 600, 800]  # inversions/duplications: ""
+    TRA: [0, 1000, 3000]    # translocation: ""
 
 sim_reads:
   seed: 1000

@@ -20,6 +20,12 @@ rule survivor_config:
                 s/^(INVERSION_number:)\s+[0-9]+/\\1 {params.matrix[INV][0]}/;\
                 s/^(INVERSION_minimum_length:)\s+[0-9]+/\\1 {params.matrix[INV][1]}/;\
                 s/^(INVERSION_maximum_length:)\s+[0-9]+/\\1 {params.matrix[INV][2]}/;\
+                s/^(INV_del_number:)\s+[0-9]+/\\1 {params.matrix[INV_DEL][0]}/;\
+                s/^(INV_del_minimum_length:)\s+[0-9]+/\\1 {params.matrix[INV_DEL][1]}/;\
+                s/^(INV_del_maximum_length:)\s+[0-9]+/\\1 {params.matrix[INV_DEL][2]}/;\
+                s/^(INV_dup_number:)\s+[0-9]+/\\1 {params.matrix[INV_DUP][0]}/;\
+                s/^(INV_dup_minimum_length:)\s+[0-9]+/\\1 {params.matrix[INV_DUP][1]}/;\
+                s/^(INV_dup_maximum_length:)\s+[0-9]+/\\1 {params.matrix[INV_DUP][2]}/;\
                 s/^(TRANSLOCATION_number:)\s+[0-9]+/\\1 {params.matrix[TRA][0]}/;\
                 s/^(TRANSLOCATION_minimum_length:)\s+[0-9]+/\\1 {params.matrix[TRA][1]}/;\
                 s/^(TRANSLOCATION_maximum_length:)\s+[0-9]+/\\1 {params.matrix[TRA][2]}/"\
