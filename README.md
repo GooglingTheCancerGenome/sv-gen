@@ -44,8 +44,8 @@ cd snakemake
 **3. Configure the workflow.**
 
 -   **config files**:
-    -   [`analysis.yaml`](/GooglingTheCancerGenome/sv-gen/snakemake) - analysis-specific settings
-    -   [`environment.yaml`](/GooglingTheCancerGenome/sv-gen/snakemake) - software dependencies and versions
+    -   [`analysis.yaml`](/snakemake/analysis.yaml) - analysis-specific settings
+    -   [`environment.yaml`](/snakemake/environment.yaml) - software dependencies and versions
 
 **4. Execute the workflow.**
 
