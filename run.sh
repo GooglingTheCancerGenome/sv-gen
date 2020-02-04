@@ -1,13 +1,13 @@
-#!/bin/bash -xe
+#!/usr/bin/env bash
 
-source ~/.profile
-export BRANCH=dev
-git clone -b $BRANCH https://github.com/GooglingTheCancerGenome/sv-gen.git
-cd sv-gen/snakemake
-snakemake --version
-xenon --version
+set -xe
 
 SCH=$1
+
+eval "$(conda shell.bash hook)"
+conda activate $MY_ENV
+conda list
+cd snakemake && ls -alh
 snakemake --use-conda --configfile analysis.yaml \
   --latency-wait 60 --jobs \
   --cluster "xenon -vvv scheduler $SCH --location local:// submit \
@@ -17,7 +17,7 @@ snakemake --use-conda --configfile analysis.yaml \
 
 echo -e "\nLog files:"
 ls *.log
-for f in $(ls stderr-*.log); do
+for f in *.log; do
   echo -e "\n### $f ###\n"
   cat $f
 done

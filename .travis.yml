@@ -7,7 +7,7 @@ services:
   - docker
 env:
   global:
-    - PREFIX=gtcg/sv-callers
+    - PREFIX=gtcg/xenon
     - TAG=dev
   matrix:
     - PORT=10022 SCH=gridengine
@@ -17,6 +17,8 @@ install:
   - docker run -d -p $PORT:22 --name $SCH $PREFIX-$SCH:$TAG
   - sleep 10
   - docker ps -a
-  - docker cp run.sh $SCH:/home/xenon
+  - docker cp ./ $SCH:/home/xenon
+  - docker exec -t $SCH-$MODE chown -R xenon:xenon /home/xenon
+  - docker exec -u xenon -t $SCH-$MODE ./install.sh
 script:
-  - docker exec -u xenon -t $SCH /bin/bash run.sh $SCH
+  - docker exec -u xenon -t $SCH ./run.sh $SCH
