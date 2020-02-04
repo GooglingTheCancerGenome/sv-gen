@@ -6,10 +6,11 @@ Snakemake-based workflow to generate artificial structural variant (SV) data.
 
 ## Dependencies
 
--   python (>=3.6)
--   [conda](https://conda.io/) (>=4.5)
--   [snakemake](https://snakemake.readthedocs.io/) (>=4.8)
--   [xenon-cli](https://github.com/NLeSC/xenon-cli) (3.0.4)
+-   [Python 3](https://www.python.org/)
+-   [Conda](https://conda.io/)
+-   [Snakemake](https://snakemake.readthedocs.io/) (5.10.0)
+-   [Xenon CLI](https://github.com/NLeSC/xenon-cli) (3.0.4)
+-   [jq](https://stedolan.github.io/jq/) (1.6) to query job accounting output by `xenon --json ...` (optional)
 
 The workflow includes the following tools:
 
