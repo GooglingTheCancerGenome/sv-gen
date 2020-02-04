@@ -18,7 +18,7 @@ install:
   - sleep 10
   - docker ps -a
   - docker cp ./ $SCH:/home/xenon
-  - docker exec -t $SCH-$MODE chown -R xenon:xenon /home/xenon
-  - docker exec -u xenon -t $SCH-$MODE ./install.sh
+  - docker exec -t $SCH chown -R xenon:xenon /home/xenon
+  - docker exec -u xenon -t $SCH ./install.sh
 script:
   - docker exec -u xenon -t $SCH ./run.sh $SCH
