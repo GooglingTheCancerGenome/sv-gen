@@ -3,6 +3,7 @@
 set -xe
 
 SCH=$1
+MY_ENV=wf
 
 eval "$(conda shell.bash hook)"
 conda activate $MY_ENV
