@@ -34,7 +34,8 @@ rule bwa_mem:
         bwa mem \
             -R "{params.read_group}" \
             "{input.fasta}" "{input.fastq1}" "{input.fastq2}" | \
-        samtools sort -o "{output.bam}"
+        samtools sort -o "{output.bam}" && \
+        rm -f "{input.fastq1}" "{input.fastq2}"
         """
 
 rule samtools_view:
