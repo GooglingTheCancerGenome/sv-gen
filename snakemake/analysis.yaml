@@ -1,9 +1,11 @@
 # I/O files
 input:
   fasta: data/chr22_44-45Mb.GRCh37.fasta  # reference genome (haploid)
-  seqids: [22]               # list of zero or more SeqIDs (e.g. chromosomes)
-  config: data/survivor.cfg  # SURVIVOR config file
+  seqids: [22]  # list of zero or more SeqIDs (e.g. chromosomes)
+  config: survivor.cfg  # SURVIVOR config file
+
 output:
+  basedir: data/out
   genotype:
     - hmz     # homozygous genome (diploid)
     - hmz-sv  # homozygous genome with SVs
@@ -22,6 +24,7 @@ file_exts:
   bam: .bam
   bam_idx: .bam.bai
 
+# simulation params
 sim_genomes:
   sv_type:
     DUP: [0, 100, 10000]    # duplication: [count, min_len, max_len]

@@ -1,6 +1,7 @@
 rule survivor_config:
     output:
-        cfg = config['input']['config']
+        config = os.path.join(config['output']['basedir'],
+                              config['input']['config'])
     params:
         matrix = config['sim_genomes']['sv_type']
     conda:
@@ -9,7 +10,7 @@ rule survivor_config:
         """
         set -xe
 
-        SURVIVOR simSV "{output.cfg}" &&
+        SURVIVOR simSV "{output.config}"
         sed -i.org \
             -E "s/^(DUPLICATION_number:)\s+[0-9]+/\\1 {params.matrix[DUP][0]}/;\
                 s/^(DUPLICATION_minimum_length:)\s+[0-9]+/\\1 {params.matrix[DUP][1]}/;\
@@ -37,8 +38,8 @@ rule samtools_faidx:
     input:
         fasta = config['input']['fasta']
     output:
-        seqids = os.path.join("{basedir}", "seqids.txt"),
-        fasta = os.path.join("{basedir}", "seqids.fasta")
+        seqids = os.path.join(config['output']['basedir'], 'seqids.txt'),
+        fasta = os.path.join(config['output']['basedir'], 'seqids.fasta')
     params:
         seqids = "\n".join([str(c) for c in config['input']['seqids']])
     conda:
@@ -56,13 +57,14 @@ rule samtools_faidx:
 
 rule survivor_simsv:
     input:
-        config = config['input']['config'],
-        fasta = os.path.join("{basedir}", "seqids.fasta")
+        config = os.path.join(config['output']['basedir'],
+                              config['input']['config']),
+        fasta = os.path.join(config['output']['basedir'], "seqids.fasta")
     output:
-        fasta = os.path.join("{basedir}", "{genotype}.fasta")
+        fasta = os.path.join(config['output']['basedir'], "{genotype}.fasta")
     params:
         sfx = '.org',
-        prefix = os.path.join("{basedir}", "{genotype}")
+        prefix = os.path.join(config['output']['basedir'], "{genotype}")
     conda:
         "../environment.yaml"
     shell:

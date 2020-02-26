@@ -1,8 +1,8 @@
 rule bwa_index:
     input:
-        fasta = os.path.join("{basedir}", "seqids.fasta")
+        fasta = os.path.join(config['output']['basedir'], "seqids.fasta")
     output:
-        fastai = [os.path.join("{basedir}", "seqids") +
+        fastai = [os.path.join(config['output']['basedir'], "seqids") +
                   e for e in config['file_exts']['fasta_idx']]
     conda:
         "../environment.yaml"
@@ -16,13 +16,18 @@ rule bwa_index:
 
 rule bwa_mem:
     input:
-        fasta = os.path.join("{basedir}", "seqids.fasta"),
-        fastai = [os.path.join("{basedir}", "seqids") +
+        fasta = os.path.join(config['output']['basedir'], "seqids.fasta"),
+        fastai = [os.path.join(config['output']['basedir'], "seqids") +
                   e for e in config['file_exts']['fasta_idx']],
-        fastq1 = os.path.join("{basedir}", "r{read_len}_i{insert_len}", "{genotype}_1.fq"),
-        fastq2 = os.path.join("{basedir}", "r{read_len}_i{insert_len}", "{genotype}_2.fq")
+        fastq1 = os.path.join(config['output']['basedir'],
+                              "r{read_len}_i{insert_len}", "{genotype}_1.fq"),
+        fastq2 = os.path.join(config['output']['basedir'],
+                              "r{read_len}_i{insert_len}", "{genotype}_2.fq")
     output:
-        bam = os.path.join("{basedir}", "r{read_len}_i{insert_len}", "cov" + str(max(config['sim_reads']['coverage'])), "{genotype}.bam")
+        bam = os.path.join(config['output']['basedir'],
+                           "r{read_len}_i{insert_len}",
+                           "cov" + str(max(config['sim_reads']['coverage'])),
+                           "{genotype}.bam")
     params:
         read_group = "@RG\\tID:{0}\\tLB:{0}\\tSM:{0}".format("{genotype}")
     conda:
@@ -40,9 +45,14 @@ rule bwa_mem:
 
 rule samtools_view:
     input:
-        bam = os.path.join("{basedir}", "r{read_len}_i{insert_len}", "cov" + str(max(config['sim_reads']['coverage'])), "{genotype}.bam")
+        bam = os.path.join(config['output']['basedir'],
+                           "r{read_len}_i{insert_len}",
+                           "cov" + str(max(config['sim_reads']['coverage'])),
+                           "{genotype}.bam")
     output:
-        bam = os.path.join("{basedir}", "r{read_len}_i{insert_len}", "cov{cov}", "{genotype}.bam")
+        bam = os.path.join(config['output']['basedir'],
+                           "r{read_len}_i{insert_len}",
+                           "cov{cov}", "{genotype}.bam")
     conda:
         "../environment.yaml"
     shell:
@@ -55,9 +65,13 @@ rule samtools_view:
 
 rule samtools_index:
     input:
-        bam = os.path.join("{basedir}", "r{read_len}_i{insert_len}", "cov{cov}", "{genotype}.bam")
+        bam = os.path.join(config['output']['basedir'],
+                           "r{read_len}_i{insert_len}", "cov{cov}",
+                           "{genotype}.bam")
     output:
-        bai = os.path.join("{basedir}", "r{read_len}_i{insert_len}", "cov{cov}", "{genotype}.bam.bai")
+        bai = os.path.join(config['output']['basedir'],
+                           "r{read_len}_i{insert_len}", "cov{cov}",
+                           "{genotype}.bam.bai")
     conda:
         "../environment.yaml"
     shell:
