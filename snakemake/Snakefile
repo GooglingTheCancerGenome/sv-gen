@@ -1,7 +1,5 @@
-import random
-
-shell.executable("/bin/bash")
-configfile: "analysis.yaml"
+shell.executable('/bin/bash')
+configfile: 'analysis.yaml'
 
 __author__ = ['Arnold Kuzniar', 'Luca Santuari']
 __version__ = '0.1.0'
@@ -13,22 +11,22 @@ localrules: all
 rule all:
     input:
         ### Used for debugging:
-        # os.path.join(config['output']['basedir'], "seqids.fasta")
+        # os.path.join(config['output']['basedir'], 'seqids.fasta')
         #
-        # expand(os.path.join("{basedir}", "{genotype}.fasta"),
+        # expand(os.path.join('{basedir}', '{genotype}.fasta'),
         #        basedir=config['output']['basedir'],
         #        genotype=config['output']['genotype'])
         #
-        # expand(os.path.join("{basedir}", "r{read_len}_i{insert_len}",
-        #                     "{genotype}_{paired}.fq"),
+        # expand(os.path.join('{basedir}', 'r{read_len}_i{insert_len}',
+        #                     '{genotype}_{paired}.fq'),
         #        basedir=config['output']['basedir'],
         #        read_len=config['sim_reads']['read']['len'],
         #        insert_len=config['sim_reads']['insert']['len'],
         #        genotype=config['output']['genotype'],
         #        paired=[1,2])
         #
-        expand(os.path.join("{basedir}", "r{read_len}_i{insert_len}",
-                            "cov{cov}", "{genotype}.bam"),
+        expand(os.path.join('{basedir}', 'r{read_len}_i{insert_len}',
+                            'cov{cov}', '{genotype}.bam'),
                basedir=config['output']['basedir'],
                read_len=config['sim_reads']['read']['len'],
                insert_len=config['sim_reads']['insert']['len'],
@@ -36,6 +34,6 @@ rule all:
                genotype=config['output']['genotype'])
 
 # include rules
-include: "rules/sim_genomes.smk"
-include: "rules/sim_reads.smk"
-include: "rules/map_reads.smk"
+include: 'rules/sim_genomes.smk'
+include: 'rules/sim_reads.smk'
+include: 'rules/map_reads.smk'
