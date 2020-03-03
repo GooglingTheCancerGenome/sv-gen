@@ -1,3 +1,5 @@
+threads: -1  # enable multi-threading for samtools & bwa (default: -1 = #cores)
+
 # I/O files
 input:
   fasta: data/chr22_44-45Mb.GRCh37.fasta  # reference genome (haploid)
@@ -24,7 +26,7 @@ file_exts:
   bam: .bam
   bam_idx: .bam.bai
 
-# simulation params
+# simulation parameters
 sim_genomes:
   sv_type:
     DUP: [0, 100, 10000]    # duplication: [count, min_len, max_len]

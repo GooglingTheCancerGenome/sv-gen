@@ -10,7 +10,7 @@ rule bwa_index:
         """
         set -xe
 
-        bwa index "{input.fasta}" &&
+        bwa index "{input.fasta}"
         ls {output.fastai}
         """
 
@@ -34,14 +34,17 @@ rule bwa_mem:
         read_group = "@RG\\tID:{0}\\tLB:{0}\\tSM:{0}".format('{genotype}')
     conda:
         "../environment.yaml"
+    threads:
+        get_nthreads()
     shell:
         """
         set -xe
 
         bwa mem \
+            -t {threads} \
             -R "{params.read_group}" \
             "{input.fasta}" "{input.fastq1}" "{input.fastq2}" | \
-        samtools sort -o "{output.bam}" && \
+        samtools sort -@ {threads} -o "{output.bam}"
         rm -f "{input.fastq1}" "{input.fastq2}"
         """
 
@@ -57,12 +60,14 @@ rule samtools_view:
                            '{genotype}' + get_filext('bam'))
     conda:
         "../environment.yaml"
+    threads:
+        get_nthreads()
     shell:
         """
         set -xe
 
         FRAC=$(LC_ALL=C printf "%.2f" $(bc <<< "scale=2; {wildcards.cov} / 100"))
-        samtools view -s ${{FRAC}} "{input.bam}" -o "{output.bam}"
+        samtools view -@ {threads} -s ${{FRAC}} "{input.bam}" -o "{output.bam}"
         """
 
 rule samtools_index:
@@ -76,9 +81,11 @@ rule samtools_index:
                            '{genotype}' + get_filext('bam_idx'))
     conda:
         "../environment.yaml"
+    threads:
+        get_nthreads()
     shell:
         """
         set -xe
 
-        samtools index -b "{input.bam}" "{output.bai}"
+        samtools index -@ {threads} -b "{input.bam}" "{output.bai}"
         """
