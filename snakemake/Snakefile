@@ -1,3 +1,5 @@
+from helper_functions import *
+
 shell.executable('/bin/bash')
 configfile: 'analysis.yaml'
 
@@ -13,21 +15,24 @@ rule all:
         ### Used for debugging:
         # os.path.join(config['output']['basedir'], 'seqids.fasta')
         #
-        # expand(os.path.join('{basedir}', '{genotype}.fasta'),
+        # expand(os.path.join('{basedir}', '{svtype}', '{genotype}.fasta'),
         #        basedir=config['output']['basedir'],
+        #        svtype=get_svtype(),
         #        genotype=config['output']['genotype'])
         #
-        # expand(os.path.join('{basedir}', 'r{read_len}_i{insert_len}',
+        # expand(os.path.join('{basedir}', '{svtype}', 'r{read_len}_i{insert_len}',
         #                     '{genotype}_{paired}.fq'),
         #        basedir=config['output']['basedir'],
+        #        svtype=get_svtype(),
         #        read_len=config['sim_reads']['read']['len'],
         #        insert_len=config['sim_reads']['insert']['len'],
         #        genotype=config['output']['genotype'],
         #        paired=[1,2])
         #
-        expand(os.path.join('{basedir}', 'r{read_len}_i{insert_len}',
-                            'cov{cov}', '{genotype}.bam'),
+        expand(os.path.join('{basedir}', '{svtype}', 'r{read_len}_i{insert_len}',
+                            'cov{cov}', '{genotype}' + get_filext('bam_idx')),
                basedir=config['output']['basedir'],
+               svtype=get_svtype(),
                read_len=config['sim_reads']['read']['len'],
                insert_len=config['sim_reads']['insert']['len'],
                cov=config['sim_reads']['coverage'],

@@ -30,8 +30,8 @@ sim_genomes:
     DUP: [0, 100, 10000]    # duplication: [count, min_len, max_len]
     INDEL: [10, 20, 500]    # insertion+deletion: ""
     INV: [0, 600, 800]      # inversion: ""
-    INV_DEL: [0, 600, 800]  # inversion+deletion: ""
-    INV_DUP: [0, 600, 800]  # inversion+duplication: ""
+    INV-DEL: [0, 600, 800]  # inversion+deletion: ""
+    INV-DUP: [0, 600, 800]  # inversion+duplication: ""
     TRA: [0, 1000, 3000]    # translocation: ""
 
 sim_reads:
