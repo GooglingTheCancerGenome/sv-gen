@@ -1,6 +1,7 @@
 rule survivor_config:
     output:
-        config = os.path.join(get_outdir(), config['input']['config'])
+        config = os.path.join(get_outdir(), '{svtype}',
+                              config['sim_genomes']['config'])
     params:
         matrix = config['sim_genomes']['sv_type']
     conda:
@@ -56,7 +57,8 @@ rule samtools_faidx:
 
 rule survivor_simsv:
     input:
-        config = os.path.join(get_outdir(), config['input']['config']),
+        config = os.path.join(get_outdir(), '{svtype}',
+                              config['sim_genomes']['config']),
         fasta = os.path.join(get_outdir(), 'seqids' + get_filext('fasta'))
     output:
         fasta = os.path.join(get_outdir(), '{svtype}',

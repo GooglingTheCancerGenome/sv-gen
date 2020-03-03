@@ -4,7 +4,6 @@ threads: -1  # supported by samtools & bwa (default: -1 = # cores available)
 input:
   fasta: data/chr22_44-45Mb.GRCh37.fasta  # reference genome (haploid)
   seqids: [22]  # list of zero or more SeqIDs (e.g. chromosomes)
-  config: survivor.cfg  # SURVIVOR config file
 
 output:
   basedir: data/out
@@ -28,6 +27,7 @@ file_exts:
 
 # simulation parameters
 sim_genomes:
+  config: survivor.cfg      # SURVIVOR config filename
   sv_type:
     DUP: [0, 100, 10000]    # duplication: [count, min_len, max_len]
     INV: [0, 600, 800]      # inversion: ""
