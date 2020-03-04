@@ -20,14 +20,14 @@ rule bwa_mem:
         fastai = [os.path.join(get_outdir(), 'seqids') +
                   e for e in get_filext('fasta_idx')],
         fastq1 = os.path.join(get_outdir(), '{svtype}',
-                              '{read_len}_{insert_len}',
+                              'r{read_len}_i{insert_len}',
                               '{genotype}_1' + get_filext('fastq')),
         fastq2 = os.path.join(get_outdir(), '{svtype}',
-                              '{read_len}_{insert_len}',
+                              'r{read_len}_i{insert_len}',
                               '{genotype}_2' + get_filext('fastq'))
     output:
         bam = os.path.join(get_outdir(), '{svtype}',
-                           '{read_len}_{insert_len}',
+                           'r{read_len}_i{insert_len}',
                            'cov' + str(max(config['sim_reads']['coverage'])),
                            '{genotype}' + get_filext('bam'))
     params:
@@ -51,12 +51,12 @@ rule bwa_mem:
 rule samtools_view:
     input:
         bam = os.path.join(get_outdir(), '{svtype}',
-                           '{read_len}_{insert_len}',
+                           'r{read_len}_i{insert_len}',
                            'cov' + str(max(config['sim_reads']['coverage'])),
                            '{genotype}' + get_filext('bam'))
     output:
         bam = os.path.join(get_outdir(), '{svtype}',
-                           '{read_len}_{insert_len}', 'cov{cov}',
+                           'r{read_len}_i{insert_len}', 'cov{cov}',
                            '{genotype}' + get_filext('bam'))
     conda:
         "../environment.yaml"
@@ -73,11 +73,11 @@ rule samtools_view:
 rule samtools_index:
     input:
         bam = os.path.join(get_outdir(), '{svtype}',
-                           '{read_len}_{insert_len}', 'cov{cov}',
+                           'r{read_len}_i{insert_len}', 'cov{cov}',
                            '{genotype}' + get_filext('bam'))
     output:
         bai = os.path.join(get_outdir(), '{svtype}',
-                           '{read_len}_{insert_len}', 'cov{cov}',
+                           'r{read_len}_i{insert_len}', 'cov{cov}',
                            '{genotype}' + get_filext('bam_idx'))
     conda:
         "../environment.yaml"

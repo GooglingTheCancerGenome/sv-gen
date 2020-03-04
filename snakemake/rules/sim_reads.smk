@@ -4,10 +4,10 @@ rule art_illumina:
                              '{genotype}' + get_filext('fasta'))
     output:
         fastq1 = os.path.join(get_outdir(), '{svtype}',
-                              '{read_len}_{insert_len}',
+                              'r{read_len}_i{insert_len}',
                               '{genotype}_1' + get_filext('fastq')),
         fastq2 = os.path.join(get_outdir(), '{svtype}',
-                              '{read_len}_{insert_len}',
+                              'r{read_len}_i{insert_len}',
                               '{genotype}_2' + get_filext('fastq'))
     params:
         seed = config['sim_reads']['seed'],
@@ -15,7 +15,7 @@ rule art_illumina:
         insert_stdev = config['sim_reads']['insert']['stdev'],
         coverage = max(config['sim_reads']['coverage']),
         prefix = os.path.join(get_outdir(), '{svtype}',
-                              '{read_len}_{insert_len}', '{genotype}_')
+                              'r{read_len}_i{insert_len}', '{genotype}_')
     conda:
         "../environment.yaml"
     shell:
