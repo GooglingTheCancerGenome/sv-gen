@@ -1,15 +1,21 @@
 rule art_illumina:
     input:
-        fasta = os.path.join("{basedir}", "{genotype}.fasta")
+        fasta = os.path.join(get_outdir(), '{svtype}',
+                             '{genotype}' + get_filext('fasta'))
     output:
-        fastq1 = os.path.join("{basedir}", "r{read_len}_i{insert_len}", "{genotype}_1.fq"),
-        fastq2 = os.path.join("{basedir}", "r{read_len}_i{insert_len}", "{genotype}_2.fq")
+        fastq1 = os.path.join(get_outdir(), '{svtype}',
+                              'r{read_len}_i{insert_len}',
+                              '{genotype}_1' + get_filext('fastq')),
+        fastq2 = os.path.join(config['output']['basedir'], '{svtype}',
+                              'r{read_len}_i{insert_len}',
+                              '{genotype}_2' + get_filext('fastq'))
     params:
         seed = config['sim_reads']['seed'],
         profile = config['sim_reads']['profile'],
         insert_stdev = config['sim_reads']['insert']['stdev'],
         coverage = max(config['sim_reads']['coverage']),
-        prefix = os.path.join("{basedir}", "r{read_len}_i{insert_len}", "{genotype}_")
+        prefix = os.path.join(get_outdir(), '{svtype}',
+                              'r{read_len}_i{insert_len}', '{genotype}_')
     conda:
         "../environment.yaml"
     shell:
