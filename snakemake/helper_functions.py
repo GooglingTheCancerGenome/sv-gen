@@ -1,4 +1,5 @@
 import os
+import sys
 
 from snakemake import load_configfile
 from csv import DictReader
@@ -50,3 +51,21 @@ def get_svtype():
             types.append(sv)
     types.sort()
     return '_'.join(types)
+
+
+def get_nthreads():
+    """Get the max. number of threads used by the tools (i.e. samtools and bwa).
+    :returns: (int) number of threads (default: # cores available)
+    """
+    if 'threads' not in config:
+        raise KeyError("Missing key 'threads' from config.")
+
+    n = config['threads']
+    try:
+        int(n)
+    except ValueError:
+        sys.exit('Use INT to set the number of threads.')
+    if int(n) > 0:
+        return config['threads']
+    else:
+        return os.cpu_count()
