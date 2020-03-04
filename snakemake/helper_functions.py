@@ -14,7 +14,8 @@ def get_filext(fmt):
     :returns: (str) file extension
     """
     if fmt not in config['file_exts'].keys():
-         raise ValueError("Input file format '{}' not supported.".format(fmt.lower()))
+         raise ValueError("Input file format '{}' not supported."
+            .format(fmt.lower()))
     return config['file_exts'][fmt]
 
 
@@ -36,14 +37,17 @@ def get_reference():
 
 def get_outdir():
     """Get output directory.
-    :returns: (str) outdir
+    :returns: (str) output path
     """
     if 'basedir' not in config['output']:
-        raise OSError('Output basedir is not set.')
+        raise OSError("The 'output.basedir' not set in the YAML config.")
     return config['output']['basedir']
 
 
 def get_svtype():
+    """Get one or more SV types set to non-zero count.
+    :returns: (str) SV type(s)
+    """
     types = []
     for sv, arr in config['sim_genomes']['sv_type'].items():
         count = arr[0]
@@ -54,17 +58,17 @@ def get_svtype():
 
 
 def get_nthreads():
-    """Get the max. number of threads used by the tools (i.e. samtools and bwa).
+    """Get the max. number of threads used by samtools and bwa.
     :returns: (int) number of threads (default: # cores available)
     """
     if 'threads' not in config:
-        raise KeyError("Missing key 'threads' from config.")
+        raise KeyError("The number of 'threads' is not set in the YAML config.")
 
     n = config['threads']
     try:
         int(n)
     except ValueError:
-        sys.exit('Use INT to set the number of threads.')
+        sys.exit("The value of 'threads' must be an integer.")
     if int(n) > 0:
         return config['threads']
     else:
