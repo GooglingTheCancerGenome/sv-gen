@@ -36,6 +36,8 @@ rule bwa_mem:
         "../environment.yaml"
     threads:
         get_nthreads()
+    resources:
+        mem_mb = get_mem()
     shell:
         """
         set -xe
@@ -44,7 +46,7 @@ rule bwa_mem:
             -t {threads} \
             -R "{params.read_group}" \
             "{input.fasta}" "{input.fastq1}" "{input.fastq2}" | \
-        samtools sort -@ {threads} -o "{output.bam}"
+        samtools sort -@ {threads} -m {resources.mem_mb}M -o "{output.bam}"
         rm -f "{input.fastq1}" "{input.fastq2}"
         """
 

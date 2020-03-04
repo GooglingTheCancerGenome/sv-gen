@@ -1,4 +1,4 @@
-threads: -1  # supported by samtools & bwa (default: -1 = # cores available)
+threads: -1  # only samtools & bwa (default: -1 = number of available cores)
 
 # I/O files
 input:

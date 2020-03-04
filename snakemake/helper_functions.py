@@ -1,5 +1,6 @@
 import os
 import sys
+import psutil as ps
 
 from snakemake import load_configfile
 from csv import DictReader
@@ -57,9 +58,9 @@ def get_svtype():
     return '_'.join(types)
 
 
-def get_nthreads():
-    """Get the max. number of threads used by samtools and bwa.
-    :returns: (int) number of threads (default: # cores available)
+def get_nthreads(logical=True):
+    """Get the number of threads used by `samtools` and `bwa`.
+    :returns: (int) threads (default: -1 = number of logical cores)
     """
     if 'threads' not in config:
         raise KeyError("The number of 'threads' is not set in the YAML config.")
@@ -72,4 +73,12 @@ def get_nthreads():
     if int(n) > 0:
         return config['threads']
     else:
-        return os.cpu_count()
+        return ps.cpu_count(logical)
+
+
+def get_mem():
+    """Get free memory per core used by `samtools sort`.
+    :returns: (int) in MB
+    """
+    mem = ps.virtual_memory().free / get_nthreads() / 2**20
+    return int(mem)
