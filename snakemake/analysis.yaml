@@ -2,15 +2,15 @@ threads: -1  # supported by samtools & bwa (default: -1 = # cores available)
 
 # I/O files
 input:
-  fasta: data/chr22_44-45Mb.GRCh37.fasta  # reference genome (haploid)
-  seqids: [22]  # list of zero or more SeqIDs (e.g. chromosomes)
+  fasta: data/chr22_44-45Mb.GRCh37.fasta  # filepath of ref. genome (haploid)
+  seqids: [22]  # zero or more SeqIDs (e.g. chromosomes)
 
 output:
-  basedir: data/out
-  genotype:
-    - hmz     # homozygous genome (diploid)
-    - hmz-sv  # homozygous genome with SVs
-    - htz-sv  # heterozygous genome with SVs
+  basedir: data/out  # relative or absolute path
+  genotype:   # diploid genomes
+    - hmz     # homozygous
+    - hmz-sv  # homozygous with SVs
+    - htz-sv  # heterozygous with SVs
 
 # I/O file extensions
 file_exts:
@@ -27,7 +27,7 @@ file_exts:
 
 # simulation parameters
 sim_genomes:
-  config: survivor.cfg      # SURVIVOR config filename
+  config: survivor.cfg      # SURVIVOR config
   sv_type:
     DUP: [0, 100, 10000]    # duplication: [count, min_len, max_len]
     INV: [0, 600, 800]      # inversion: ""
