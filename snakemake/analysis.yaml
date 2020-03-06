@@ -1,13 +1,16 @@
+threads: -1  # only samtools & bwa (default: -1 = number of available cores)
+
 # I/O files
 input:
-  fasta: data/chr22_44-45Mb.GRCh37.fasta  # reference genome (haploid)
-  seqids: [22]               # list of zero or more SeqIDs (e.g. chromosomes)
-  config: data/survivor.cfg  # SURVIVOR config file
+  fasta: data/chr22_44-45Mb.GRCh37.fasta  # filepath of ref. genome (haploid)
+  seqids: [22]  # zero or more SeqIDs (e.g. chromosomes)
+
 output:
-  genotype:
-    - hmz     # homozygous genome (diploid)
-    - hmz-sv  # homozygous genome with SVs
-    - htz-sv  # heterozygous genome with SVs
+  basedir: data/out  # relative or absolute path
+  genotype:   # diploid genomes
+    - hmz     # homozygous
+    - hmz-sv  # homozygous with SVs
+    - htz-sv  # heterozygous with SVs
 
 # I/O file extensions
 file_exts:
@@ -22,14 +25,16 @@ file_exts:
   bam: .bam
   bam_idx: .bam.bai
 
+# simulation parameters
 sim_genomes:
+  config: survivor.cfg      # SURVIVOR config
   sv_type:
     DUP: [0, 100, 10000]    # duplication: [count, min_len, max_len]
-    INDEL: [10, 20, 500]    # insertion+deletion: ""
     INV: [0, 600, 800]      # inversion: ""
-    INV_DEL: [0, 600, 800]  # inversion+deletion: ""
-    INV_DUP: [0, 600, 800]  # inversion+duplication: ""
     TRA: [0, 1000, 3000]    # translocation: ""
+    INDEL: [10, 20, 500]    # insertion+deletion: ""
+    INV-DEL: [0, 600, 800]  # inversion+deletion: ""
+    INV-DUP: [0, 600, 800]  # inversion+duplication: ""
 
 sim_reads:
   seed: 1000

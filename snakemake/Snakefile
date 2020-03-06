@@ -1,7 +1,7 @@
-import random
+from helper_functions import *
 
-shell.executable("/bin/bash")
-configfile: "analysis.yaml"
+shell.executable('/bin/bash')
+configfile: 'analysis.yaml'
 
 __author__ = ['Arnold Kuzniar', 'Luca Santuari']
 __version__ = '0.1.0'
@@ -12,31 +12,33 @@ localrules: all
 
 rule all:
     input:
-        ### DEBUG:
-        #os.path.join(os.path.dirname(config['input']['fasta']), "seqids.fasta")
-        #expand(os.path.join("{basedir}", "{genotype}.fasta"),
-        #basedir=os.path.dirname(config['input']['fasta']),
-        #genotype=config['output']['genotype'])
-        #[expand("{prefix}.{ext}", prefix=config['input']['fasta'], ext=['bwt', 'amb', 'ann', 'pac', 'sa']),
-        #config['output'].values(),
-        # expand(os.path.join("{basedir}", "r{read_len}_i{insert_len}", "{genotype}_{paired}.fq"),
-        # basedir=os.path.dirname(config['input']['fasta']),
-        # read_len=config['sim_reads']['read'],
-        # insert_len=config['sim_reads']['insert'][1:],
-        # genotype=config['output']['genotype'],
-        # paired=[1,2])
-        # expand(os.path.join("{basedir}", "{genotype}{ext}"),
-        # basedir=os.path.dirname(config['input']['fasta']),
-        # genotype=config['output']['genotype'],
-        # ext=config['file_exts']['fasta'][0])]
-        expand(os.path.join("{basedir}", "r{read_len}_i{insert_len}", "cov{cov}", "{genotype}.bam.bai"),
-        basedir=os.path.dirname(config['input']['fasta']),
-        read_len=config['sim_reads']['read']['len'],
-        insert_len=config['sim_reads']['insert']['len'],
-        cov=config['sim_reads']['coverage'],
-        genotype=config['output']['genotype'])
+        ### Uncomment lines (blocks) when debugging rules.
+        # os.path.join(get_outdir(), 'seqids.fasta')
+        #
+        # expand(os.path.join('{basedir}', '{svtype}', '{genotype}.fasta'),
+        #        basedir=get_outdir(),
+        #        svtype=get_svtype(),
+        #        genotype=config['output']['genotype'])
+        #
+        # expand(os.path.join('{basedir}', '{svtype}', 'r{read_len}_i{insert_len}',
+        #                     '{genotype}_{paired}.fq'),
+        #        basedir=get_outdir(),
+        #        svtype=get_svtype(),
+        #        read_len=config['sim_reads']['read']['len'],
+        #        insert_len=config['sim_reads']['insert']['len'],
+        #        genotype=config['output']['genotype'],
+        #        paired=[1,2])
+        #
+        expand(os.path.join('{basedir}', '{svtype}', 'r{read_len}_i{insert_len}',
+                            'cov{cov}', '{genotype}' + get_filext('bam_idx')),
+               basedir=get_outdir(),
+               svtype=get_svtype(),
+               read_len=config['sim_reads']['read']['len'],
+               insert_len=config['sim_reads']['insert']['len'],
+               cov=config['sim_reads']['coverage'],
+               genotype=config['output']['genotype'])
 
 # include rules
-include: "rules/sim_genomes.smk"
-include: "rules/sim_reads.smk"
-include: "rules/map_reads.smk"
+include: 'rules/sim_genomes.smk'
+include: 'rules/sim_reads.smk'
+include: 'rules/map_reads.smk'
