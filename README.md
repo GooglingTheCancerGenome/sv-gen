@@ -61,12 +61,12 @@ _Submit jobs to Grid Engine-based cluster_
 
 ```bash
 snakemake --use-conda --latency-wait 30 --jobs \
---cluster 'xenon scheduler gridengine --location local:// submit --name smk.{rule} --inherit-env --cores-per-task 1 --max-run-time 5 --working-directory . --stderr stderr-%j.log --stdout stdout-%j.log' &>smk.log&
+--cluster 'xenon scheduler gridengine --location local:// submit --name smk.{rule} --inherit-env --max-run-time 5 --working-directory . --stderr stderr-%j.log --stdout stdout-%j.log' &>smk.log&
 ```
 
 _Submit jobs to Slurm-based cluster_
 
 ```bash
 snakemake --use-conda --latency-wait 30 --jobs \
---cluster 'xenon scheduler slurm --location local:// submit --name smk.{rule} --inherit-env --cores-per-task 1 --max-run-time 5 --working-directory . --stderr stderr-%j.log --stdout stdout-%j.log' &>smk.log&
+--cluster 'xenon scheduler slurm --location local:// submit --name smk.{rule} --inherit-env --max-run-time 5 --working-directory . --stderr stderr-%j.log --stdout stdout-%j.log' &>smk.log&
 ```
