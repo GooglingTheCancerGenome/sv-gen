@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/GooglingTheCancerGenome/sv-gen.svg?branch=master)](https://travis-ci.org/GooglingTheCancerGenome/sv-gen)
 
-Snakemake-based workflow to generate artificial structural variant (SV) data.
+Structural variants (SVs) are an important class of genetic variation implicated in a wide array of genetic diseases. _sv-gen_ is a Snakemake-based workflow to generate artificial short-read alignments based on a reference genome with(out) SVs. The workflow is easy to use and deploy on any Linux-based machine. In particular, the workflow supports automated software deployment, easy configuration and addition of new analysis tools as well as enables to scale from a single computer to different HPC clusters with minimal effort.
 
 ## Dependencies
 
@@ -10,9 +10,9 @@ Snakemake-based workflow to generate artificial structural variant (SV) data.
 -   [Conda](https://conda.io/)
 -   [Snakemake](https://snakemake.readthedocs.io/) (5.10.0)
 -   [Xenon CLI](https://github.com/NLeSC/xenon-cli) (3.0.4)
--   [jq](https://stedolan.github.io/jq/) (1.6) to query job accounting output by `xenon --json ...` (optional)
+-   [jq](https://stedolan.github.io/jq/) (optional) - command-line JSON processor to parse job accounting info (see `xenon --json ...`)
 
-The workflow includes the following tools:
+The [workflow](/doc/sv-gen.svg) includes the following tools:
 
 -   [SURVIVOR](https://github.com/fritzsedlazeck/SURVIVOR) (1.0.6)
 -   [ART](https://www.niehs.nih.gov/research/resources/software/biostatistics/art/) (2016-06-05)
@@ -50,20 +50,23 @@ cd snakemake
 **4. Execute the workflow.**
 
 ```bash
-snakemake -np  # 'dry' run only checks I/O files
-snakemake --use-conda  # run simulations locally
+# 'dry' run only checks I/O files
+snakemake -np
+
+# run the workflow locally
+snakemake --use-conda
 ```
 
 _Submit jobs to Grid Engine-based cluster_
 
 ```bash
-snakemake --use-conda --latency-wait 30 --jobs 17 \
---cluster 'xenon scheduler gridengine --location local:// submit --name smk.{rule} --inherit-env --cores-per-task 1 --max-run-time 5 --working-directory . --stderr stderr-%j.log --stdout stdout-%j.log' &>smk.log&
+snakemake --use-conda --latency-wait 30 --jobs \
+--cluster 'xenon scheduler gridengine --location local:// submit --name smk.{rule} --inherit-env --max-run-time 5 --working-directory . --stderr stderr-%j.log --stdout stdout-%j.log' &>smk.log&
 ```
 
 _Submit jobs to Slurm-based cluster_
 
 ```bash
-snakemake --use-conda --latency-wait 30 --jobs 17 \
---cluster 'xenon scheduler slurm --location local:// submit --name smk.{rule} --inherit-env --cores-per-task 1 --max-run-time 5 --working-directory . --stderr stderr-%j.log --stdout stdout-%j.log' &>smk.log&
+snakemake --use-conda --latency-wait 30 --jobs \
+--cluster 'xenon scheduler slurm --location local:// submit --name smk.{rule} --inherit-env --max-run-time 5 --working-directory . --stderr stderr-%j.log --stdout stdout-%j.log' &>smk.log&
 ```
