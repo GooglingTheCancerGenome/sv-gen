@@ -10,7 +10,7 @@ config = load_configfile('analysis.yaml')
 
 def get_filext(fmt):
     """Get file extension(s) given file type/format:
-        ['fasta', 'fasta_idx', 'bam', 'bam_idx', 'fastq']
+        ['fasta', 'fasta_idx', 'bam', 'bam_idx', 'fastq', 'vcf', 'bed']
     :param fmt: (str) input file format
     :returns: (str) file extension
     """

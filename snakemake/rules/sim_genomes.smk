@@ -62,7 +62,11 @@ rule survivor_simsv:
         fasta = os.path.join(get_outdir(), 'seqids' + get_filext('fasta'))
     output:
         fasta = os.path.join(get_outdir(), '{svtype}',
-                             '{genotype}' + get_filext('fasta'))
+                             '{genotype}' + get_filext('fasta')),
+        vcf = os.path.join(get_outdir(), '{svtype}',
+                             '{genotype}' + get_filext('vcf')),
+        bed = os.path.join(get_outdir(), '{svtype}',
+                             '{genotype}' + get_filext('bed'))
     params:
         sfx = '.org',
         prefix = os.path.join(get_outdir(), '{svtype}', '{genotype}')

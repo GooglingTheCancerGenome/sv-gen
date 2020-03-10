@@ -24,6 +24,8 @@ file_exts:
   fastq: .fq
   bam: .bam
   bam_idx: .bam.bai
+  bed: .bed
+  vcf: .vcf
 
 # simulation parameters
 sim_genomes:
