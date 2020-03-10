@@ -81,6 +81,8 @@ rule survivor_simsv:
         if [ "{wildcards.genotype}" == "hmz" ]; then
             sed -E "s:^(>.*):\\1\.1:" "{input.fasta}" > "{output.fasta}"
             sed -E "s:^(>.*):\\1\.2:" "{input.fasta}" >> "{output.fasta}"
+            # write dummy VCF and BED output files (no SVs)
+            touch "{output.vcf}" "{output.bed}"
         elif [ "{wildcards.genotype}" == "hmz-sv" ]; then
             SURVIVOR simSV "{input.fasta}" "{input.config}" 0 0 "{params.prefix}"
             sed -E -i{params.sfx} "s:^(>.*):\\1\.1:" "{output.fasta}"
