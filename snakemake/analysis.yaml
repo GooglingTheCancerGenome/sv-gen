@@ -1,3 +1,4 @@
+---
 threads: -1  # only samtools & bwa (default: -1 = number of available cores)
 
 # I/O files
