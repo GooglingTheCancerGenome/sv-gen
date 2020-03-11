@@ -1,5 +1,7 @@
 from ruamel import yaml
 from typing import Dict, List, Union
+
+import logging
 import yatiml
 import enum
 
@@ -15,42 +17,16 @@ class Input:
 
 
 class Genotype(enum.Enum):
-    HOMO_NOSV = 'hmz'
-    HOMO_SV = 'hmz-sv'
-    HETERO_SV = 'htz-sv'
-
-    @classmethod
-    def yatiml_savorize(cls, node: yatiml.Node) -> None:
-        yaml_to_python = {
-                'hmz': 'HOMO_NOSV',
-                'hmz-sv': 'HOMO_SV',
-                'htz-sv': 'HETERO_SV'}
-
-        if node.is_scalar(str):
-            yaml_str = node.get_value()
-            if yaml_str in yaml_to_python:
-                node.set_value(yaml_to_python[yaml_str])
-            else:
-                raise yatiml.SeasoningError('Invalid Genotype value')
-
-    @classmethod
-    def yatiml_sweeten(cls, node: yatiml.Node) -> None:
-        python_to_yaml = {
-                'HOMO_NOSV': 'hmz',
-                'HOMO_SV': 'hmz-sv',
-                'HETERO_SV': 'htz-sv'}
-        python_str = node.get_value()
-        if python_str in python_to_yaml:
-            node.set_value(python_to_yaml[python_str])
-        else:
-            raise yatiml.SeasoningError('Invalid Genotype value')
+    hmz = 'homozygous_without_sv'
+    hmz_sv = 'homozygous_with_sv'
+    htz_sv = 'heterozygous_with_sv'
 
 
 class Output:
     def __init__(
             self,
             basedir: str,
-            genotype: Genotype) -> None:
+            genotype: List[Genotype]) -> None:
         self.basedir = basedir
         self.genotype = genotype
 
@@ -92,6 +68,7 @@ class MyLoader(yatiml.Loader):
     pass
 
 
+yatiml.logger.setLevel(logging.DEBUG)
 yatiml.add_to_loader(MyLoader, [Input, Genotype, Output, FileExtension, Analysis])
 yatiml.set_document_type(MyLoader, Analysis)
 
@@ -105,8 +82,8 @@ output:
   basedir: data/out
   genotype:
     - hmz
-    - hmz-sv
-    - htz-sv
+    - hmz_sv
+    - htz_sv
 filext:
   fasta: .fasta
   fasta_idx:
@@ -122,13 +99,12 @@ filext:
   vcf: .vcf
 """
 doc = yaml.load(yaml_text, Loader=MyLoader)
-print(type(doc))
 print(doc)
 print(doc.threads)
 print(doc.input.fasta)
 print(doc.input.seqids)
 print(doc.output.basedir)
-print(doc.output.genotype)
+print("\n".join([str(g) for g in doc.output.genotype]))
 print(doc.filext.fasta)
 print(doc.filext.fasta_idx)
 print(doc.filext.fastq)
