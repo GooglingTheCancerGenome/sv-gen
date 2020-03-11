@@ -1,9 +1,10 @@
+---
 channels:
   - conda-forge
   - bioconda
   - nlesc
-
 dependencies:
   - snakemake=5.10.0
   - xenon-cli=3.0.4
   - jq=1.6
+  - pip: yatiml
