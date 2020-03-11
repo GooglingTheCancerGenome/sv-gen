@@ -17,9 +17,16 @@ class Input:
 
 
 class Genotype(enum.Enum):
-    hmz = 'homozygous_without_sv'
-    hmz_sv = 'homozygous_with_sv'
-    htz_sv = 'heterozygous_with_sv'
+    HOMOZYG_NOSV = 'hmz'
+    HOMOZYG_SV = 'hmz-sv'
+    HETEROZYG_SV = 'htz-sv'
+
+    @classmethod
+    def yatiml_savorize(cls, node: yatiml.Node) -> None:
+        yaml_to_python = {
+                v._value_: v._name_ for v in cls.__members__.values()}
+        if node.is_scalar(str):
+            node.set_value(yaml_to_python.get(node.get_value()))
 
 
 class Output:
@@ -56,11 +63,11 @@ class Analysis:
             threads: int,
             input: Input,
             output: Output,
-            filext: FileExtension) -> None:
+            file_exts: FileExtension) -> None:
         self.threads = threads
         self.input = input
         self.output = output
-        self.filext = filext  # file_exts->filext
+        self.file_exts = file_exts
 
 
 # Create loader
@@ -82,9 +89,9 @@ output:
   basedir: data/out
   genotype:
     - hmz
-    - hmz_sv
-    - htz_sv
-filext:
+    - hmz-sv
+    - htz-sv
+file_exts:
   fasta: .fasta
   fasta_idx:
     - .fasta.ann
@@ -104,11 +111,11 @@ print(doc.threads)
 print(doc.input.fasta)
 print(doc.input.seqids)
 print(doc.output.basedir)
-print("\n".join([str(g) for g in doc.output.genotype]))
-print(doc.filext.fasta)
-print(doc.filext.fasta_idx)
-print(doc.filext.fastq)
-print(doc.filext.bam)
-print(doc.filext.bam_idx)
-print(doc.filext.bed)
-print(doc.filext.vcf)
+print("\n".join([str(g.value) for g in doc.output.genotype]))
+print(doc.file_exts.fasta)
+print(doc.file_exts.fasta_idx)
+print(doc.file_exts.fastq)
+print(doc.file_exts.bam)
+print(doc.file_exts.bam_idx)
+print(doc.file_exts.bed)
+print(doc.file_exts.vcf)
