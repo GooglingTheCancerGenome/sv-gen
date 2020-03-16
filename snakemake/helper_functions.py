@@ -4,11 +4,10 @@ import psutil as ps
 
 from snakemake import load_configfile
 from csv import DictReader
-from validator import validate_configfile
+from validator import load_configfile
 
 
-config_file = validate_configfile('analysis.yaml')
-config = load_configfile(config_file)
+config = load_configfile('analysis.yaml')
 
 
 def get_filext(fmt):

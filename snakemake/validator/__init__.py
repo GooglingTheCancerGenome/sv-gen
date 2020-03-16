@@ -6,6 +6,7 @@ import enum
 
 from ruamel import yaml
 from typing import Dict, List, Union
+from collections import OrderedDict
 
 
 # Create document classes
@@ -137,20 +138,66 @@ class Analysis:
         self.filext = filext
         self.simulation = simulation
 
+    def dump(self) -> Dict:
+        return OrderedDict(
+            threads = self.threads,
+            input = OrderedDict(
+                fasta=self.input.fasta,
+                seqids=self.input.seqids),
+            output = OrderedDict(
+                basedir=self.output.basedir,
+                genotype=[str(g.value) for g in self.output.genotype]),
+            filext = OrderedDict(
+                fasta=self.filext.fasta,
+                fasta_idx=[e for e in self.filext.fasta_idx],
+                fastq=self.filext.fastq,
+                bam=self.filext.bam,
+                bam_idx=self.filext.bam_idx,
+                bed=self.filext.bed,
+                vcf=self.filext.vcf),
+            simulation = OrderedDict(
+                config=self.simulation.config,
+                sv_type=OrderedDict(
+                    dup=[
+                        self.simulation.sv_type.dup.count,
+                        self.simulation.sv_type.dup.min_len,
+                        self.simulation.sv_type.dup.max_len],
+                    inv=[
+                        self.simulation.sv_type.inv.count,
+                        self.simulation.sv_type.inv.min_len,
+                        self.simulation.sv_type.inv.max_len],
+                    tra=[
+                        self.simulation.sv_type.tra.count,
+                        self.simulation.sv_type.tra.min_len,
+                        self.simulation.sv_type.tra.max_len],
+                    indel=[
+                        self.simulation.sv_type.indel.count,
+                        self.simulation.sv_type.indel.min_len,
+                        self.simulation.sv_type.indel.max_len],
+                    invdel=[
+                        self.simulation.sv_type.invdel.count,
+                        self.simulation.sv_type.invdel.min_len,
+                        self.simulation.sv_type.invdel.max_len],
+                    invdup=[
+                        self.simulation.sv_type.invdup.count,
+                        self.simulation.sv_type.invdup.min_len,
+                        self.simulation.sv_type.invdup.max_len])),
+            seed = self.simulation.seed,
+            profile = self.simulation.profile,
+            coverage = self.simulation.coverage,
+            read = self.simulation.read,
+            insert = self.simulation.insert)
+
 
 # Create loader
 class MyLoader(yatiml.Loader):
     pass
 
 
-def validate_configfile(yaml_file: str) -> str:
+def load_configfile(yaml_file: str) -> Dict:
     with open(yaml_file, 'r') as f:
-        try:
-            doc = yaml.load(f, MyLoader)
-            return yaml_file
-        except yatiml.RecognitionError as err:
-            print(str(err), file=sys.stderr)
-            sys.exit(os.EX_OSFILE)
+        doc = yaml.load(f, MyLoader)
+        return doc.dump()
 
 
 yatiml.logger.setLevel(logging.DEBUG)
