@@ -4,8 +4,11 @@ import psutil as ps
 
 from snakemake import load_configfile
 from csv import DictReader
+from validator import validate_configfile
 
-config = load_configfile('analysis.yaml')
+
+config_file = validate_configfile('analysis.yaml')
+config = load_configfile(config_file)
 
 
 def get_filext(fmt):
@@ -40,8 +43,6 @@ def get_outdir():
     """Get output directory.
     :returns: (str) output path
     """
-    if 'basedir' not in config['output']:
-        raise OSError("The 'output.basedir' not set in the YAML config.")
     return config['output']['basedir']
 
 
@@ -62,16 +63,9 @@ def get_nthreads(logical=True):
     """Get the number of threads used by `samtools` and `bwa`.
     :returns: (int) threads (default: -1 = number of logical cores)
     """
-    if 'threads' not in config:
-        raise KeyError("The number of 'threads' is not set in the YAML config.")
-
-    n = config['threads']
-    try:
-        int(n)
-    except ValueError:
-        sys.exit("The value of 'threads' must be an integer.")
-    if int(n) > 0:
-        return config['threads']
+    n = int(config['threads'])
+    if n > 0:
+        return n
     else:
         return ps.cpu_count(logical)
 
