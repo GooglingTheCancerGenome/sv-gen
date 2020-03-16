@@ -10,10 +10,10 @@ rule art_illumina:
                               'r{read_len}_i{insert_len}',
                               '{genotype}_2' + get_filext('fastq'))
     params:
-        seed = config['sim_reads']['seed'],
-        profile = config['sim_reads']['profile'],
-        insert_stdev = config['sim_reads']['insert']['stdev'],
-        coverage = max(config['sim_reads']['coverage']),
+        seed = config['simulation']['seed'],
+        profile = config['simulation']['profile'],
+        insert_stdev = config['simulation']['insert']['stdev'],
+        coverage = max(config['simulation']['coverage']),
         prefix = os.path.join(get_outdir(), '{svtype}',
                               'r{read_len}_i{insert_len}', '{genotype}_')
     conda:

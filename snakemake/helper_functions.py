@@ -14,10 +14,10 @@ def get_filext(fmt):
     :param fmt: (str) input file format
     :returns: (str) file extension
     """
-    if fmt not in config['file_exts'].keys():
+    if fmt not in config['filext'].keys():
          raise ValueError("Input file format '{}' not supported."
             .format(fmt.lower()))
-    return config['file_exts'][fmt]
+    return config['filext'][fmt]
 
 
 def get_reference():
@@ -50,7 +50,7 @@ def get_svtype():
     :returns: (str) SV type(s)
     """
     types = []
-    for sv, arr in config['sim_genomes']['sv_type'].items():
+    for sv, arr in config['simulation']['sv_type'].items():
         count = arr[0]
         if count > 0:
             types.append(sv)

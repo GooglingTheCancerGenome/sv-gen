@@ -1,9 +1,9 @@
 rule survivor_config:
     output:
         config = os.path.join(get_outdir(), '{svtype}',
-                              config['sim_genomes']['config'])
+                              config['simulation']['config'])
     params:
-        matrix = config['sim_genomes']['sv_type']
+        matrix = config['simulation']['sv_type']
     conda:
         "../environment.yaml"
     shell:
@@ -12,24 +12,24 @@ rule survivor_config:
 
         SURVIVOR simSV "{output.config}"
         sed -i.org \
-            -E "s/^(DUPLICATION_number:)\s+[0-9]+/\\1 {params.matrix[DUP][0]}/;\
-                s/^(DUPLICATION_minimum_length:)\s+[0-9]+/\\1 {params.matrix[DUP][1]}/;\
-                s/^(DUPLICATION_maximum_length:)\s+[0-9]+/\\1 {params.matrix[DUP][2]}/;\
-                s/^(INDEL_number:)\s+[0-9]+/\\1 {params.matrix[INDEL][0]}/;\
-                s/^(INDEL_minimum_length:)\s+[0-9]+/\\1 {params.matrix[INDEL][1]}/;\
-                s/^(INDEL_maximum_length:)\s+[0-9]+/\\1 {params.matrix[INDEL][2]}/;\
-                s/^(INVERSION_number:)\s+[0-9]+/\\1 {params.matrix[INV][0]}/;\
-                s/^(INVERSION_minimum_length:)\s+[0-9]+/\\1 {params.matrix[INV][1]}/;\
-                s/^(INVERSION_maximum_length:)\s+[0-9]+/\\1 {params.matrix[INV][2]}/;\
-                s/^(INV_del_number:)\s+[0-9]+/\\1 {params.matrix[INV-DEL][0]}/;\
-                s/^(INV_del_minimum_length:)\s+[0-9]+/\\1 {params.matrix[INV-DEL][1]}/;\
-                s/^(INV_del_maximum_length:)\s+[0-9]+/\\1 {params.matrix[INV-DEL][2]}/;\
-                s/^(INV_dup_number:)\s+[0-9]+/\\1 {params.matrix[INV-DUP][0]}/;\
-                s/^(INV_dup_minimum_length:)\s+[0-9]+/\\1 {params.matrix[INV-DUP][1]}/;\
-                s/^(INV_dup_maximum_length:)\s+[0-9]+/\\1 {params.matrix[INV-DUP][2]}/;\
-                s/^(TRANSLOCATION_number:)\s+[0-9]+/\\1 {params.matrix[TRA][0]}/;\
-                s/^(TRANSLOCATION_minimum_length:)\s+[0-9]+/\\1 {params.matrix[TRA][1]}/;\
-                s/^(TRANSLOCATION_maximum_length:)\s+[0-9]+/\\1 {params.matrix[TRA][2]}/"\
+            -E "s/^(DUPLICATION_number:)\s+[0-9]+/\\1 {params.matrix[dup][0]}/;\
+                s/^(DUPLICATION_minimum_length:)\s+[0-9]+/\\1 {params.matrix[dup][1]}/;\
+                s/^(DUPLICATION_maximum_length:)\s+[0-9]+/\\1 {params.matrix[dup][2]}/;\
+                s/^(INVERSION_number:)\s+[0-9]+/\\1 {params.matrix[inv][0]}/;\
+                s/^(INVERSION_minimum_length:)\s+[0-9]+/\\1 {params.matrix[inv][1]}/;\
+                s/^(INVERSION_maximum_length:)\s+[0-9]+/\\1 {params.matrix[inv][2]}/;\
+                s/^(INDEL_number:)\s+[0-9]+/\\1 {params.matrix[indel][0]}/;\
+                s/^(INDEL_minimum_length:)\s+[0-9]+/\\1 {params.matrix[indel][1]}/;\
+                s/^(INDEL_maximum_length:)\s+[0-9]+/\\1 {params.matrix[indel][2]}/;\
+                s/^(TRANSLOCATION_number:)\s+[0-9]+/\\1 {params.matrix[tra][0]}/;\
+                s/^(TRANSLOCATION_minimum_length:)\s+[0-9]+/\\1 {params.matrix[tra][1]}/;\
+                s/^(TRANSLOCATION_maximum_length:)\s+[0-9]+/\\1 {params.matrix[tra][2]}/;\
+                s/^(INV_del_number:)\s+[0-9]+/\\1 {params.matrix[invdel][0]}/;\
+                s/^(INV_del_minimum_length:)\s+[0-9]+/\\1 {params.matrix[invdel][1]}/;\
+                s/^(INV_del_maximum_length:)\s+[0-9]+/\\1 {params.matrix[invdel][2]}/;\
+                s/^(INV_dup_number:)\s+[0-9]+/\\1 {params.matrix[invdup][0]}/;\
+                s/^(INV_dup_minimum_length:)\s+[0-9]+/\\1 {params.matrix[invdup][1]}/;\
+                s/^(INV_dup_maximum_length:)\s+[0-9]+/\\1 {params.matrix[invdup][2]}/"\
             "{output}"
         cat "{output}"
         """
@@ -58,7 +58,7 @@ rule samtools_faidx:
 rule survivor_simsv:
     input:
         config = os.path.join(get_outdir(), '{svtype}',
-                              config['sim_genomes']['config']),
+                              config['simulation']['config']),
         fasta = os.path.join(get_outdir(), 'seqids' + get_filext('fasta'))
     output:
         fasta = os.path.join(get_outdir(), '{svtype}',

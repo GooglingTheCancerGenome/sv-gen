@@ -28,7 +28,7 @@ rule bwa_mem:
     output:
         bam = os.path.join(get_outdir(), '{svtype}',
                            'r{read_len}_i{insert_len}',
-                           'cov' + str(max(config['sim_reads']['coverage'])),
+                           'cov' + str(max(config['simulation']['coverage'])),
                            '{genotype}' + get_filext('bam'))
     params:
         read_group = "@RG\\tID:{0}\\tLB:{0}\\tSM:{0}".format('{genotype}')
@@ -54,7 +54,7 @@ rule samtools_view:
     input:
         bam = os.path.join(get_outdir(), '{svtype}',
                            'r{read_len}_i{insert_len}',
-                           'cov' + str(max(config['sim_reads']['coverage'])),
+                           'cov' + str(max(config['simulation']['coverage'])),
                            '{genotype}' + get_filext('bam'))
     output:
         bam = os.path.join(get_outdir(), '{svtype}',
