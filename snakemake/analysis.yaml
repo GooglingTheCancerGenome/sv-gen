@@ -13,7 +13,7 @@ output:
     - hmz-sv  # homozygous with SVs
     - htz-sv  # heterozygous with SVs
 
-# I/O file extensions
+# registered I/O file extensions
 filext:
   fasta: .fasta
   fasta_idx:

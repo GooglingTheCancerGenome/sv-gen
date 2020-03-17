@@ -6,6 +6,7 @@ import enum
 
 from ruamel import yaml
 from typing import Dict, List, Union
+from collections import OrderedDict
 
 
 # Create document classes
@@ -104,6 +105,22 @@ class SvType:
         self.invdup = invdup
 
 
+class Read:
+    def __init__(
+            self,
+            len: List[int]) -> None:
+        self.len = len
+
+
+class Insert:
+    def __init__(
+            self,
+            stdev: int,
+            len: List[int]) -> None:
+        self.stdev = stdev
+        self.len = len
+
+
 class Simulation:
     def __init__(
             self,
@@ -112,8 +129,8 @@ class Simulation:
             seed: int,
             profile: str,
             coverage: List[int],
-            read: Dict[str, List[int]],
-            insert: Dict[str, Union[int, List[int]]]) -> None:
+            read: Read,
+            insert: Insert) -> None:
         self.config = config
         self.sv_type = sv_type
         self.seed = seed
@@ -143,17 +160,12 @@ class MyLoader(yatiml.Loader):
     pass
 
 
-def validate_configfile(yaml_file: str) -> str:
+def load_configfile(yaml_file: str) -> Dict:
     with open(yaml_file, 'r') as f:
-        try:
-            doc = yaml.load(f, MyLoader)
-            return yaml_file
-        except yatiml.RecognitionError as err:
-            print(str(err), file=sys.stderr)
-            sys.exit(os.EX_OSFILE)
+        return yaml.load(f, MyLoader)
 
 
 yatiml.logger.setLevel(logging.DEBUG)
 yatiml.add_to_loader(MyLoader, [Input, Genotype, Output, FileExtension, Edit,
-                     SvType, Simulation, Analysis])
+                     SvType, Read, Insert, Simulation, Analysis])
 yatiml.set_document_type(MyLoader, Analysis)
