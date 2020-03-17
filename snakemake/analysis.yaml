@@ -36,7 +36,7 @@ simulation:
     inv: [0, 600, 800]      # inversion: ""
     tra: [0, 1000, 3000]    # translocation: ""
     indel: [10, 20, 500]    # insertion+deletion: ""
-    invdel: [10, 600, 800]  # inversion+deletion: ""
+    invdel: [0, 600, 800]   # inversion+deletion: ""
     invdup: [0, 600, 800]   # inversion+duplication: ""
   # ART parameters
   seed: 1000
@@ -45,5 +45,5 @@ simulation:
   read:
     len: [150]  # [len1, len2, ...]
   insert:
-    stdev: 10   # standard deviation of the fragment size
+    stdev: 10   # standard deviation of the fragment size (bp)
     len: [500]  # [len1, len2, ...]
