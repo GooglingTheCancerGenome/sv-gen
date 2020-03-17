@@ -11,6 +11,7 @@ Structural variants (SVs) are an important class of genetic variation implicated
 -   [Snakemake](https://snakemake.readthedocs.io/) (5.10.0)
 -   [Xenon CLI](https://github.com/NLeSC/xenon-cli) (3.0.4)
 -   [jq](https://stedolan.github.io/jq/) (optional) - command-line JSON processor to parse job accounting info (see `xenon --json ...`)
+-   [YAtiML](https://github.com/yatiml/yatiml)
 
 The [workflow](/doc/sv-gen.svg) includes the following tools:
 
