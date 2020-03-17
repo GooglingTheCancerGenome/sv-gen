@@ -105,6 +105,22 @@ class SvType:
         self.invdup = invdup
 
 
+class Read:
+    def __init__(
+            self,
+            len: List[int]) -> None:
+        self.len = len
+
+
+class Insert:
+    def __init__(
+            self,
+            stdev: int,
+            len: List[int]) -> None:
+        self.stdev = stdev
+        self.len = len
+
+
 class Simulation:
     def __init__(
             self,
@@ -113,8 +129,8 @@ class Simulation:
             seed: int,
             profile: str,
             coverage: List[int],
-            read: Dict[str, List[int]],
-            insert: Dict[str, Union[int, List[int]]]) -> None:
+            read: Read,
+            insert: Insert) -> None:
         self.config = config
         self.sv_type = sv_type
         self.seed = seed
@@ -138,56 +154,6 @@ class Analysis:
         self.filext = filext
         self.simulation = simulation
 
-    def dump(self) -> Dict:
-        return OrderedDict(
-            threads = self.threads,
-            input = OrderedDict(
-                fasta=self.input.fasta,
-                seqids=self.input.seqids),
-            output = OrderedDict(
-                basedir=self.output.basedir,
-                genotype=[str(g.value) for g in self.output.genotype]),
-            filext = OrderedDict(
-                fasta=self.filext.fasta,
-                fasta_idx=[e for e in self.filext.fasta_idx],
-                fastq=self.filext.fastq,
-                bam=self.filext.bam,
-                bam_idx=self.filext.bam_idx,
-                bed=self.filext.bed,
-                vcf=self.filext.vcf),
-            simulation = OrderedDict(
-                config=self.simulation.config,
-                sv_type=OrderedDict(
-                    dup=[
-                        self.simulation.sv_type.dup.count,
-                        self.simulation.sv_type.dup.min_len,
-                        self.simulation.sv_type.dup.max_len],
-                    inv=[
-                        self.simulation.sv_type.inv.count,
-                        self.simulation.sv_type.inv.min_len,
-                        self.simulation.sv_type.inv.max_len],
-                    tra=[
-                        self.simulation.sv_type.tra.count,
-                        self.simulation.sv_type.tra.min_len,
-                        self.simulation.sv_type.tra.max_len],
-                    indel=[
-                        self.simulation.sv_type.indel.count,
-                        self.simulation.sv_type.indel.min_len,
-                        self.simulation.sv_type.indel.max_len],
-                    invdel=[
-                        self.simulation.sv_type.invdel.count,
-                        self.simulation.sv_type.invdel.min_len,
-                        self.simulation.sv_type.invdel.max_len],
-                    invdup=[
-                        self.simulation.sv_type.invdup.count,
-                        self.simulation.sv_type.invdup.min_len,
-                        self.simulation.sv_type.invdup.max_len])),
-            seed = self.simulation.seed,
-            profile = self.simulation.profile,
-            coverage = self.simulation.coverage,
-            read = self.simulation.read,
-            insert = self.simulation.insert)
-
 
 # Create loader
 class MyLoader(yatiml.Loader):
@@ -196,11 +162,10 @@ class MyLoader(yatiml.Loader):
 
 def load_configfile(yaml_file: str) -> Dict:
     with open(yaml_file, 'r') as f:
-        doc = yaml.load(f, MyLoader)
-        return doc.dump()
+        return yaml.load(f, MyLoader)
 
 
 yatiml.logger.setLevel(logging.DEBUG)
 yatiml.add_to_loader(MyLoader, [Input, Genotype, Output, FileExtension, Edit,
-                     SvType, Simulation, Analysis])
+                     SvType, Read, Insert, Simulation, Analysis])
 yatiml.set_document_type(MyLoader, Analysis)
