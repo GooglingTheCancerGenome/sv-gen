@@ -9,4 +9,4 @@ dependencies:
   - jq=1.6
   - pip
   - pip:
-      - git+https://github.com/yatiml/yatiml.git@develop  # yatiml
+      - git+https://github.com/yatiml/yatiml.git@e14cf8e88f9a6f79634aaaea562b47eccb1a2af4  # yatiml
