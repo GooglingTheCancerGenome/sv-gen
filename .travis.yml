@@ -17,11 +17,11 @@ install:
   - docker run -d -p $PORT:22 --name $SCH-$TAG $PREFIX-$SCH:$TAG
   - sleep 10
   - docker ps -a
-  - docker cp ./ $SCH:/home/xenon
+  - docker cp ./ $SCH-$TAG:/home/xenon
   - docker exec -t $SCH-$TAG chown -R xenon:xenon /home/xenon
   - docker exec -u xenon -t $SCH-$TAG ./install.sh
 script:
   - cd snakemake && pytest --cov=helper_functions --cov-report=xml
-  - docker exec -u xenon -t $SCH ./run.sh $SCH
+  - docker exec -u xenon -t $SCH-$TAG ./run.sh $SCH
 after_succes:
   - python-codacy-coverage -r coverage.xml
