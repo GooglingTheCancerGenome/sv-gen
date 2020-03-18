@@ -3,7 +3,6 @@ import sys
 import psutil as ps
 
 from snakemake import load_configfile
-from csv import DictReader
 from validator import load_configfile
 
 
