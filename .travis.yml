@@ -9,9 +9,9 @@ env:
   global:
     - PREFIX=gtcg/xenon
   matrix:
-    - PORT=10022 SCH=gridengine TAG:6.2
-    - PORT=10023 SCH=slurm TAG:17
-    - PORT=10024 SCH=slurm TAG:19
+    - PORT=10022 SCH=gridengine TAG=6
+    - PORT=10023 SCH=slurm TAG=17
+    - PORT=10024 SCH=slurm TAG=19
 install:
   - pip install -r test-requirements.txt
   - docker run -d -p $PORT:22 --name $SCH-$TAG $PREFIX-$SCH:$TAG
