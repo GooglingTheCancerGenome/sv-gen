@@ -1,0 +1,5 @@
+snakemake==5.10.0
+pytest
+pytest-cov
+codacy-coverage
+git+git://github.com/yatiml/yatiml.git@develop
