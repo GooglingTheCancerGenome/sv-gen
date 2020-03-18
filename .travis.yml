@@ -13,6 +13,7 @@ env:
     - PORT=10022 SCH=gridengine
     - PORT=10023 SCH=slurm
 install:
+  - pip install -r test-requirements.txt
   - docker pull $PREFIX-$SCH:$TAG
   - docker run -d -p $PORT:22 --name $SCH $PREFIX-$SCH:$TAG
   - sleep 10
@@ -21,4 +22,7 @@ install:
   - docker exec -t $SCH chown -R xenon:xenon /home/xenon
   - docker exec -u xenon -t $SCH ./install.sh
 script:
+  - cd snakemake && pytest --cov=helper_functions --cov-report=xml
   - docker exec -u xenon -t $SCH ./run.sh $SCH
+after_succes:
+  - python-codacy-coverage -r coverage.xml
