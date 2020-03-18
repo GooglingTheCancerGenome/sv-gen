@@ -5,7 +5,7 @@ channels:
   - nlesc
 dependencies:
   - snakemake=5.10.0
-  - xenon-cli=3.0.4
+  - xenon-cli=3.0.5beta1
   - jq=1.6
   - pip
   - pip:
