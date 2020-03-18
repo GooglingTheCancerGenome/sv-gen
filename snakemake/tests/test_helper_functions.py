@@ -1,4 +1,3 @@
-import os
 import pytest
 import psutil as ps
 import helper_functions as hf

@@ -1,20 +1,15 @@
-import os
-import sys
-import logging
-import yatiml
 import enum
+import logging
 
-from ruamel import yaml
 from typing import Dict, List, Union
-from collections import OrderedDict
+from ruamel import yaml
+
+import yatiml
 
 
 # Create document classes
 class Input:
-    def __init__(
-            self,
-            fasta: str,
-            seqids: List[Union[int, str]]) -> None:
+    def __init__(self, fasta: str, seqids: List[Union[int, str]]) -> None:
         self.fasta = fasta
         self.seqids = seqids
 
@@ -26,31 +21,20 @@ class Genotype(enum.Enum):
 
     @classmethod
     def yatiml_savorize(cls, node: yatiml.Node) -> None:
-        yaml_to_python = {
-                v._value_: v._name_ for v in cls.__members__.values()}
+        yaml_to_py = {v._value_: v._name_ for v in cls.__members__.values()}
         if node.is_scalar(str):
-            node.set_value(yaml_to_python.get(node.get_value()))
+            node.set_value(yaml_to_py.get(node.get_value()))
 
 
 class Output:
-    def __init__(
-            self,
-            basedir: str,
-            genotype: List[Genotype]) -> None:
+    def __init__(self, basedir: str, genotype: List[Genotype]) -> None:
         self.basedir = basedir
         self.genotype = genotype
 
 
 class FileExtension:
-    def __init__(
-            self,
-            fasta: str,
-            fasta_idx: List[str],
-            fastq: str,
-            bam: str,
-            bam_idx: str,
-            bed: str,
-            vcf: str) -> None:
+    def __init__(self, fasta: str, fasta_idx: List[str], fastq: str, bam: str,
+                 bam_idx: str, bed: str, vcf: str) -> None:
         self.fasta = fasta
         self.fasta_idx = fasta_idx
         self.bam = bam
@@ -72,10 +56,10 @@ class Edit:
         err_msg = ('Edit descriptions must be arrays of INTs: count, \
                    min_len and max_len')
         if len(node.yaml_node.value) != 3:
-            raise yatiml.RecognitionError(err_msg);
+            raise yatiml.RecognitionError(err_msg)
         for item in node.yaml_node.value:
-            if (not isinstance(item, yaml.ScalarNode) or
-               item.tag != 'tag:yaml.org,2002:int'):
+            if (not isinstance(item, yaml.ScalarNode) or \
+                item.tag != 'tag:yaml.org,2002:int'):
                 raise yatiml.RecognitionError(err_msg)
 
     @classmethod
@@ -89,14 +73,8 @@ class Edit:
 
 
 class SvType:
-    def __init__(
-            self,
-            dup: Edit,
-            inv: Edit,
-            tra: Edit,
-            indel: Edit,
-            invdel: Edit,
-            invdup: Edit) -> None:
+    def __init__(self, dup: Edit, inv: Edit, tra: Edit, indel: Edit,
+                 invdel: Edit, invdup: Edit) -> None:
         self.dup = dup
         self.inv = inv
         self.tra = tra
@@ -106,31 +84,19 @@ class SvType:
 
 
 class Read:
-    def __init__(
-            self,
-            len: List[int]) -> None:
+    def __init__(self, len: List[int]) -> None:
         self.len = len
 
 
 class Insert:
-    def __init__(
-            self,
-            stdev: int,
-            len: List[int]) -> None:
+    def __init__(self, stdev: int, len: List[int]) -> None:
         self.stdev = stdev
         self.len = len
 
 
 class Simulation:
-    def __init__(
-            self,
-            config: str,
-            sv_type: SvType,
-            seed: int,
-            profile: str,
-            coverage: List[int],
-            read: Read,
-            insert: Insert) -> None:
+    def __init__(self, config: str, sv_type: SvType, seed: int, profile: str,
+                 coverage: List[int], read: Read, insert: Insert) -> None:
         self.config = config
         self.sv_type = sv_type
         self.seed = seed
@@ -141,13 +107,8 @@ class Simulation:
 
 
 class Analysis:
-    def __init__(
-            self,
-            threads: int,
-            input: Input,
-            output: Output,
-            filext: FileExtension,
-            simulation: Simulation) -> None:
+    def __init__(self, threads: int, input: Input, output: Output,
+                 filext: FileExtension, simulation: Simulation) -> None:
         self.threads = threads
         self.input = input
         self.output = output
@@ -161,11 +122,13 @@ class MyLoader(yatiml.Loader):
 
 
 def load_configfile(yaml_file: str) -> Dict:
-    with open(yaml_file, 'r') as f:
-        return yaml.load(f, MyLoader)
+    with open(yaml_file, 'r') as conf:
+        return yaml.load(conf, MyLoader)
 
 
 yatiml.logger.setLevel(logging.DEBUG)
-yatiml.add_to_loader(MyLoader, [Input, Genotype, Output, FileExtension, Edit,
-                     SvType, Read, Insert, Simulation, Analysis])
+yatiml.add_to_loader(MyLoader, [
+    Input, Genotype, Output, FileExtension, Edit, SvType, Read, Insert,
+    Simulation, Analysis
+])
 yatiml.set_document_type(MyLoader, Analysis)

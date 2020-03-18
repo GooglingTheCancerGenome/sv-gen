@@ -1,10 +1,7 @@
 import os
-import sys
 import psutil as ps
 
-from snakemake import load_configfile
 from validator import load_configfile
-
 
 config = load_configfile('analysis.yaml')
 
@@ -18,8 +15,8 @@ def get_reference():
     if not os.path.exists(fname):
         raise FileNotFoundError("FASTA file '{}' not found.".format(fname))
     if not fname.endswith(fext):
-        raise ValueError("FASTA file extension '{}' not registered."
-            .format(os.path.splitext(fname)[-1]))
+        raise ValueError("FASTA file extension '{}' not registered.".format(
+            os.path.splitext(fname)[-1]))
     if os.path.getsize(fname) == 0:
         raise OSError("FASTA file '{}' is empty.".format(fname))
     return fname
