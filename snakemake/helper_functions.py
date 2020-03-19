@@ -34,7 +34,7 @@ def get_svtype():
     :returns: (str) SV type(s)
     """
     types = []
-    for sv, params in config.simulation.sv_type.__dict__.items():
+    for sv, params in config.simulation.svtype.__dict__.items():
         if params.count > 0:
             types.append(sv)
     types.sort()

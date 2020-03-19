@@ -3,7 +3,7 @@ rule survivor_config:
         config = os.path.join(config.output.basedir, '{svtype}',
                               config.simulation.config)
     params:
-        m = config.simulation.sv_type
+        m = config.simulation.svtype
     conda:
         "../environment.yaml"
     shell:

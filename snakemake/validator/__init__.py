@@ -84,21 +84,21 @@ class SvType:
 
 
 class Read:
-    def __init__(self, len: List[int]) -> None:
-        self.len = len
+    def __init__(self, length: List[int]) -> None:
+        self.length = length
 
 
 class Insert:
-    def __init__(self, stdev: int, len: List[int]) -> None:
+    def __init__(self, stdev: int, length: List[int]) -> None:
         self.stdev = stdev
-        self.len = len
+        self.length = length
 
 
 class Simulation:
-    def __init__(self, config: str, sv_type: SvType, seed: int, profile: str,
+    def __init__(self, config: str, svtype: SvType, seed: int, profile: str,
                  coverage: List[int], read: Read, insert: Insert) -> None:
         self.config = config
-        self.sv_type = sv_type
+        self.svtype = svtype
         self.seed = seed
         self.profile = profile
         self.coverage = coverage

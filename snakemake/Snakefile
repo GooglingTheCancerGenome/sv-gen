@@ -24,8 +24,8 @@ rule all:
         #                     '{genotype}_{paired}.fq'),
         #        basedir=config.output.basedir,
         #        svtype=get_svtype(),
-        #        read_len=config.simulation.read.len,
-        #        insert_len=config.simulation.insert.len,
+        #        read_len=config.simulation.read.length,
+        #        insert_len=config.simulation.insert.length,
         #        genotype=get_genotype(),
         #        paired=[1,2])
         #
@@ -33,8 +33,8 @@ rule all:
                             'cov{cov}', '{genotype}' + config.filext.bam_idx),
                basedir=config.output.basedir,
                svtype=get_svtype(),
-               read_len=config.simulation.read.len,
-               insert_len=config.simulation.insert.len,
+               read_len=config.simulation.read.length,
+               insert_len=config.simulation.insert.length,
                cov=config.simulation.coverage,
                genotype=get_genotype())
 

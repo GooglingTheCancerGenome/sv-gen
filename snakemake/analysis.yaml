@@ -31,7 +31,7 @@ filext:
 simulation:
   # SURVIVOR parameters
   config: survivor.cfg
-  sv_type:
+  svtype:
     dup: [0, 100, 10000]    # duplication: [count, min_len, max_len]
     inv: [0, 600, 800]      # inversion: ""
     tra: [0, 1000, 3000]    # translocation: ""
@@ -43,7 +43,7 @@ simulation:
   profile: HSXt
   coverage: [10, 30]  # [cov1, cov2, ...]
   read:
-    len: [150]  # [len1, len2, ...]
+    length: [150]  # [len1, len2, ...]
   insert:
-    stdev: 10   # standard deviation of the fragment size (bp)
-    len: [500]  # [len1, len2, ...]
+    stdev: 10      # standard deviation of the fragment length (bp)
+    length: [500]  # [len1, len2, ...]
