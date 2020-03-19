@@ -20,7 +20,7 @@ class Genotype(enum.Enum):
     HETEROZYG_SV = 'htz-sv'
 
     @classmethod
-    def yatiml_savorize(cls, node: yatiml.Node) -> None:
+    def _yatiml_savorize(cls, node: yatiml.Node) -> None:
         yaml_to_py = {v._value_: v._name_ for v in cls.__members__.values()}
         if node.is_scalar(str):
             node.set_value(yaml_to_py.get(node.get_value()))
@@ -51,7 +51,7 @@ class Edit:
         self.max_len = max_len
 
     @classmethod
-    def yatiml_recognize(cls, node: yatiml.UnknownNode) -> None:
+    def _yatiml_recognize(cls, node: yatiml.UnknownNode) -> None:
         node.require_sequence()
         err_msg = ('Edit descriptions must be arrays of INTs: count, \
                    min_len and max_len')
@@ -63,7 +63,7 @@ class Edit:
                 raise yatiml.RecognitionError(err_msg)
 
     @classmethod
-    def yatiml_savorize(cls, node: yatiml.Node) -> None:
+    def _yatiml_savorize(cls, node: yatiml.Node) -> None:
         if node.is_sequence():
             items = node.seq_items()
             node.make_mapping()
