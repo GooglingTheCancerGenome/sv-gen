@@ -8,18 +8,20 @@ Structural variants (SVs) are an important class of genetic variation implicated
 ## Dependencies
 
 -   [Python 3](https://www.python.org/)
--   [Conda](https://conda.io/)
--   [Snakemake](https://snakemake.readthedocs.io/) (5.10.0)
--   [Xenon CLI](https://github.com/NLeSC/xenon-cli) (3.0.4)
--   [jq](https://stedolan.github.io/jq/) (optional) - command-line JSON processor to parse job accounting info (see `xenon --json ...`)
--   [YAtiML](https://github.com/yatiml/yatiml)
+-   [Conda](https://conda.io/) - package/environment management system
+-   [Snakemake](https://snakemake.readthedocs.io/) - workflow management system
+-   [Xenon CLI](https://github.com/NLeSC/xenon-cli) - command-line interface to compute and storage resources
+-   [jq](https://stedolan.github.io/jq/) - command-line JSON processor (optional)
+-   [YAtiML](https://github.com/yatiml/yatiml) - library for YAML type inference and schema validation
 
-The [workflow](/doc/sv-gen.svg) includes the following tools:
+For more details, refer to the conda [`environment.yaml`](/environment.yaml).
 
--   [SURVIVOR](https://github.com/fritzsedlazeck/SURVIVOR) (1.0.6)
--   [ART](https://www.niehs.nih.gov/research/resources/software/biostatistics/art/) (2016-06-05)
--   [BWA](https://github.com/lh3/bwa) (0.7.17)
--   [Samtools](https://github.com/samtools/samtools) (1.9)
+The workflow ([DAG](/doc/sv-gen.svg)) includes the following tools:
+
+-   [SURVIVOR](https://github.com/fritzsedlazeck/SURVIVOR)
+-   [ART](https://www.niehs.nih.gov/research/resources/software/biostatistics/art/)
+-   [BWA](https://github.com/lh3/bwa)
+-   [Samtools](https://github.com/samtools/samtools)
 
 **1. Clone this repo.**
 
@@ -72,3 +74,10 @@ _Submit jobs to Slurm-based cluster_
 snakemake --use-conda --latency-wait 30 --jobs \
 --cluster 'xenon scheduler slurm --location local:// submit --name smk.{rule} --inherit-env --max-run-time 5 --working-directory . --stderr stderr-%j.log --stdout stdout-%j.log' &>smk.log&
 ```
+
+_Query job accounting information_
+
+```bash
+SCH=slurm   # or gridengine
+xenon --json scheduler $SCH --location local:// list --identifier [jobID] | jq ...
+``` 
