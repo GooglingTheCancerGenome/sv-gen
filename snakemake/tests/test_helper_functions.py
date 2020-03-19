@@ -29,12 +29,14 @@ def test_get_genotype():
 
 @pytest.fixture
 def set_svtype():
-    conf = hf.config.simulation.sv_type
+    conf = hf.config.simulation.svtype
     conf.indel.count = 10  # default
     conf.dup.count = 10
+    return conf
 
 
 def test_get_svtype(set_svtype):
+    hf.config.simulation.svtype = set_svtype
     result = hf.get_svtype()
     expected = 'dup_indel'
     assert result == expected
