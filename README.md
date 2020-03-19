@@ -1,5 +1,6 @@
 # sv-gen
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/a7234b739463488394049a9549b9fec8)](https://app.codacy.com/gh/GooglingTheCancerGenome/sv-gen?utm_source=github.com&utm_medium=referral&utm_content=GooglingTheCancerGenome/sv-gen&utm_campaign=Badge_Grade_Dashboard)
 [![Build Status](https://travis-ci.org/GooglingTheCancerGenome/sv-gen.svg?branch=master)](https://travis-ci.org/GooglingTheCancerGenome/sv-gen)
 
 Structural variants (SVs) are an important class of genetic variation implicated in a wide array of genetic diseases. _sv-gen_ is a Snakemake-based workflow to generate artificial short-read alignments based on a reference genome with(out) SVs. The workflow is easy to use and deploy on any Linux-based machine. In particular, the workflow supports automated software deployment, easy configuration and addition of new analysis tools as well as enables to scale from a single computer to different HPC clusters with minimal effort.
