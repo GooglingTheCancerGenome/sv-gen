@@ -40,6 +40,7 @@ def test_get_nthreads():
 
 
 def test_get_mem():
+    tolerance = 0.01
     result = hf.get_mem()
     expected = int(ps.virtual_memory().free / hf.get_nthreads() / 2**20)
-    assert result == expected
+    assert result == pytest.approx(expected, tolerance)
