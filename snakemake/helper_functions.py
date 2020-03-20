@@ -7,6 +7,7 @@ config = load_configfile('analysis.yaml')
 
 
 def get_reference():
+
     """Get reference genome in FASTA format.
     :returns: filepath
     """
@@ -23,6 +24,7 @@ def get_reference():
 
 
 def get_genotype():
+
     """Get a list of genotypes.
     :returns (list) genotypes
     """
@@ -30,6 +32,7 @@ def get_genotype():
 
 
 def get_svtype():
+
     """Get one or more SV types with non-zero counts.
     :returns: (str) SV type(s)
     """
@@ -42,6 +45,7 @@ def get_svtype():
 
 
 def get_nthreads(logical=True):
+
     """Get the number of threads used by `samtools` and `bwa`.
     :returns: (int) threads (default: -1 = number of logical cores)
     """
@@ -53,6 +57,7 @@ def get_nthreads(logical=True):
 
 
 def get_mem():
+
     """Get free memory per core used by `samtools sort`.
     :returns: (int) in MB
     """
