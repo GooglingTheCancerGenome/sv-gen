@@ -1,3 +1,4 @@
+"""YAML validator for analysis.yaml file."""
 import enum
 import logging
 
@@ -9,12 +10,18 @@ import yatiml
 
 # Create document classes
 class Input:
+    """
+    Input class to hold the 'input' node.
+    """
     def __init__(self, fasta: str, seqids: List[Union[int, str]]) -> None:
         self.fasta = fasta
         self.seqids = seqids
 
 
 class Genotype(enum.Enum):
+    """
+    Genotype class to hold the 'genotype' node.
+    """
     HOMOZYG_NOSV = 'hmz'
     HOMOZYG_SV = 'hmz-sv'
     HETEROZYG_SV = 'htz-sv'
@@ -27,12 +34,18 @@ class Genotype(enum.Enum):
 
 
 class Output:
+    """
+    Output class to hold the 'output' node.
+    """
     def __init__(self, basedir: str, genotype: List[Genotype]) -> None:
         self.basedir = basedir
         self.genotype = genotype
 
 
 class FileExtension:
+    """
+    FileExtension class to hold the 'filext' node.
+    """
     def __init__(self, fasta: str, fasta_idx: List[str], fastq: str, bam: str,
                  bam_idx: str, bed: str, vcf: str) -> None:
         self.fasta = fasta
@@ -45,6 +58,9 @@ class FileExtension:
 
 
 class Edit:
+    """
+    Edit class to hold the attributes of each SV type in the 'svtype' node.
+    """
     def __init__(self, count: int, min_len: int, max_len: int) -> None:
         self.count = count
         self.min_len = min_len
@@ -73,6 +89,9 @@ class Edit:
 
 
 class SvType:
+    """
+    SvType class to hold the 'svtype' node.
+    """
     def __init__(self, dup: Edit, inv: Edit, tra: Edit, indel: Edit,
                  invdel: Edit, invdup: Edit) -> None:
         self.dup = dup
@@ -84,17 +103,26 @@ class SvType:
 
 
 class Read:
+    """
+    Read class to hold DNA read attribute(s).
+    """
     def __init__(self, length: List[int]) -> None:
         self.length = length
 
 
 class Insert:
+    """
+    Insert class to hold DNA insert attribute(s)
+    """
     def __init__(self, stdev: int, length: List[int]) -> None:
         self.stdev = stdev
         self.length = length
 
 
 class Simulation:
+    """
+    Simulation class to hold the 'simulation' node.
+    """
     def __init__(self, config: str, svtype: SvType, seed: int, profile: str,
                  coverage: List[int], read: Read, insert: Insert) -> None:
         self.config = config
@@ -107,6 +135,9 @@ class Simulation:
 
 
 class Analysis:
+    """
+    Analysis class to hold all nodes.
+    """
     def __init__(self, threads: int, input: Input, output: Output,
                  filext: FileExtension, simulation: Simulation) -> None:
         self.threads = threads
@@ -118,6 +149,9 @@ class Analysis:
 
 # Create loader
 class MyLoader(yatiml.Loader):
+    """
+    MyLoader class.
+    """
     pass
 
 

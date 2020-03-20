@@ -1,3 +1,4 @@
+"""Helper functions."""
 import os
 import psutil as ps
 
@@ -7,7 +8,9 @@ config = load_configfile('analysis.yaml')
 
 
 def get_reference():
-    """Get reference genome in FASTA format.
+    """
+    Get reference genome in FASTA format.
+
     :returns: filepath
     """
     fname = config.input.fasta
@@ -23,14 +26,18 @@ def get_reference():
 
 
 def get_genotype():
-    """Get a list of genotypes.
+    """
+    Get a list of genotypes.
+
     :returns (list) genotypes
     """
     return [str(g.value) for g in list(config.output.genotype)]
 
 
 def get_svtype():
-    """Get one or more SV types with non-zero counts.
+    """
+    Get one or more SV types with non-zero counts.
+
     :returns: (str) SV type(s)
     """
     types = []
@@ -42,18 +49,21 @@ def get_svtype():
 
 
 def get_nthreads(logical=True):
-    """Get the number of threads used by `samtools` and `bwa`.
+    """
+    Get the number of threads used by `samtools` and `bwa`.
+
     :returns: (int) threads (default: -1 = number of logical cores)
     """
     n = int(config.threads)
     if n > 0:
         return n
-    else:
-        return ps.cpu_count(logical)
+    return ps.cpu_count(logical)
 
 
 def get_mem():
-    """Get free memory per core used by `samtools sort`.
+    """
+    Get free memory per core used by `samtools sort`.
+
     :returns: (int) in MB
     """
     mem = ps.virtual_memory().free / get_nthreads() / 2**20

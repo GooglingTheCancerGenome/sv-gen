@@ -1,3 +1,4 @@
+"""Test suite for helper_functions.py."""
 import pytest
 import psutil as ps
 import helper_functions as hf
