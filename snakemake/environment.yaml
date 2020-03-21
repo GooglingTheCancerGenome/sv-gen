@@ -3,7 +3,7 @@ channels:
   - conda-forge
   - bioconda
 dependencies:
-  - survivor=1.0.6
+  - survivor=1.0.7
   - art=2016.06.05
   - bwa=0.7.17
   - samtools=1.9
