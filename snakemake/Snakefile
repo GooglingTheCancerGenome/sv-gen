@@ -1,10 +1,10 @@
 from helper_functions import *
 
 shell.executable('/bin/bash')
-configfile: 'analysis.yaml'
+
 
 __author__ = ['Arnold Kuzniar', 'Luca Santuari']
-__version__ = '0.1.0'
+__version__ = '1.0.0'
 __license__ = 'Apache License, Version 2.0'
 
 
@@ -13,30 +13,30 @@ localrules: all
 rule all:
     input:
         ### Uncomment lines (blocks) when debugging rules.
-        # os.path.join(get_outdir(), 'seqids.fasta')
+        # os.path.join(config.output.basedir, 'seqids.fasta')
         #
         # expand(os.path.join('{basedir}', '{svtype}', '{genotype}.fasta'),
-        #        basedir=get_outdir(),
+        #        basedir=config.output.basedir,
         #        svtype=get_svtype(),
-        #        genotype=config['output']['genotype'])
+        #        genotype=get_genotype())
         #
         # expand(os.path.join('{basedir}', '{svtype}', 'r{read_len}_i{insert_len}',
         #                     '{genotype}_{paired}.fq'),
-        #        basedir=get_outdir(),
+        #        basedir=config.output.basedir,
         #        svtype=get_svtype(),
-        #        read_len=config['sim_reads']['read']['len'],
-        #        insert_len=config['sim_reads']['insert']['len'],
-        #        genotype=config['output']['genotype'],
+        #        read_len=config.simulation.read.length,
+        #        insert_len=config.simulation.insert.length,
+        #        genotype=get_genotype(),
         #        paired=[1,2])
         #
         expand(os.path.join('{basedir}', '{svtype}', 'r{read_len}_i{insert_len}',
-                            'cov{cov}', '{genotype}' + get_filext('bam_idx')),
-               basedir=get_outdir(),
+                            'cov{cov}', '{genotype}' + config.filext.bam_idx),
+               basedir=config.output.basedir,
                svtype=get_svtype(),
-               read_len=config['sim_reads']['read']['len'],
-               insert_len=config['sim_reads']['insert']['len'],
-               cov=config['sim_reads']['coverage'],
-               genotype=config['output']['genotype'])
+               read_len=config.simulation.read.length,
+               insert_len=config.simulation.insert.length,
+               cov=config.simulation.coverage,
+               genotype=get_genotype())
 
 # include rules
 include: 'rules/sim_genomes.smk'

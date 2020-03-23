@@ -1,20 +1,20 @@
 rule art_illumina:
     input:
-        fasta = os.path.join(get_outdir(), '{svtype}',
-                             '{genotype}' + get_filext('fasta'))
+        fasta = os.path.join(config.output.basedir, '{svtype}',
+                             '{genotype}' + config.filext.fasta)
     output:
-        fastq1 = os.path.join(get_outdir(), '{svtype}',
+        fastq1 = os.path.join(config.output.basedir, '{svtype}',
                               'r{read_len}_i{insert_len}',
-                              '{genotype}_1' + get_filext('fastq')),
-        fastq2 = os.path.join(get_outdir(), '{svtype}',
+                              '{genotype}_1' + config.filext.fastq),
+        fastq2 = os.path.join(config.output.basedir, '{svtype}',
                               'r{read_len}_i{insert_len}',
-                              '{genotype}_2' + get_filext('fastq'))
+                              '{genotype}_2' + config.filext.fastq)
     params:
-        seed = config['sim_reads']['seed'],
-        profile = config['sim_reads']['profile'],
-        insert_stdev = config['sim_reads']['insert']['stdev'],
-        coverage = max(config['sim_reads']['coverage']),
-        prefix = os.path.join(get_outdir(), '{svtype}',
+        seed = config.simulation.seed,
+        profile = config.simulation.profile,
+        insert_stdev = config.simulation.insert.stdev,
+        coverage = max(config.simulation.coverage),
+        prefix = os.path.join(config.output.basedir, '{svtype}',
                               'r{read_len}_i{insert_len}', '{genotype}_')
     conda:
         "../environment.yaml"

@@ -1,9 +1,9 @@
 rule survivor_config:
     output:
-        config = os.path.join(get_outdir(), '{svtype}',
-                              config['sim_genomes']['config'])
+        config = os.path.join(config.output.basedir, '{svtype}',
+                              config.simulation.config)
     params:
-        matrix = config['sim_genomes']['sv_type']
+        m = config.simulation.svtype
     conda:
         "../environment.yaml"
     shell:
@@ -12,24 +12,24 @@ rule survivor_config:
 
         SURVIVOR simSV "{output.config}"
         sed -i.org \
-            -E "s/^(DUPLICATION_number:)\s+[0-9]+/\\1 {params.matrix[DUP][0]}/;\
-                s/^(DUPLICATION_minimum_length:)\s+[0-9]+/\\1 {params.matrix[DUP][1]}/;\
-                s/^(DUPLICATION_maximum_length:)\s+[0-9]+/\\1 {params.matrix[DUP][2]}/;\
-                s/^(INDEL_number:)\s+[0-9]+/\\1 {params.matrix[INDEL][0]}/;\
-                s/^(INDEL_minimum_length:)\s+[0-9]+/\\1 {params.matrix[INDEL][1]}/;\
-                s/^(INDEL_maximum_length:)\s+[0-9]+/\\1 {params.matrix[INDEL][2]}/;\
-                s/^(INVERSION_number:)\s+[0-9]+/\\1 {params.matrix[INV][0]}/;\
-                s/^(INVERSION_minimum_length:)\s+[0-9]+/\\1 {params.matrix[INV][1]}/;\
-                s/^(INVERSION_maximum_length:)\s+[0-9]+/\\1 {params.matrix[INV][2]}/;\
-                s/^(INV_del_number:)\s+[0-9]+/\\1 {params.matrix[INV-DEL][0]}/;\
-                s/^(INV_del_minimum_length:)\s+[0-9]+/\\1 {params.matrix[INV-DEL][1]}/;\
-                s/^(INV_del_maximum_length:)\s+[0-9]+/\\1 {params.matrix[INV-DEL][2]}/;\
-                s/^(INV_dup_number:)\s+[0-9]+/\\1 {params.matrix[INV-DUP][0]}/;\
-                s/^(INV_dup_minimum_length:)\s+[0-9]+/\\1 {params.matrix[INV-DUP][1]}/;\
-                s/^(INV_dup_maximum_length:)\s+[0-9]+/\\1 {params.matrix[INV-DUP][2]}/;\
-                s/^(TRANSLOCATION_number:)\s+[0-9]+/\\1 {params.matrix[TRA][0]}/;\
-                s/^(TRANSLOCATION_minimum_length:)\s+[0-9]+/\\1 {params.matrix[TRA][1]}/;\
-                s/^(TRANSLOCATION_maximum_length:)\s+[0-9]+/\\1 {params.matrix[TRA][2]}/"\
+            -E "s/^(DUPLICATION_number:)\s+[0-9]+/\\1 {params.m.dup.count}/;\
+                s/^(DUPLICATION_minimum_length:)\s+[0-9]+/\\1 {params.m.dup.min_len}/;\
+                s/^(DUPLICATION_maximum_length:)\s+[0-9]+/\\1 {params.m.dup.max_len}/;\
+                s/^(INVERSION_number:)\s+[0-9]+/\\1 {params.m.inv.count}/;\
+                s/^(INVERSION_minimum_length:)\s+[0-9]+/\\1 {params.m.inv.min_len}/;\
+                s/^(INVERSION_maximum_length:)\s+[0-9]+/\\1 {params.m.inv.max_len}/;\
+                s/^(INDEL_number:)\s+[0-9]+/\\1 {params.m.indel.count}/;\
+                s/^(INDEL_minimum_length:)\s+[0-9]+/\\1 {params.m.indel.min_len}/;\
+                s/^(INDEL_maximum_length:)\s+[0-9]+/\\1 {params.m.indel.max_len}/;\
+                s/^(TRANSLOCATION_number:)\s+[0-9]+/\\1 {params.m.tra.count}/;\
+                s/^(TRANSLOCATION_minimum_length:)\s+[0-9]+/\\1 {params.m.tra.min_len}/;\
+                s/^(TRANSLOCATION_maximum_length:)\s+[0-9]+/\\1 {params.m.tra.max_len}/;\
+                s/^(INV_del_number:)\s+[0-9]+/\\1 {params.m.invdel.count}/;\
+                s/^(INV_del_minimum_length:)\s+[0-9]+/\\1 {params.m.invdel.min_len}/;\
+                s/^(INV_del_maximum_length:)\s+[0-9]+/\\1 {params.m.invdel.max_len}/;\
+                s/^(INV_dup_number:)\s+[0-9]+/\\1 {params.m.invdup.count}/;\
+                s/^(INV_dup_minimum_length:)\s+[0-9]+/\\1 {params.m.invdup.min_len}/;\
+                s/^(INV_dup_maximum_length:)\s+[0-9]+/\\1 {params.m.invdup.max_len}/"\
             "{output}"
         cat "{output}"
         """
@@ -38,10 +38,10 @@ rule samtools_faidx:
     input:
         fasta = get_reference()
     output:
-        seqids = os.path.join(get_outdir(), 'seqids.txt'),
-        fasta = os.path.join(get_outdir(), 'seqids' + get_filext('fasta'))
+        seqids = os.path.join(config.output.basedir, 'seqids.txt'),
+        fasta = os.path.join(config.output.basedir, 'seqids' + config.filext.fasta)
     params:
-        seqids = "\n".join([str(c) for c in config['input']['seqids']])
+        seqids = "\n".join([str(c) for c in config.input.seqids])
     conda:
         "../environment.yaml"
     shell:
@@ -57,15 +57,19 @@ rule samtools_faidx:
 
 rule survivor_simsv:
     input:
-        config = os.path.join(get_outdir(), '{svtype}',
-                              config['sim_genomes']['config']),
-        fasta = os.path.join(get_outdir(), 'seqids' + get_filext('fasta'))
+        config = os.path.join(config.output.basedir, '{svtype}',
+                              config.simulation.config),
+        fasta = os.path.join(config.output.basedir, 'seqids' + config.filext.fasta)
     output:
-        fasta = os.path.join(get_outdir(), '{svtype}',
-                             '{genotype}' + get_filext('fasta'))
+        fasta = os.path.join(config.output.basedir, '{svtype}',
+                             '{genotype}' + config.filext.fasta),
+        vcf = os.path.join(config.output.basedir, '{svtype}',
+                             '{genotype}' + config.filext.vcf),
+        bed = os.path.join(config.output.basedir, '{svtype}',
+                             '{genotype}' + config.filext.bed)
     params:
         sfx = '.org',
-        prefix = os.path.join(get_outdir(), '{svtype}', '{genotype}')
+        prefix = os.path.join(config.output.basedir, '{svtype}', '{genotype}')
     conda:
         "../environment.yaml"
     shell:
@@ -77,6 +81,8 @@ rule survivor_simsv:
         if [ "{wildcards.genotype}" == "hmz" ]; then
             sed -E "s:^(>.*):\\1\.1:" "{input.fasta}" > "{output.fasta}"
             sed -E "s:^(>.*):\\1\.2:" "{input.fasta}" >> "{output.fasta}"
+            # write dummy VCF and BED output files (no SVs)
+            touch "{output.vcf}" "{output.bed}"
         elif [ "{wildcards.genotype}" == "hmz-sv" ]; then
             SURVIVOR simSV "{input.fasta}" "{input.config}" 0 0 "{params.prefix}"
             sed -E -i{params.sfx} "s:^(>.*):\\1\.1:" "{output.fasta}"

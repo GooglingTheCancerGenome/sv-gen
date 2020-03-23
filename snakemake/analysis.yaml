@@ -1,4 +1,5 @@
-threads: -1  # only samtools & bwa (default: -1 = number of available cores)
+---
+threads: -1  # Samtools & BWA (default: -1 = use available cores)
 
 # I/O files
 input:
@@ -12,8 +13,8 @@ output:
     - hmz-sv  # homozygous with SVs
     - htz-sv  # heterozygous with SVs
 
-# I/O file extensions
-file_exts:
+# registered I/O file extensions
+filext:
   fasta: .fasta
   fasta_idx:
     - .fasta.ann  # BWA v0.6.x index files
@@ -24,24 +25,25 @@ file_exts:
   fastq: .fq
   bam: .bam
   bam_idx: .bam.bai
+  bed: .bed
+  vcf: .vcf
 
-# simulation parameters
-sim_genomes:
-  config: survivor.cfg      # SURVIVOR config
-  sv_type:
-    DUP: [0, 100, 10000]    # duplication: [count, min_len, max_len]
-    INV: [0, 600, 800]      # inversion: ""
-    TRA: [0, 1000, 3000]    # translocation: ""
-    INDEL: [10, 20, 500]    # insertion+deletion: ""
-    INV-DEL: [0, 600, 800]  # inversion+deletion: ""
-    INV-DUP: [0, 600, 800]  # inversion+duplication: ""
-
-sim_reads:
+simulation:
+  # SURVIVOR parameters
+  config: survivor.cfg
+  svtype:
+    dup: [0, 100, 10000]    # duplication: [count, min_len, max_len]
+    inv: [0, 600, 800]      # inversion: ""
+    tra: [0, 1000, 3000]    # translocation: ""
+    indel: [10, 20, 500]    # insertion+deletion: ""
+    invdel: [0, 600, 800]   # inversion+deletion: ""
+    invdup: [0, 600, 800]   # inversion+duplication: ""
+  # ART parameters
   seed: 1000
   profile: HSXt
   coverage: [10, 30]  # [cov1, cov2, ...]
   read:
-    len: [150]  # [len1, len2, ...]
+    length: [150]  # [len1, len2, ...]
   insert:
-    stdev: 10
-    len: [500]  # [len1, len2, ...]
+    stdev: 10      # standard deviation of the fragment length (bp)
+    length: [500]  # [len1, len2, ...]
