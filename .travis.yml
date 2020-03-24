@@ -8,21 +8,20 @@ services:
 env:
   global:
     - PREFIX=gtcg/xenon
-    - TAG=dev
   matrix:
-    - PORT=10022 SCH=gridengine
-    - PORT=10023 SCH=slurm
+    - PORT=10022 SCH=gridengine TAG=6
+    - PORT=10023 SCH=slurm TAG=17
+    - PORT=10024 SCH=slurm TAG=19
 install:
   - pip install -r test-requirements.txt
-  - docker pull $PREFIX-$SCH:$TAG
-  - docker run -d -p $PORT:22 --name $SCH $PREFIX-$SCH:$TAG
+  - docker run -d -p $PORT:22 --name $SCH-$TAG $PREFIX-$SCH:$TAG
   - sleep 10
   - docker ps -a
-  - docker cp ./ $SCH:/home/xenon
-  - docker exec -t $SCH chown -R xenon:xenon /home/xenon
-  - docker exec -u xenon -t $SCH ./install.sh
+  - docker cp ./ $SCH-$TAG:/home/xenon
+  - docker exec -t $SCH-$TAG chown -R xenon:xenon /home/xenon
+  - docker exec -u xenon -t $SCH-$TAG ./install.sh
 script:
   - cd snakemake && pytest --cov=helper_functions --cov-report=xml
-  - docker exec -u xenon -t $SCH ./run.sh $SCH
+  - docker exec -u xenon -t $SCH-$TAG ./run.sh $SCH
 after_succes:
   - python-codacy-coverage -r coverage.xml
