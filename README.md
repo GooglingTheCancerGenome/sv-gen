@@ -14,7 +14,7 @@ Structural variants (SVs) are an important class of genetic variation implicated
 -   [jq](https://stedolan.github.io/jq/) - command-line JSON processor (optional)
 -   [YAtiML](https://github.com/yatiml/yatiml) - library for YAML type inference and schema validation
 
-For more details, refer to the conda [`environment.yaml`](/environment.yaml).
+The software versions can be found in the conda [`environment.yaml`](/environment.yaml).
 
 The workflow ([DAG](/doc/sv-gen.svg)) includes the following tools:
 
