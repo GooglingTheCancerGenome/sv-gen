@@ -1,5 +1,6 @@
 # sv-gen
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3725664.svg)](https://doi.org/10.5281/zenodo.3725664)
 [![Build Status](https://travis-ci.org/GooglingTheCancerGenome/sv-gen.svg?branch=master)](https://travis-ci.org/GooglingTheCancerGenome/sv-gen)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/7d9a698a93fa44ec8ad79b96842d48ee)](https://www.codacy.com/gh/GooglingTheCancerGenome/sv-gen?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=GooglingTheCancerGenome/sv-gen&amp;utm_campaign=Badge_Grade)
 
