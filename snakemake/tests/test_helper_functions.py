@@ -6,7 +6,7 @@ import helper_functions as hf
 
 def test_get_reference():
     result = hf.get_reference()
-    expected = 'data/chr22_44-45Mb.GRCh37.fasta'
+    expected = 'data/test.fasta'
     assert result == expected
 
 
@@ -32,14 +32,14 @@ def test_get_genotype():
 def set_svtype():
     conf = hf.config.simulation.svtype
     conf.indel.count = 10  # default
-    conf.dup.count = 10
+    conf.tra.count = 10
     return conf
 
 
 def test_get_svtype(set_svtype):
     hf.config.simulation.svtype = set_svtype
     result = hf.get_svtype()
-    expected = 'dup_indel'
+    expected = 'indel_tra'
     assert result == expected
 
 
