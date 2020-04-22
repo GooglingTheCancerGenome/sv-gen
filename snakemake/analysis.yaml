@@ -3,8 +3,8 @@ threads: -1  # Samtools & BWA (default: -1 = use available cores)
 
 # I/O files
 input:
-  fasta: data/chr22_44-45Mb.GRCh37.fasta  # filepath of ref. genome (haploid)
-  seqids: [22]  # zero or more SeqIDs (e.g. chromosomes)
+  fasta: data/test.fasta  # filepath of ref. genome (haploid)
+  seqids: [12, 22]  # zero or more SeqIDs (e.g. chromosomes)
 
 output:
   basedir: data/out  # relative or absolute path
@@ -34,7 +34,7 @@ simulation:
   svtype:
     dup: [0, 100, 10000]    # duplication: [count, min_len, max_len]
     inv: [0, 600, 800]      # inversion: ""
-    tra: [0, 1000, 3000]    # translocation: ""
+    tra: [10, 1000, 3000]   # translocation: ""
     indel: [10, 20, 500]    # insertion+deletion: ""
     invdel: [0, 600, 800]   # inversion+deletion: ""
     invdup: [0, 600, 800]   # inversion+duplication: ""
