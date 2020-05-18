@@ -45,5 +45,5 @@ simulation:
   read:
     length: [150]  # [len1, len2, ...]
   insert:
-    stdev: 10      # standard deviation of the fragment length (bp)
+    stdev: [10]  # standard deviation of the fragment length (bp)
     length: [500]  # [len1, len2, ...]

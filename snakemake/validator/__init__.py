@@ -74,8 +74,8 @@ class Edit:
         if len(node.yaml_node.value) != 3:
             raise yatiml.RecognitionError(err_msg)
         for item in node.yaml_node.value:
-            if (not isinstance(item, yaml.ScalarNode) or \
-                item.tag != 'tag:yaml.org,2002:int'):
+            if (not isinstance(item, yaml.ScalarNode) or
+               item.tag != 'tag:yaml.org,2002:int'):
                 raise yatiml.RecognitionError(err_msg)
 
     @classmethod
@@ -114,7 +114,7 @@ class Insert:
     """
     Insert class to hold DNA insert attribute(s)
     """
-    def __init__(self, stdev: int, length: List[int]) -> None:
+    def __init__(self, stdev: List[int], length: List[int]) -> None:
         self.stdev = stdev
         self.length = length
 
