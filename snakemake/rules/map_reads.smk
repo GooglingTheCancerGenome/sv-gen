@@ -19,16 +19,16 @@ rule bwa_mem:
         fasta = os.path.join(config.output.basedir, 'seqids' + config.filext.fasta),
         fastai = [os.path.join(config.output.basedir, 'seqids') +
                   e for e in config.filext.fasta_idx],
-        fastq1 = os.path.join(config.output.basedir, '{svtype}',
-                              'r{read_len}_i{insert_len}',
+        fastq1 = os.path.join(config.output.basedir, '{svtype}', 'rlen_{read_len}',
+                              'ilen_{insert_len}', 'isd_{insert_sd}',
                               '{genotype}_1' + config.filext.fastq),
-        fastq2 = os.path.join(config.output.basedir, '{svtype}',
-                              'r{read_len}_i{insert_len}',
+        fastq2 = os.path.join(config.output.basedir, '{svtype}', 'rlen_{read_len}',
+                              'ilen_{insert_len}', 'isd_{insert_sd}',
                               '{genotype}_2' + config.filext.fastq)
     output:
         bam = os.path.join(config.output.basedir, '{svtype}',
-                           'r{read_len}_i{insert_len}',
-                           'cov' + str(max(config.simulation.coverage)),
+                           'rlen_{read_len}', 'ilen_{insert_len}', 'isd_{insert_sd}',
+                           'cov_' + str(max(config.simulation.coverage)),
                            '{genotype}' + config.filext.bam)
     params:
         read_group = "@RG\\tID:{0}\\tLB:{0}\\tSM:{0}".format('{genotype}')
@@ -52,13 +52,13 @@ rule bwa_mem:
 
 rule samtools_view:
     input:
-        bam = os.path.join(config.output.basedir, '{svtype}',
-                           'r{read_len}_i{insert_len}',
-                           'cov' + str(max(config.simulation.coverage)),
+        bam = os.path.join(config.output.basedir, '{svtype}', 'rlen_{read_len}',
+                           'ilen_{insert_len}', 'isd_{insert_sd}', 'cov_' +
+                           str(max(config.simulation.coverage)),
                            '{genotype}' + config.filext.bam)
     output:
-        bam = os.path.join(config.output.basedir, '{svtype}',
-                           'r{read_len}_i{insert_len}', 'cov{cov}',
+        bam = os.path.join(config.output.basedir, '{svtype}', 'rlen_{read_len}',
+                           'ilen_{insert_len}', 'isd_{insert_sd}', 'cov_{cov}',
                            '{genotype}' + config.filext.bam)
     conda:
         "../environment.yaml"
@@ -74,12 +74,12 @@ rule samtools_view:
 
 rule samtools_index:
     input:
-        bam = os.path.join(config.output.basedir, '{svtype}',
-                           'r{read_len}_i{insert_len}', 'cov{cov}',
+        bam = os.path.join(config.output.basedir, '{svtype}', 'rlen_{read_len}',
+                           'ilen_{insert_len}', 'isd_{insert_sd}', 'cov_{cov}',
                            '{genotype}' + config.filext.bam)
     output:
-        bai = os.path.join(config.output.basedir, '{svtype}',
-                           'r{read_len}_i{insert_len}', 'cov{cov}',
+        bai = os.path.join(config.output.basedir, '{svtype}', 'rlen_{read_len}',
+                           'ilen_{insert_len}', 'isd_{insert_sd}', 'cov_{cov}',
                            '{genotype}' + config.filext.bam_idx)
     conda:
         "../environment.yaml"
