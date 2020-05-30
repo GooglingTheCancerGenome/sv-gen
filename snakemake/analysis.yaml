@@ -1,5 +1,7 @@
 ---
-threads: -1  # Samtools & BWA (default: -1 = use available cores)
+threads: -1  # Samtools & BWA (default: -1 = set dynamically based on available cores)
+memory: -1   # Samtools (default: -1 = set dynamically based on free memory per core [MB])
+tmpspace: 0  # Samtools (default: 0 [MB])
 
 # I/O files
 input:

@@ -54,3 +54,9 @@ def test_get_mem():
     result = hf.get_mem()
     expected = int(ps.virtual_memory().free / hf.get_nthreads() / 2**20)
     assert result == pytest.approx(expected, tolerance)
+
+
+def test_get_tmpspace():
+    result = hf.get_tmpspace()
+    expected = 0
+    assert result == expected
