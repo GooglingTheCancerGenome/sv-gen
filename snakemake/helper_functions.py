@@ -66,5 +66,15 @@ def get_mem():
 
     :returns: (int) in MB
     """
-    mem = ps.virtual_memory().free / get_nthreads() / 2**20
-    return int(mem)
+    if config.memory < 0:
+        return int(ps.virtual_memory().free / get_nthreads() / 2**20)
+    return config.memory
+
+
+def get_tmpspace():
+    """
+    Get the amount of temporary space used by `samtools sort`.
+
+    :returns (int) in MB
+    """
+    return config.tmpspace

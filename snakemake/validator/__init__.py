@@ -138,9 +138,12 @@ class Analysis:
     """
     Analysis class to hold all nodes.
     """
-    def __init__(self, threads: int, input: Input, output: Output,
-                 filext: FileExtension, simulation: Simulation) -> None:
+    def __init__(self, threads: int, memory: int, tmpspace: int, input: Input,
+                 output: Output, filext: FileExtension, simulation: Simulation) \
+                 -> None:
         self.threads = threads
+        self.memory = memory
+        self.tmpspace = tmpspace
         self.input = input
         self.output = output
         self.filext = filext
