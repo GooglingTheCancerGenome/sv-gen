@@ -67,7 +67,7 @@ _Submit jobs to Slurm/GridEngine-based cluster_
 ```bash
 SCH=slurm   # or gridengine
 snakemake --use-conda --latency-wait 30 --jobs \
---cluster 'xenon scheduler $SCH --location local:// submit --name smk.{rule} --inherit-env --max-run-time 5 --working-directory . --stderr stderr-%j.log --stdout stdout-%j.log' &>smk.log&
+--cluster "xenon scheduler $SCH --location local:// submit --name smk.{rule} --inherit-env --max-run-time 5 --working-directory . --stderr stderr-%j.log --stdout stdout-%j.log" &>smk.log&
 ```
 
 _Query job accounting information_
