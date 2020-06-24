@@ -102,9 +102,6 @@ class SvType:
         self.indel = indel
         self.invdel = invdel
         self.invdup = invdup
-        count = sum([sv.count for sv in vars(self).values()])
-        if count < 1:
-            raise ValueError("At least one svtype count must be set to non-zero value.")
 
 
 class Read:
@@ -164,7 +161,7 @@ class Analysis:
             if n_sel == 0:
                 return n
             if n_sel > n:
-                raise ValueError("There are more SeqIDs selected than there are in the FASTA file '{}'."
+                raise ValueError("Can't select more seqIDs than found in the FASTA file '{}'."
                     .format(fname))
             for s in self.input.seqids:
                 if str(s) not in headers:
@@ -180,6 +177,9 @@ class Analysis:
                 .format(os.path.splitext(fname)[-1]))
 
     def _simulation(self):
+        count = sum([sv.count for sv in vars(self.simulation.svtype).values()])
+        if count < 1:
+            raise ValueError("Select at least one SV type by setting its count to non-zero value.")
         if self.simulation.svtype.tra.count > 0 and self._seqids() == 1:
             raise ValueError("Two or more chromosomes are required to simulate translocations.")
 

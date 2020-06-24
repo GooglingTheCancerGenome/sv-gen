@@ -33,7 +33,8 @@ def get_svtype():
     """
     types = []
     for sv, params in config.simulation.svtype.__dict__.items():
-        types.append(sv)
+        if params.count > 0:
+            types.append(sv)
     types.sort()
     return '_'.join(types)
 
