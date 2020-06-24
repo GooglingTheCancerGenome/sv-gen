@@ -1,9 +1,11 @@
 """YAML validator for analysis.yaml file."""
+import os
 import enum
 import logging
 
 from typing import Dict, List, Union
 from ruamel import yaml
+from pyfaidx import Fasta
 
 import yatiml
 
@@ -148,6 +150,40 @@ class Analysis:
         self.output = output
         self.filext = filext
         self.simulation = simulation
+        self._validate()
+
+    def _seqids(self):
+        fname = self.input.fasta
+        with Fasta(fname) as fasta:
+            headers = fasta.keys()
+            n = len(headers)
+            n_sel = len(self.input.seqids)
+            if n_sel == 0:
+                return n
+            if n_sel > n:
+                raise ValueError("There are more SeqIDs selected than there are in the FASTA file '{}'."
+                    .format(fname))
+            for s in self.input.seqids:
+                if str(s) not in headers:
+                    raise ValueError("SeqID'{}' is not in the FASTA file '{}'."
+                        .format(s, fname))
+            return n_sel
+
+    def _filext(self):
+        fname = self.input.fasta
+        fext = self.filext.fasta
+        if not fname.endswith(fext):
+            raise ValueError("FASTA file extension '{}' is not registered."
+                .format(os.path.splitext(fname)[-1]))
+
+    def _simulation(self):
+        if self.simulation.svtype.tra.count > 0 and self._seqids() == 1:
+            raise ValueError("Two or more chromosomes are required to simulate translocations.")
+
+    def _validate(self):
+        self._seqids()
+        self._filext()
+        self._simulation()
 
 
 # Create loader
