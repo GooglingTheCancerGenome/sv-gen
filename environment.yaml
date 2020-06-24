@@ -4,7 +4,7 @@ channels:
   - bioconda
   - nlesc
 dependencies:
-  - pyfaidx
+  - pyfaidx=0.5.8
   - snakemake=5.10.0
   - xenon-cli=3.0.5
   - jq=1.6
