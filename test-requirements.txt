@@ -1,5 +1,5 @@
 snakemake==5.10.0
-ppyfaidx==0.5.8
+pyfaidx==0.5.8
 pytest>=4.6
 pytest-cov
 codacy-coverage
