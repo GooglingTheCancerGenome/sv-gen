@@ -100,6 +100,8 @@ class SvType:
         self.indel = indel
         self.invdel = invdel
         self.invdup = invdup
+        if sum(vars(self).values()) < 1:
+            raise ValueError("At least one svtype count must be set to non-zero value.")
 
 
 class Read:
