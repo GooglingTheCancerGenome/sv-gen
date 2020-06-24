@@ -13,16 +13,7 @@ def get_reference():
 
     :returns: filepath
     """
-    fname = config.input.fasta
-    fext = config.filext.fasta
-    if not os.path.exists(fname):
-        raise FileNotFoundError("FASTA file '{}' not found.".format(fname))
-    if not fname.endswith(fext):
-        raise ValueError("FASTA file extension '{}' not registered.".format(
-            os.path.splitext(fname)[-1]))
-    if os.path.getsize(fname) == 0:
-        raise OSError("FASTA file '{}' is empty.".format(fname))
-    return fname
+    return config.input.fasta
 
 
 def get_genotype():
