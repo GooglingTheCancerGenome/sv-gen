@@ -10,18 +10,6 @@ def test_get_reference():
     assert result == expected
 
 
-def test_get_reference__filenotfound_exception():
-    with pytest.raises(Exception):
-        hf.config.input.fasta = 'data/nowhere.fasta'
-        hf.get_reference()
-
-
-def test_get_reference__filextnotfound_exception():
-    with pytest.raises(Exception):
-        hf.config.filext.fasta = '.fa'
-        hf.get_reference()
-
-
 def test_get_genotype():
     result = hf.get_genotype()
     expected = ['hmz', 'hmz-sv', 'htz-sv']

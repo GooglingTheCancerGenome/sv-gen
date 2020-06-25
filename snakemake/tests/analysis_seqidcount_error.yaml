@@ -1,0 +1,51 @@
+---
+threads: -1  # Samtools & BWA (default: -1 = set dynamically based on available cores)
+memory: -1   # Samtools (default: -1 = set dynamically based on free memory per core [MB])
+tmpspace: 0  # Samtools (default: 0 [MB])
+
+# I/O files
+input:
+  fasta: data/chr22_44-45Mb.GRCh37.fasta  # filepath of ref. genome (haploid)
+  seqids: [1, 22]  # zero or more SeqIDs (e.g. chromosomes)
+
+output:
+  basedir: data/out  # relative or absolute path
+  genotype:   # diploid genomes
+    - hmz     # homozygous
+    - hmz-sv  # homozygous with SVs
+    - htz-sv  # heterozygous with SVs
+
+# registered I/O file extensions
+filext:
+  fasta: .fasta
+  fasta_idx:
+    - .fasta.ann  # BWA v0.6.x index files
+    - .fasta.amb  #
+    - .fasta.bwt  #
+    - .fasta.pac  #
+    - .fasta.sa   #
+  fastq: .fq
+  bam: .bam
+  bam_idx: .bam.bai
+  bed: .bed
+  vcf: .vcf
+
+simulation:
+  # SURVIVOR parameters
+  config: survivor.cfg
+  svtype:
+    dup: [0, 100, 10000]    # duplication: [count, min_len, max_len]
+    inv: [0, 600, 800]      # inversion: ""
+    tra: [0, 1000, 3000]    # translocation: ""
+    indel: [10, 20, 500]    # insertion+deletion: ""
+    invdel: [0, 600, 800]   # inversion+deletion: ""
+    invdup: [0, 600, 800]   # inversion+duplication: ""
+  # ART parameters
+  seed: 1000
+  profile: HSXt
+  coverage: [10, 30]  # [cov1, cov2, ...]
+  read:
+    length: [150]  # [len1, len2, ...]
+  insert:
+    stdev: [10]  # standard deviation of the fragment length (bp)
+    length: [500]  # [len1, len2, ...]

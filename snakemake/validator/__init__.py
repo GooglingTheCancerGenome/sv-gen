@@ -161,11 +161,11 @@ class Analysis:
             if n_sel == 0:
                 return n
             if n_sel > n:
-                raise ValueError("Cannot select more seqIDs than they are in the FASTA file '{}'."
+                raise SeqIdCountError("Cannot select more seqIDs than they are in the FASTA file '{}'."
                     .format(fname))
             for s in self.input.seqids:
                 if str(s) not in headers:
-                    raise ValueError("SeqID '{}' is not in the FASTA file '{}'."
+                    raise SeqIdNotFoundError("SeqID '{}' is not in the FASTA file '{}'."
                         .format(s, fname))
             return n_sel
 
@@ -173,20 +173,41 @@ class Analysis:
         fname = self.input.fasta
         fext = self.filext.fasta
         if not fname.endswith(fext):
-            raise ValueError("FASTA file extension '{}' is not registered."
+            raise FastaFilextError("FASTA file extension '{}' is not registered."
                 .format(os.path.splitext(fname)[-1]))
 
     def _simulation(self):
         count = sum([sv.count for sv in vars(self.simulation.svtype).values()])
         if count < 1:
-            raise ValueError("Select at least one SV type by setting its count to non-zero value.")
+            raise SimulateSvTypeError("Select at least one SV type by setting its count to non-zero value.")
         if self.simulation.svtype.tra.count > 0 and self._seqids() == 1:
-            raise ValueError("Two or more chromosomes are required to simulate translocations.")
+            raise SimulateTransError("Two or more chromosomes are required to simulate translocations.")
 
     def _validate(self):
         self._seqids()
         self._filext()
         self._simulation()
+
+
+# custom exceptions
+class SeqIdCountError(Exception):
+    pass
+
+
+class SeqIdNotFoundError(Exception):
+    pass
+
+
+class FastaFilextError(Exception):
+    pass
+
+
+class SimulateSvTypeError(Exception):
+    pass
+
+
+class SimulateTransError(Exception):
+    pass
 
 
 # Create loader
