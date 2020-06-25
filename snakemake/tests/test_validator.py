@@ -1,5 +1,4 @@
 """Test suite for validator/__init__.py."""
-import os
 import pytest
 import pyfaidx
 
