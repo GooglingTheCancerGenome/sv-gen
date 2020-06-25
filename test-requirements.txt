@@ -2,5 +2,6 @@ snakemake==5.10.0
 pyfaidx==0.5.8
 pytest>=4.6
 pytest-cov
+pytest-datadir
 codacy-coverage
 yatiml==0.5.0
