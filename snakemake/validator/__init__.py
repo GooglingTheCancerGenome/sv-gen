@@ -161,11 +161,11 @@ class Analysis:
             if n_sel == 0:
                 return n
             if n_sel > n:
-                raise ValueError("Can't select more seqIDs than found in the FASTA file '{}'."
+                raise ValueError("Cannot select more seqIDs than they are in the FASTA file '{}'."
                     .format(fname))
             for s in self.input.seqids:
                 if str(s) not in headers:
-                    raise ValueError("SeqID'{}' is not in the FASTA file '{}'."
+                    raise ValueError("SeqID '{}' is not in the FASTA file '{}'."
                         .format(s, fname))
             return n_sel
 
