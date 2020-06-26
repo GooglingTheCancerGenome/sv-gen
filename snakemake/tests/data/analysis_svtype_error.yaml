@@ -5,7 +5,7 @@ tmpspace: 0  # Samtools (default: 0 [MB])
 
 # I/O files
 input:
-  fasta: data/chr22_44-45Mb.GRCh37.fasta  # filepath of ref. genome (haploid)
+  fasta: data/test.fasta  # filepath of ref. genome (haploid)
   seqids: [22]  # zero or more SeqIDs (e.g. chromosomes)
 
 output:
