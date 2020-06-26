@@ -59,7 +59,7 @@ cd snakemake
 snakemake -np
 
 # run the workflow locally
-snakemake --use-conda
+snakemake --use-conda --cores
 ```
 
 _Submit jobs to Slurm/GridEngine-based cluster_
