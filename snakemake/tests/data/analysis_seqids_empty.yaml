@@ -6,7 +6,7 @@ tmpspace: 0  # Samtools (default: 0 [MB])
 # I/O files
 input:
   fasta: data/test.fasta  # filepath of ref. genome (haploid)
-  seqids: [1, 22]  # zero or more SeqIDs (e.g. chromosomes)
+  seqids: []  # zero or more SeqIDs (e.g. chromosomes)
 
 output:
   basedir: data/out  # relative or absolute path
