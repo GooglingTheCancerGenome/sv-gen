@@ -1,5 +1,4 @@
 """Helper functions."""
-import os
 import psutil as ps
 
 from validator import load_configfile
