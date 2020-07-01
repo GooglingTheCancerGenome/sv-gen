@@ -76,8 +76,8 @@ class Edit:
         if len(node.yaml_node.value) != 3:
             raise yatiml.RecognitionError(err_msg)
         for item in node.yaml_node.value:
-            if (not isinstance(item, yaml.ScalarNode) or
-               item.tag != 'tag:yaml.org,2002:int'):
+            if (not isinstance(item, yaml.ScalarNode) or \
+                item.tag != 'tag:yaml.org,2002:int'):
                 raise yatiml.RecognitionError(err_msg)
 
     @classmethod
@@ -156,14 +156,14 @@ class Analysis:
         fname = self.input.fasta
         with Fasta(fname) as fasta:
             headers = fasta.keys()
-            n = len(headers)
+            n_all = len(headers)
             n_sel = len(self.input.seqids)
             if n_sel == 0:
-                return n
-            for s in self.input.seqids:
-                if str(s) not in headers:
+                return n_all
+            for seqid in self.input.seqids:
+                if str(seqid) not in headers:
                     raise ValueError("SeqID '{}' is not in the FASTA file '{}'."
-                        .format(s, fname))
+                                     .format(seqid, fname))
             return n_sel
 
     def _filext(self):
@@ -171,7 +171,7 @@ class Analysis:
         fext = self.filext.fasta
         if not fname.endswith(fext):
             raise ValueError("FASTA file extension '{}' is not registered."
-                .format(os.path.splitext(fname)[-1]))
+                             .format(os.path.splitext(fname)[-1]))
 
     def _simulation(self):
         count = sum([sv.count for sv in vars(self.simulation.svtype).values()])
