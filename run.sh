@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -xe
+set -e
 
 SCH=$1
 MY_ENV=wf
@@ -8,7 +8,7 @@ MY_ENV=wf
 eval "$(conda shell.bash hook)"
 conda activate $MY_ENV
 conda list
-cd snakemake && ls -alh
+cd ./workflow && ls -alh
 snakemake --use-conda --configfile analysis.yaml \
   --latency-wait 60 --jobs \
   --cluster "xenon -vvv scheduler $SCH --location local:// submit \
