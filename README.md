@@ -23,7 +23,7 @@ The workflow ([DAG](/doc/sv-gen.svg)) includes the following tools:
 -   [BWA](https://github.com/lh3/bwa)
 -   [Samtools](https://github.com/samtools/samtools)
 
-The software dependencies and versions can be found in the conda `environment.yaml` files ([1](/environment.yaml), [2](/snakemake/environment.yaml)).
+The software dependencies and versions can be found in the conda `environment.yaml` files ([1](/environment.yaml), [2](/workflow/environment.yaml)).
 
 **1. Clone this repo.**
 
@@ -50,8 +50,8 @@ cd snakemake
 **3. Configure the workflow.**
 
 -   **config files**:
-    -   [`analysis.yaml`](/snakemake/analysis.yaml) - analysis-specific settings
-    -   [`environment.yaml`](/snakemake/environment.yaml) - software dependencies and versions
+    -   [`analysis.yaml`](/workflow/analysis.yaml) - analysis-specific settings
+    -   [`environment.yaml`](/workflow/environment.yaml) - software dependencies and versions
 
 **4. Execute the workflow.**
 
