@@ -41,21 +41,23 @@ wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O mi
 bash miniconda.sh
 # update Conda
 conda update -y conda
-# create & activate new env with installed deps
-conda env create -n wf -f environment.yaml
+# install Mamba
+conda install -n base -c conda-forge -y mamba
+# create a new environment with dependencies & activate it
+mamba env create -n wf -f environment.yaml
 conda activate wf
-cd snakemake
 ```
 
 **3. Configure the workflow.**
 
 -   **config files**:
-    -   [`analysis.yaml`](/workflow/analysis.yaml) - analysis-specific settings
+    -   [`analysis.yaml`](/config/analysis.yaml) - analysis-specific settings
     -   [`environment.yaml`](/workflow/environment.yaml) - software dependencies and versions
 
 **4. Execute the workflow.**
 
 ```bash
+cd workflow
 # 'dry' run only checks I/O files
 snakemake -np
 
