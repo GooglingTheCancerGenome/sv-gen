@@ -1,8 +1,11 @@
 """Helper functions."""
+import os
 import psutil as ps
 
 from validator import load_configfile
 
+config_path = "../config"
+config = load_configfile(os.path.join(config_path, "analysis.yaml"))
 config = load_configfile('analysis.yaml')
 
 
