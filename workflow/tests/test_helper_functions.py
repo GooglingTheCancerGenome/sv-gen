@@ -10,6 +10,12 @@ def test_get_reference():
     assert result == expected
 
 
+def test_get_seqids():
+    result = hf.get_seqids()
+    expected = [12, 22]
+    assert result == expected
+
+
 def test_get_genotype():
     result = hf.get_genotype()
     expected = ['hmz', 'hmz-sv', 'htz-sv']
