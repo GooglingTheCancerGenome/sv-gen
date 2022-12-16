@@ -2,12 +2,10 @@
 import os
 import enum
 import logging
-
-from typing import Dict, List, Union
-from ruamel import yaml
-from pyfaidx import Fasta
-
 import yatiml
+
+from typing import Dict, List, Union, Optional
+from ruamel import yaml
 
 
 # Create document classes
@@ -15,9 +13,13 @@ class Input:
     """
     Input class to hold the 'input' node.
     """
-    def __init__(self, fasta: str, seqids: List[Union[int, str]]) -> None:
+    def __init__(self, fasta: str, seqids: Optional[List[Union[int, str]]]=None) -> None:
         self.fasta = fasta
         self.seqids = seqids
+
+    @classmethod
+    def _yatiml_recognize(cls, node: yatiml.UnknownNode) -> None:
+        node.require_attribute('fasta', str)
 
 
 class Genotype(enum.Enum):
@@ -29,9 +31,16 @@ class Genotype(enum.Enum):
     HETEROZYG_SV = 'htz-sv'
 
     @classmethod
+    def _yatiml_recognize(cls, node: yatiml.UnknownNode) -> None:
+        node.require_scalar(str)
+
+    @classmethod
     def _yatiml_savorize(cls, node: yatiml.Node) -> None:
-        yaml_to_py = {v._value_: v._name_ for v in cls.__members__.values()}
+        yaml_to_py = {v.value: v.name for v in cls.__members__.values()}
         if node.is_scalar(str):
+            val = node.yaml_node.value
+            if val not in yaml_to_py:
+                raise yatiml.SeasoningError("Invalid genotype: '{}'".format(val))
             node.set_value(yaml_to_py.get(node.get_value()))
 
 
@@ -61,7 +70,7 @@ class FileExtension:
 
 class Edit:
     """
-    Edit class to hold the attributes of each SV type in the 'svtype' node.
+    Edit class holds the attributes for each 'svtype' node.
     """
     def __init__(self, count: int, min_len: int, max_len: int) -> None:
         self.count = count
@@ -71,14 +80,15 @@ class Edit:
     @classmethod
     def _yatiml_recognize(cls, node: yatiml.UnknownNode) -> None:
         node.require_sequence()
-        err_msg = ('Edit descriptions must be arrays of INTs: count, \
-                   min_len and max_len')
+        err_msg = ('svtype attributes must be an array of INTs: [count, \
+                   min_len, max_len]')
         if len(node.yaml_node.value) != 3:
             raise yatiml.RecognitionError(err_msg)
         for item in node.yaml_node.value:
             if (not isinstance(item, yaml.ScalarNode) or \
                 item.tag != 'tag:yaml.org,2002:int'):
                 raise yatiml.RecognitionError(err_msg)
+
 
     @classmethod
     def _yatiml_savorize(cls, node: yatiml.Node) -> None:
@@ -102,6 +112,16 @@ class SvType:
         self.indel = indel
         self.invdel = invdel
         self.invdup = invdup
+
+
+    @classmethod
+    def _yatiml_recognize(cls, node: yatiml.UnknownNode) -> None:
+        node.require_mapping()
+        svtype_count = 0
+        for item in node.yaml_node.value:
+            svtype_count += int(item[1].value[0].value)
+        if svtype_count == 0:
+            raise yatiml.RecognitionError("At least one SV type must have non-zero count.")
 
 
 class Read:
@@ -150,58 +170,13 @@ class Analysis:
         self.output = output
         self.filext = filext
         self.simulation = simulation
-        self._validate()
-
-    def _seqids(self):
-        fname = self.input.fasta
-        with Fasta(fname) as fasta:
-            headers = fasta.keys()
-            n_all = len(headers)
-            n_sel = len(self.input.seqids)
-            if n_sel == 0:
-                return n_all
-            for seqid in self.input.seqids:
-                if str(seqid) not in headers:
-                    raise ValueError("SeqID '{}' is not in the FASTA file '{}'."
-                                     .format(seqid, fname))
-            return n_sel
-
-    def _filext(self):
-        fname = self.input.fasta
-        fext = self.filext.fasta
-        if not fname.endswith(fext):
-            raise ValueError("FASTA file extension '{}' is not registered."
-                             .format(os.path.splitext(fname)[-1]))
-
-    def _simulation(self):
-        count = sum([sv.count for sv in vars(self.simulation.svtype).values()])
-        if count < 1:
-            raise ValueError("Select at least one SV type by setting its count to non-zero value.")
-        if self.simulation.svtype.tra.count > 0 and self._seqids() == 1:
-            raise ValueError("Two or more chromosomes are required to simulate translocations.")
-
-    def _validate(self):
-        self._seqids()
-        self._filext()
-        self._simulation()
 
 
 # Create loader
-class MyLoader(yatiml.Loader):
-    """
-    MyLoader class.
-    """
-    pass
-
+load = yatiml.load_function(Analysis, Simulation, Insert, Read, SvType, Edit, \
+                            FileExtension, Output, Genotype, Input)
+yatiml.logger.setLevel(logging.DEBUG)
 
 def load_configfile(yaml_file: str) -> Dict:
     with open(yaml_file, 'r') as conf:
-        return yaml.load(conf, MyLoader)
-
-
-yatiml.logger.setLevel(logging.DEBUG)
-yatiml.add_to_loader(MyLoader, [
-    Input, Genotype, Output, FileExtension, Edit, SvType, Read, Insert,
-    Simulation, Analysis
-])
-yatiml.set_document_type(MyLoader, Analysis)
+        return load(conf)
