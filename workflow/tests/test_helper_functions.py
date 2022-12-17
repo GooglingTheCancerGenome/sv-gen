@@ -1,7 +1,7 @@
 """Test suite for helper_functions.py."""
-import pytest
-import psutil as ps
 import helper_functions as hf
+import psutil as ps
+import pytest
 
 
 def test_get_reference():
