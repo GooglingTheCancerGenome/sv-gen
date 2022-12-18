@@ -17,10 +17,6 @@ class Input:
         self.fasta = fasta
         self.seqids = seqids
 
-    @classmethod
-    def _yatiml_recognize(cls, node: yatiml.UnknownNode) -> None:
-        node.require_attribute('fasta', str)
-
 
 class Genotype(enum.Enum):
     """
@@ -116,16 +112,14 @@ class SvType:
         self.indel = indel
         self.invdel = invdel
         self.invdup = invdup
+        self._valid_count()
 
-    @classmethod
-    def _yatiml_recognize(cls, node: yatiml.UnknownNode) -> None:
-        node.require_mapping()
+    def _valid_count(self):
         svtype_count = 0
-        for item in node.yaml_node.value:
-            svtype_count += int(item[1].value[0].value)
+        for params in self.__dict__.values():
+            svtype_count += params.count
         if svtype_count == 0:
-            raise yatiml.RecognitionError(
-                "At least one SV type must have non-zero count.")
+            raise ValueError("At least one SV type must have non-zero count.")
 
 
 class Read:
