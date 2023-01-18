@@ -11,4 +11,4 @@ dependencies:
   - jq>=1.6
   - pip
   - pip:
-      - yatiml==0.9
+      - yatiml==0.10
