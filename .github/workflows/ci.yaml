@@ -15,7 +15,7 @@ jobs:
       REGISTRY: ghcr.io
       SCH: ${{ matrix.schedulers }}
       IMAGE: ${{ github.repository_owner }}/sv-gen-${{ matrix.schedulers }}
-      TAG: "dev"
+      TAG: "1.1.0"
     steps:
       - name: Checkout repo
         uses: actions/checkout@v2
