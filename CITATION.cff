@@ -15,8 +15,8 @@ authors:
     orcid: "https://orcid.org/0000-0001-8784-2507"
 
 cff-version: "1.0.3"
-date-released: "2020-03-24"
-doi: 10.5281/zenodo.3725664
+date-released: 2023-01-18
+doi: 10.5281/zenodo.3725663
 keywords:
   - "bioinformatics"
   - "structural variants"
