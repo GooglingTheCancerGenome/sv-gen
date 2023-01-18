@@ -1,8 +1,9 @@
 # sv-gen
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3725664.svg)](https://doi.org/10.5281/zenodo.3725664)
-[![Build Status](https://travis-ci.org/GooglingTheCancerGenome/sv-gen.svg?branch=master)](https://travis-ci.org/GooglingTheCancerGenome/sv-gen)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/7d9a698a93fa44ec8ad79b96842d48ee)](https://www.codacy.com/gh/GooglingTheCancerGenome/sv-gen?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=GooglingTheCancerGenome/sv-gen&amp;utm_campaign=Badge_Grade)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3725663.svg)](https://doi.org/10.5281/zenodo.3725663)
+[![CI](https://github.com/GooglingTheCancerGenome/sv-gen/actions/workflows/ci.yaml/badge.svg?branch=master)](https://github.com/GooglingTheCancerGenome/sv-gen/actions/workflows/ci.yaml)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/7d9a698a93fa44ec8ad79b96842d48ee)](https://www.codacy.com/gh/GooglingTheCancerGenome/sv-gen/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=GooglingTheCancerGenome/sv-gen&amp;utm_campaign=Badge_Grade)
+[![Codacy Badge](https://app.codacy.com/project/badge/Coverage/7d9a698a93fa44ec8ad79b96842d48ee)](https://www.codacy.com/gh/GooglingTheCancerGenome/sv-gen/dashboard?utm_source=github.com&utm_medium=referral&utm_content=GooglingTheCancerGenome/sv-gen&utm_campaign=Badge_Coverage)
 
 Structural variants (SVs) are an important class of genetic variation implicated in a wide array of genetic diseases. _sv-gen_ is a Snakemake-based workflow to generate artificial short-read alignments based on a reference genome with(out) SVs. The workflow is easy to use and deploy on any Linux-based machine. In particular, the workflow supports automated software deployment, easy configuration and addition of new analysis tools as well as enables to scale from a single computer to different HPC clusters with minimal effort.
 
@@ -22,7 +23,7 @@ The workflow ([DAG](/doc/sv-gen.svg)) includes the following tools:
 -   [BWA](https://github.com/lh3/bwa)
 -   [Samtools](https://github.com/samtools/samtools)
 
-The software dependencies and versions can be found in the conda `environment.yaml` files ([1](/environment.yaml), [2](/snakemake/environment.yaml)).
+The software dependencies and versions can be found in the conda `environment.yaml` files ([1](/environment.yaml), [2](/workflow/environment.yaml)).
 
 **1. Clone this repo.**
 
@@ -40,40 +41,36 @@ wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O mi
 bash miniconda.sh
 # update Conda
 conda update -y conda
-# create & activate new env with installed deps
-conda env create -n wf -f environment.yaml
+# install Mamba
+conda install -n base -c conda-forge -y mamba
+# create a new environment with dependencies & activate it
+mamba env create -n wf -f environment.yaml
 conda activate wf
-cd snakemake
 ```
 
 **3. Configure the workflow.**
 
 -   **config files**:
-    -   [`analysis.yaml`](/snakemake/analysis.yaml) - analysis-specific settings
-    -   [`environment.yaml`](/snakemake/environment.yaml) - software dependencies and versions
+    -   [`analysis.yaml`](/config/analysis.yaml) - analysis-specific settings
+    -   [`environment.yaml`](/workflow/environment.yaml) - software dependencies and versions
 
 **4. Execute the workflow.**
 
 ```bash
+cd workflow
 # 'dry' run only checks I/O files
 snakemake -np
 
 # run the workflow locally
-snakemake --use-conda
+snakemake --use-conda --cores
 ```
 
-_Submit jobs to Grid Engine-based cluster_
+_Submit jobs to Slurm/GridEngine-based cluster_
 
 ```bash
+SCH=slurm   # or gridengine
 snakemake --use-conda --latency-wait 30 --jobs \
---cluster 'xenon scheduler gridengine --location local:// submit --name smk.{rule} --inherit-env --max-run-time 5 --working-directory . --stderr stderr-%j.log --stdout stdout-%j.log' &>smk.log&
-```
-
-_Submit jobs to Slurm-based cluster_
-
-```bash
-snakemake --use-conda --latency-wait 30 --jobs \
---cluster 'xenon scheduler slurm --location local:// submit --name smk.{rule} --inherit-env --max-run-time 5 --working-directory . --stderr stderr-%j.log --stdout stdout-%j.log' &>smk.log&
+--cluster "xenon scheduler $SCH --location local:// submit --name smk.{rule} --inherit-env --max-run-time 5 --working-directory . --stderr stderr-%j.log --stdout stdout-%j.log" &>smk.log&
 ```
 
 _Query job accounting information_

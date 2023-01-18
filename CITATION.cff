@@ -15,8 +15,8 @@ authors:
     orcid: "https://orcid.org/0000-0001-8784-2507"
 
 cff-version: "1.0.3"
-date-released: "2020-03-24"
-doi: 10.5281/zenodo.3725664
+date-released: 2023-01-18
+doi: 10.5281/zenodo.3725663
 keywords:
   - "bioinformatics"
   - "structural variants"
@@ -35,4 +35,4 @@ license: Apache-2.0
 message: "If you use this software, please cite it using these metadata"
 repository-code: "https://github.com/GooglingTheCancerGenome/sv-gen"
 title: sv-gen
-version: "1.0.0"
+version: "1.1.0"

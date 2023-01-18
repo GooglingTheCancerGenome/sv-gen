@@ -1,25 +1,19 @@
 """Test suite for helper_functions.py."""
-import pytest
-import psutil as ps
 import helper_functions as hf
+import psutil as ps
+import pytest
 
 
 def test_get_reference():
     result = hf.get_reference()
-    expected = 'data/chr22_44-45Mb.GRCh37.fasta'
+    expected = 'data/test.fasta'
     assert result == expected
 
 
-def test_get_reference__filenotfound_exception():
-    with pytest.raises(Exception):
-        hf.config.input.fasta = 'data/nowhere.fasta'
-        hf.get_reference()
-
-
-def test_get_reference__filextnotfound_exception():
-    with pytest.raises(Exception):
-        hf.config.filext.fasta = '.fa'
-        hf.get_reference()
+def test_get_seqids():
+    result = hf.get_seqids()
+    expected = [12, 22]
+    assert result == expected
 
 
 def test_get_genotype():
@@ -28,18 +22,9 @@ def test_get_genotype():
     assert set(result) == set(expected)
 
 
-@pytest.fixture
-def set_svtype():
-    conf = hf.config.simulation.svtype
-    conf.indel.count = 10  # default
-    conf.dup.count = 10
-    return conf
-
-
-def test_get_svtype(set_svtype):
-    hf.config.simulation.svtype = set_svtype
+def test_get_svtype():
     result = hf.get_svtype()
-    expected = 'dup_indel'
+    expected = 'indel_tra'
     assert result == expected
 
 
@@ -54,3 +39,9 @@ def test_get_mem():
     result = hf.get_mem()
     expected = int(ps.virtual_memory().free / hf.get_nthreads() / 2**20)
     assert result == pytest.approx(expected, tolerance)
+
+
+def test_get_tmpspace():
+    result = hf.get_tmpspace()
+    expected = 0
+    assert result == expected

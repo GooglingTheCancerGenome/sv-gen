@@ -41,7 +41,7 @@ rule samtools_faidx:
         seqids = os.path.join(config.output.basedir, 'seqids.txt'),
         fasta = os.path.join(config.output.basedir, 'seqids' + config.filext.fasta)
     params:
-        seqids = "\n".join([str(c) for c in config.input.seqids])
+        seqids = "\n".join([str(s) for s in get_seqids()])
     conda:
         "../environment.yaml"
     shell:

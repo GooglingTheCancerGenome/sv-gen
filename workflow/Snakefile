@@ -4,7 +4,7 @@ shell.executable('/bin/bash')
 
 
 __author__ = ['Arnold Kuzniar', 'Luca Santuari']
-__version__ = '1.0.0'
+__version__ = '1.1.0'
 __license__ = 'Apache License, Version 2.0'
 
 
@@ -20,21 +20,25 @@ rule all:
         #        svtype=get_svtype(),
         #        genotype=get_genotype())
         #
-        # expand(os.path.join('{basedir}', '{svtype}', 'r{read_len}_i{insert_len}',
+        # expand(os.path.join('{basedir}', '{svtype}', 'rlen_{read_len}',
+        #                     'ilen_{insert_len}', 'isd_{insert_sd}',
         #                     '{genotype}_{paired}.fq'),
         #        basedir=config.output.basedir,
         #        svtype=get_svtype(),
         #        read_len=config.simulation.read.length,
         #        insert_len=config.simulation.insert.length,
+        #        insert_sd=config.simulation.insert.stdev,
         #        genotype=get_genotype(),
         #        paired=[1,2])
         #
-        expand(os.path.join('{basedir}', '{svtype}', 'r{read_len}_i{insert_len}',
-                            'cov{cov}', '{genotype}' + config.filext.bam_idx),
+        expand(os.path.join('{basedir}', '{svtype}', 'rlen_{read_len}',
+                            'ilen_{insert_len}', 'isd_{insert_sd}', 'cov_{cov}',
+                            '{genotype}' + config.filext.bam_idx),
                basedir=config.output.basedir,
                svtype=get_svtype(),
                read_len=config.simulation.read.length,
                insert_len=config.simulation.insert.length,
+               insert_sd=config.simulation.insert.stdev,
                cov=config.simulation.coverage,
                genotype=get_genotype())
 
